@@ -3,6 +3,7 @@
     "description": "Files shared among Shopware6 plugin and Shopware App",
     "type": "library",
     "license": "GPL-3.0-or-later",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "FINDOLOGIC Developers",
