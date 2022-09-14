@@ -1,0 +1,20 @@
+{
+    "name": "findologic/shopware6-common",
+    "description": "Files shared among Shopware6 plugin and Shopware App",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "FINDOLOGIC Developers",
+            "email": "dev@findologic.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "FINDOLOGIC\\Shopware6Common\\": "src"
+        }
+    }
+}
