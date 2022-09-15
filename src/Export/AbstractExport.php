@@ -6,14 +6,8 @@ namespace FINDOLOGIC\Shopware6Common\Export;
 
 use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\FinSearch\Logger\Handler\ProductErrorHandler;
-use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
-use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 
 abstract class AbstractExport
 {
