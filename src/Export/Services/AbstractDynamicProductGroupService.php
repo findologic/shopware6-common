@@ -4,24 +4,28 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
+use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Handlers\DynamicProductGroupCacheHandler;
 use Psr\Cache\CacheItemPoolInterface;
 
 abstract class AbstractDynamicProductGroupService
 {
-    protected DynamicProductGroupCacheHandler $cacheHandler;
+    public const CONTAINER_ID = 'fin_search.dynamic_product_group';
 
-    protected string $mainCategoryId;
+    protected DynamicProductGroupCacheHandler $cacheHandler;
 
     protected CacheItemPoolInterface $cache;
 
+    protected ExportContext $exportContext;
+
     public function __construct(
-        CacheItemPoolInterface $cache
+        CacheItemPoolInterface $cache,
+        ExportContext $exportContext
     ) {
         $this->cache = $cache;
+        $this->exportContext = $exportContext;
 
         $this->setCacheHandler();
-        $this->setMainNavigationCategoryId();
     }
 
     public function warmUp(): void
@@ -53,7 +57,7 @@ abstract class AbstractDynamicProductGroupService
 
     protected function setCacheHandler(): void
     {
-        $this->cacheHandler = new DynamicProductGroupCacheHandler($this->cache, $this->getShopkey());
+        $this->cacheHandler = new DynamicProductGroupCacheHandler($this->cache, $this->exportContext->getShopkey());
     }
 
     /**
@@ -93,10 +97,6 @@ abstract class AbstractDynamicProductGroupService
     }
 
     abstract public function getCategories(string $productId): array;
-
-    abstract protected function setMainNavigationCategoryId(): void;
-
-    abstract protected function getShopkey(): string;
 
     /**
      * @return array<string, array<int, string>>
