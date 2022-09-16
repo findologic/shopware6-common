@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace FINDOLOGIC\Shopware6Common\Export;
+namespace FINDOLOGIC\Shopware6Common\Export\Types;
 
 use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\Export\Exporter;
@@ -83,7 +83,7 @@ abstract class AbstractXmlExport extends AbstractExport
             if (!$item) {
                 continue;
             }
-
+            // TODO: Event dispatching
 //            $this->eventDispatcher->dispatch(new AfterItemBuildEvent($item), AfterItemBuildEvent::NAME);
 
             $items[] = $item;

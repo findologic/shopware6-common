@@ -57,7 +57,7 @@ abstract class AbstractProductCriteriaBuilder
         return $this;
     }
 
-    public function withParentIdFilterWithVisibility(string $productId, ?string $parentId): AbstractProductCriteriaBuilder
+    public function withParentIdFilterWithVisibility(string $productId, ?string $parentId = null): AbstractProductCriteriaBuilder
     {
         if ($parentId) {
             $this->adaptProductIdCriteriaWithoutParentId($productId, $parentId);

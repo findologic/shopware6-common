@@ -26,6 +26,8 @@ class ExportContext
 
     protected bool $shouldHideProductsOutOfStock;
 
+    protected string $shopDomain;
+
     public function __construct(
         string $shopkey,
         string $salesChannelId,
@@ -33,7 +35,8 @@ class ExportContext
         string $navigationCategoryId,
         array $customerGroups,
         array $navigationCategoryBreadcrumbs,
-        bool $shouldHideProductsOutOfStock
+        bool $shouldHideProductsOutOfStock,
+        string $shopDomain,
     ) {
         $this->shopkey = $shopkey;
         $this->salesChannelId = $salesChannelId;
@@ -42,6 +45,7 @@ class ExportContext
         $this->customerGroups = $customerGroups;
         $this->navigationCategoryBreadcrumbs = $navigationCategoryBreadcrumbs;
         $this->shouldHideProductsOutOfStock = $shouldHideProductsOutOfStock;
+        $this->shopDomain = $shopDomain;
     }
 
     public function getShopkey(): string
@@ -80,5 +84,10 @@ class ExportContext
     public function shouldHideProductsOutOfStock(): bool
     {
         return $this->shouldHideProductsOutOfStock;
+    }
+
+    public function getShopDomain(): string
+    {
+        return $this->shopDomain;
     }
 }

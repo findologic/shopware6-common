@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace FINDOLOGIC\Shopware6Common\Export;
+namespace FINDOLOGIC\Shopware6Common\Export\Types;
 
 use FINDOLOGIC\Export\Data\Item;
-use FINDOLOGIC\FinSearch\Logger\Handler\ProductErrorHandler;
+use FINDOLOGIC\Shopware6Common\Export\Logger\Handler\ProductErrorHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
