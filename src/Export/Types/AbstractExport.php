@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Types;
 
 use FINDOLOGIC\Export\Data\Item;
+use FINDOLOGIC\Shopware6Common\Export\AbstractHeaderHandler;
 use FINDOLOGIC\Shopware6Common\Export\Logger\Handler\ProductErrorHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,13 +26,9 @@ abstract class AbstractExport
 
     public static function buildErrorResponse(ProductErrorHandler $errorHandler, array $headers): JsonResponse
     {
-        // TODO: Add HeaderHandler
-        $headers['content-type'] = 'application/json';
-
         return new JsonResponse(
             $errorHandler->getExportErrors()->buildErrorResponse(),
-            Response::HTTP_UNPROCESSABLE_ENTITY,
-            $headers
+            Response::HTTP_UNPROCESSABLE_ENTITY
         );
     }
 

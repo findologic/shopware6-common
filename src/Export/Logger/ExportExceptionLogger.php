@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Logger;
 
 use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
-use FINDOLOGIC\FinSearch\Exceptions\Export\Product\AccessEmptyPropertyException;
-use FINDOLOGIC\FinSearch\Exceptions\Export\Product\ProductHasNoAttributesException;
-use FINDOLOGIC\FinSearch\Exceptions\Export\Product\ProductInvalidException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
+use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductInvalidException;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
