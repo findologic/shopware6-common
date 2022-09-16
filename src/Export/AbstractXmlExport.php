@@ -114,7 +114,7 @@ abstract class AbstractXmlExport extends AbstractExport
         }
 
         $initialItem = $this->xmlFileConverter->createItem($this->getIdOfProductEntity($product));
-        $item = $this->exportItemAdapter->adapt($initialItem, $product, $this->logger);
+        $item = $this->exportItemAdapter->adaptProduct($initialItem, $product);
 
 //        $pageSize = $this->calculatePageSize($productEntity);
 //        $iterator = $this->productSearcher->buildVariantIterator($productEntity, $pageSize);
