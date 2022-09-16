@@ -37,15 +37,15 @@ abstract class AbstractXmlExport extends AbstractExport
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
         AbstractProductSearcher $productSearcher,
+        ExportItemAdapter $exportItemAdapter,
         ContainerInterface $container,
         ?LoggerInterface $logger = null
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
         $this->productSearcher = $productSearcher;
+        $this->exportItemAdapter = $exportItemAdapter;
         $this->container = $container;
         $this->logger = $logger;
-
-        $this->exportItemAdapter = new ExportItemAdapter($dynamicProductGroupService);
 
         /** @var XMLExporter $exporter */
         $exporter = Exporter::create(Exporter::TYPE_XML);
