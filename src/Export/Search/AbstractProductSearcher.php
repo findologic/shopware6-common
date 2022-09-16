@@ -40,7 +40,7 @@ abstract class AbstractProductSearcher
     abstract public function findMaxPropertiesCount(
         string $productId,
         ?string $parentId,
-        ?array $propertyIds,
+        ?array $propertyIds
     ): int;
 
     protected function adaptCriteriaBasedOnConfiguration(): void

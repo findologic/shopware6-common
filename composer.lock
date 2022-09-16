@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "818d7bfa20ac5891d0a50bfb0afbe7e6",
+    "content-hash": "bcf54ffeed989259650eee294c319910",
     "packages": [
         {
             "name": "findologic/libflexport",
-            "version": "dev-develop",
+            "version": "v2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/findologic/libflexport.git",
-                "reference": "a3649c3a155941086881f43db919e3579551b3a0"
+                "reference": "6ba98ae3e89def55b42d27437040b22a4bcfb4f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/findologic/libflexport/zipball/a3649c3a155941086881f43db919e3579551b3a0",
-                "reference": "a3649c3a155941086881f43db919e3579551b3a0",
+                "url": "https://api.github.com/repos/findologic/libflexport/zipball/6ba98ae3e89def55b42d27437040b22a4bcfb4f9",
+                "reference": "6ba98ae3e89def55b42d27437040b22a4bcfb4f9",
                 "shasum": ""
             },
             "require": {
@@ -30,7 +30,6 @@
                 "phpunit/phpunit": "^7.5|^8.5|^9.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -72,9 +71,9 @@
             "homepage": "https://github.com/findologic/libflexport",
             "support": {
                 "issues": "https://github.com/findologic/libflexport/issues",
-                "source": "https://github.com/findologic/libflexport/tree/develop"
+                "source": "https://github.com/findologic/libflexport/tree/v2.9.0"
             },
-            "time": "2022-06-28T14:34:53+00:00"
+            "time": "2021-04-22T14:04:19+00:00"
         },
         {
             "name": "findologic/xml-export-schema",
@@ -117,9 +116,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "findologic/libflexport": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

@@ -8,15 +8,12 @@ use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\Export\Exporter;
 use FINDOLOGIC\Export\XML\XMLExporter;
 use FINDOLOGIC\Export\XML\XMLItem;
-use FINDOLOGIC\FinSearchApp\Export\Search\ProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
-use Vin\ShopwareSdk\Exception\ShopwareSearchResponseException;
 
 abstract class AbstractXmlExport extends AbstractExport
 {
@@ -32,7 +29,7 @@ abstract class AbstractXmlExport extends AbstractExport
 
     protected ExportItemAdapter $exportItemAdapter;
 
-    protected ProductSearcher $productSearcher;
+    protected AbstractProductSearcher $productSearcher;
 
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
@@ -95,14 +92,14 @@ abstract class AbstractXmlExport extends AbstractExport
         return $items;
     }
 
-    private function exportSingleItem(ProductEntity $product): ?Item
+    private function exportSingleItem($product): ?Item
     {
         $category = $this->getConfiguredCrossSellingCategory(
             $this->getIdOfProductEntity($product),
             $this->getCategoriesOfProductEntity($product),
         );
-        if ($category) {
-            $this->logger?->warning(
+        if ($category && $this->logger) {
+            $this->logger->warning(
                 sprintf(
                     'Product with id %s (%s) was not exported because it is assigned to cross selling category %s (%s)',
                     $this->getIdOfProductEntity($product),
@@ -141,9 +138,6 @@ abstract class AbstractXmlExport extends AbstractExport
         return $item;
     }
 
-    /**
-     * @throws ShopwareSearchResponseException
-     */
     private function calculatePageSize($product): int
     {
         $maxPropertiesCount = $this->productSearcher->findMaxPropertiesCount(

@@ -33,7 +33,7 @@ class ExportContext
         string $navigationCategoryId,
         array $customerGroups,
         array $navigationCategoryBreadcrumbs,
-        bool $shouldHideProductsOutOfStock,
+        bool $shouldHideProductsOutOfStock
     ) {
         $this->shopkey = $shopkey;
         $this->salesChannelId = $salesChannelId;

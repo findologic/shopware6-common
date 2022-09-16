@@ -12,9 +12,11 @@ use Throwable;
 
 class ExportItemAdapter
 {
-    public function __construct(
-        private AbstractDynamicProductGroupService $dynamicProductGroupService
-    ) {
+    private AbstractDynamicProductGroupService $dynamicProductGroupService;
+
+    public function __construct(AbstractDynamicProductGroupService $dynamicProductGroupService)
+    {
+        $this->dynamicProductGroupService = $dynamicProductGroupService;
     }
 
     public function adapt(Item $item, $product): ?Item
@@ -42,7 +44,7 @@ class ExportItemAdapter
         $item->addName($product->getTranslation('name'));
         $item->addOrdernumber(new Ordernumber($product->productNumber));
         $item->addUrl('http://example.org/test.html');
-        $item->addPrice($product->price ? $product->price[0]['gross'] : 0.00);
+        $item->addPrice(0.00);
 
         $categoryAttribute = new Attribute('cat');
         foreach ($this->dynamicProductGroupService->getCategories($product->id) as $category) {

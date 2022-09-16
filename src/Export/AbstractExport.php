@@ -23,7 +23,7 @@ abstract class AbstractExport
      */
     public const TYPE_PRODUCT_ID = 1;
 
-    public function buildErrorResponse(ProductErrorHandler $errorHandler, array $headers): JsonResponse
+    public static function buildErrorResponse(ProductErrorHandler $errorHandler, array $headers): JsonResponse
     {
         // TODO: Add HeaderHandler
         $headers['content-type'] = 'application/json';
