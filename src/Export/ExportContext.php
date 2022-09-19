@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export;
 
-use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
-use Shopware\Core\Content\Category\CategoryEntity;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
+use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
+use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
 
 class ExportContext
 {
@@ -13,39 +14,30 @@ class ExportContext
 
     protected string $shopkey;
 
-    protected string $salesChannelId;
+    protected SalesChannelEntity $salesChannel;
 
-    protected string $currencyId;
+    protected CategoryEntity $navigationCategory;
 
-    protected string $navigationCategoryId;
-
-    protected array $customerGroups;
-
-    /** @var string[] */
-    protected array $navigationCategoryBreadcrumbs;
+    protected CustomerGroupCollection $customerGroups;
 
     protected bool $shouldHideProductsOutOfStock;
 
-    protected string $shopDomain;
+    protected bool $isIntegrationTypeApi;
 
     public function __construct(
         string $shopkey,
-        string $salesChannelId,
-        string $currencyId,
-        string $navigationCategoryId,
-        array $customerGroups,
-        array $navigationCategoryBreadcrumbs,
+        SalesChannelEntity $salesChannel,
+        CategoryEntity $navigationCategory,
+        CustomerGroupCollection $customerGroups,
         bool $shouldHideProductsOutOfStock,
-        string $shopDomain
+        bool $isIntegrationTypeApi,
     ) {
         $this->shopkey = $shopkey;
-        $this->salesChannelId = $salesChannelId;
-        $this->currencyId = $currencyId;
-        $this->navigationCategoryId = $navigationCategoryId;
+        $this->salesChannel = $salesChannel;
+        $this->navigationCategory = $navigationCategory;
         $this->customerGroups = $customerGroups;
-        $this->navigationCategoryBreadcrumbs = $navigationCategoryBreadcrumbs;
         $this->shouldHideProductsOutOfStock = $shouldHideProductsOutOfStock;
-        $this->shopDomain = $shopDomain;
+        $this->isIntegrationTypeApi = $isIntegrationTypeApi;
     }
 
     public function getShopkey(): string
@@ -53,32 +45,39 @@ class ExportContext
         return $this->shopkey;
     }
 
+    public function getSalesChannel(): SalesChannelEntity
+    {
+        return $this->salesChannel;
+    }
+
     public function getSalesChannelId(): string
     {
-        return $this->salesChannelId;
+        return $this->salesChannel->id;
     }
 
     public function getCurrencyId(): string
     {
-        return $this->currencyId;
+        return $this->salesChannel->currencyId;
     }
 
-    public function getCustomerGroups(): array
+    public function getLanguageId(): string
     {
-        return $this->customerGroups;
+        return $this->salesChannel->languageId;
+    }
+
+    public function getNavigationCategory(): CategoryEntity
+    {
+        return $this->navigationCategory;
     }
 
     public function getNavigationCategoryId(): string
     {
-        return $this->navigationCategoryId;
+        return $this->navigationCategory->id;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getNavigationCategoryBreadcrumbs(): array
+    public function getCustomerGroups(): CustomerGroupCollection
     {
-        return $this->navigationCategoryBreadcrumbs;
+        return $this->customerGroups;
     }
 
     public function shouldHideProductsOutOfStock(): bool
@@ -86,8 +85,8 @@ class ExportContext
         return $this->shouldHideProductsOutOfStock;
     }
 
-    public function getShopDomain(): string
+    public function isIntegrationTypeApi(): bool
     {
-        return $this->shopDomain;
+        return $this->isIntegrationTypeApi;
     }
 }

@@ -4,7 +4,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 
-class DebugUrlBuilderService
+class AbstractDebugUrlBuilderService
 {
     private const PATH_STRUCTURE = '%s/%s%s?shopkey=%s&productId=%s';
     private const DEBUG_PATH = '/debug';

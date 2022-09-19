@@ -25,7 +25,7 @@ abstract class AbstractProductDebugService
 
     protected ?XMLItem $xmlItem;
 
-    protected DebugUrlBuilderService $debugUrlBuilderService;
+    protected AbstractDebugUrlBuilderService $debugUrlBuilderService;
 
     public function __construct(
         ExportContext $exportContext,
