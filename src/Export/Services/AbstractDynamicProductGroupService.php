@@ -7,6 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Services;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Handlers\DynamicProductGroupCacheHandler;
 use Psr\Cache\CacheItemPoolInterface;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 
 abstract class AbstractDynamicProductGroupService
 {
@@ -96,7 +97,7 @@ abstract class AbstractDynamicProductGroupService
         $this->cacheHandler->setDynamicProductGroupsPage($products, $this->getCurrentOffset());
     }
 
-    abstract public function getCategories(string $productId): array;
+    abstract public function getCategories(string $productId): CategoryCollection;
 
     /**
      * @return array<string, array<int, string>>

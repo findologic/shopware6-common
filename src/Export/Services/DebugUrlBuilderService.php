@@ -4,7 +4,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 
-class AbstractDebugUrlBuilderService
+class DebugUrlBuilderService
 {
     private const PATH_STRUCTURE = '%s/%s%s?shopkey=%s&productId=%s';
     private const DEBUG_PATH = '/debug';
@@ -36,11 +36,20 @@ class AbstractDebugUrlBuilderService
     {
         return sprintf(
             self::PATH_STRUCTURE,
-            $this->exportContext->getShopDomain(),
+            $this->getShopDomain(),
             $this->basePath,
             $path,
             $this->shopkey,
             $productId
         );
+    }
+
+    private function getShopDomain(): string
+    {
+        if ($domains = $this->exportContext->getSalesChannel()->domains) {
+            return $domains->first()->url;
+        }
+
+        return '';
     }
 }

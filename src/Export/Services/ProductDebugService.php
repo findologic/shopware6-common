@@ -8,8 +8,9 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\ProductDebugSearcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-abstract class AbstractProductDebugService
+class ProductDebugService
 {
     protected const NO_PRODUCT_EXPORTED = 'No product is exported';
 
@@ -19,34 +20,42 @@ abstract class AbstractProductDebugService
 
     protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
 
+    protected string $basePath;
+
     protected string $productId;
 
     protected ExportErrors $exportErrors;
 
     protected ?XMLItem $xmlItem;
 
-    protected AbstractDebugUrlBuilderService $debugUrlBuilderService;
+    protected ?ProductEntity $requestedProduct;
+
+    protected ?ProductEntity $exportedMainProduct;
+
+    protected DebugUrlBuilderService $debugUrlBuilderService;
 
     public function __construct(
         ExportContext $exportContext,
         ProductDebugSearcherInterface $productDebugSearcher,
-        AbstractProductCriteriaBuilder $productCriteriaBuilder
+        AbstractProductCriteriaBuilder $productCriteriaBuilder,
+        string $basePath
     ) {
         $this->exportContext = $exportContext;
         $this->productDebugSearcher = $productDebugSearcher;
         $this->productCriteriaBuilder = $productCriteriaBuilder;
+        $this->basePath = $basePath;
     }
 
     public function getDebugInformation(
         string $productId,
         string $shopkey,
         ?XMLItem $xmlItem,
-        $exportedMainProduct,
+        ProductEntity $exportedMainProduct,
         ExportErrors $exportErrors
     ): JsonResponse {
         $this->initialize($productId, $shopkey, $xmlItem, $exportedMainProduct, $exportErrors);
 
-        if (!$this->getRequestedProduct()) {
+        if (!$this->requestedProduct) {
             $this->exportErrors->addGeneralError(
                 sprintf('Product or variant with ID %s does not exist.', $this->productId)
             );
@@ -65,27 +74,27 @@ abstract class AbstractProductDebugService
 
         return new JsonResponse([
             'export' => [
-                'productId' => $this->getRequestedProductId(),
-                'exportedMainProductId' => $this->getExportedMainProductProduct()
-                    ? $this->getExportedMainProductProductId()
+                'productId' => $this->requestedProduct->id,
+                'exportedMainProductId' => $this->exportedMainProduct
+                    ? $this->exportedMainProduct->id
                     : self::NO_PRODUCT_EXPORTED,
                 'isExported' => $isExported,
                 'reasons' => $this->parseExportErrors()
             ],
             'debugLinks' => [
-                'exportUrl' => $this->getExportedMainProductProduct()
-                    ? $this->debugUrlBuilderService->buildExportUrl($this->getExportedMainProductProductId())
+                'exportUrl' => $this->exportedMainProduct
+                    ? $this->debugUrlBuilderService->buildExportUrl($this->exportedMainProduct->id)
                     : self::NO_PRODUCT_EXPORTED,
-                'debugUrl' => $this->getExportedMainProductProduct()
-                    ? $this->debugUrlBuilderService->buildDebugUrl($this->getExportedMainProductProductId())
+                'debugUrl' => $this->exportedMainProduct
+                    ? $this->debugUrlBuilderService->buildDebugUrl($this->exportedMainProduct->id)
                     : self::NO_PRODUCT_EXPORTED,
             ],
             'data' => [
-                'isExportedMainVariant' => $this->getExportedMainProductProduct() &&
-                    $this->getExportedMainProductProductId() === $this->getRequestedProductId(),
-                'product' => $this->getRequestedProduct(),
-                'siblings' => $this->getRequestedProductParentId()
-                    ? $this->productDebugSearcher->getSiblings($this->getRequestedProductParentId(), 100)
+                'isExportedMainVariant' => $this->exportedMainProduct &&
+                    $this->exportedMainProduct->id === $this->requestedProduct->id,
+                'product' => $this->requestedProduct,
+                'siblings' => $this->requestedProduct->parentId
+                    ? $this->productDebugSearcher->getSiblings($this->requestedProduct->parentId, 100)
                     : [],
                 'associations' => $this->productDebugSearcher
                     ->buildCriteria()
@@ -98,12 +107,20 @@ abstract class AbstractProductDebugService
         string $productId,
         string $shopkey,
         ?XMLItem $xmlItem,
-        $exportedMainProduct,
+        ProductEntity $exportedMainProduct,
         ExportErrors $exportErrors
     ): void {
         $this->productId = $productId;
         $this->exportErrors = $exportErrors;
         $this->xmlItem = $xmlItem;
+        $this->exportedMainProduct = $exportedMainProduct;
+
+        $this->debugUrlBuilderService = new DebugUrlBuilderService(
+            $this->exportContext,
+            $shopkey,
+            $this->basePath
+        );
+        $this->requestedProduct = $this->productDebugSearcher->getProductById($productId);
     }
 
     private function isExported(): bool
@@ -113,7 +130,7 @@ abstract class AbstractProductDebugService
 
     private function isVisible(): bool
     {
-        $isVisible = isset($this->xmlItem) && $this->isRequestedProductActive();
+        $isVisible = isset($this->xmlItem) && $this->requestedProduct->active;
         if (!$isVisible) {
             $this->exportErrors->addGeneralError('Product could not be found or is not available for search.');
         }
@@ -123,7 +140,7 @@ abstract class AbstractProductDebugService
 
     private function isExportedVariant(): bool
     {
-        if (!$isExportedVariant = $this->getExportedMainProductProductId() === $this->productId) {
+        if (!$isExportedVariant = $this->exportedMainProduct->id === $this->productId) {
             $this->exportErrors->addGeneralError('Product is not the exported variant.');
         }
 
@@ -141,7 +158,7 @@ abstract class AbstractProductDebugService
 
         foreach ($criteriaMethods as $method => $errorMessage) {
             $criteria = $this->productCriteriaBuilder
-                ->withIds([$this->getRequestedProductId()])
+                ->withIds([$this->requestedProduct->id])
                 ->$method()
                 ->build();
 
@@ -168,16 +185,4 @@ abstract class AbstractProductDebugService
 
         return $errors;
     }
-
-    protected abstract function getRequestedProduct();
-
-    protected abstract function getRequestedProductId(): string;
-
-    protected abstract function getRequestedProductParentId(): ?string;
-
-    protected abstract function isRequestedProductActive(): bool;
-
-    protected abstract function getExportedMainProductProduct();
-
-    protected abstract function getExportedMainProductProductId(): string;
 }

@@ -11,6 +11,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
@@ -69,7 +70,7 @@ class AttributeAdapter
         $categories = [];
 
         $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($product->id);
-        $this->parseCategoryAttributes($productCategories->getElements(), $catUrls, $categories);
+        $this->parseCategoryAttributes($productCategories, $catUrls, $categories);
         $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
 
         $attributes = [];
@@ -89,7 +90,7 @@ class AttributeAdapter
     }
 
     protected function parseCategoryAttributes(
-        array $categoryCollection,
+        CategoryCollection $categoryCollection,
         array &$catUrls,
         array &$categories
     ): void {
@@ -99,7 +100,6 @@ class AttributeAdapter
 
         $navigationCategoryId = $this->exportContext->getNavigationCategoryId();
 
-        /** @var CategoryEntity $categoryEntity */
         foreach ($categoryCollection as $categoryEntity) {
             if (!$categoryEntity->active) {
                 continue;

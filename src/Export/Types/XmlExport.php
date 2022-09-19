@@ -14,8 +14,12 @@ use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupServic
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-abstract class AbstractXmlExport extends AbstractExport
+class XmlExport extends AbstractExport
 {
     private const MAXIMUM_PROPERTIES_COUNT = 500;
 
@@ -49,9 +53,7 @@ abstract class AbstractXmlExport extends AbstractExport
         $this->xmlFileConverter = $exporter;
     }
 
-    /**
-     * @param Item[] $items
-     */
+    /** @inheritDoc */
     public function buildResponse(array $items, int $start, int $total, array $headers = []): Response
     {
         $rawXml = $this->xmlFileConverter->serializeItems(
@@ -67,14 +69,7 @@ abstract class AbstractXmlExport extends AbstractExport
         return $response;
     }
 
-    /**
-     * Converts given product entities to Findologic XML items. In case items can not be exported, they won't
-     * be returned. Details about why specific products can not be exported, can be found in the logs.
-     *
-     * @param array $products
-     *
-     * @return XMLItem[]
-     */
+    /** @inheritDoc */
     public function buildItems(array $products): array
     {
         $items = [];
@@ -92,20 +87,20 @@ abstract class AbstractXmlExport extends AbstractExport
         return $items;
     }
 
-    private function exportSingleItem($product): ?Item
+    private function exportSingleItem(ProductEntity $product): ?Item
     {
         $category = $this->getConfiguredCrossSellingCategory(
-            $this->getIdOfProductEntity($product),
-            $this->getCategoriesOfProductEntity($product),
+            $product->id,
+            $product->categories,
         );
         if ($category && $this->logger) {
             $this->logger->warning(
                 sprintf(
                     'Product with id %s (%s) was not exported because it is assigned to cross selling category %s (%s)',
-                    $this->getIdOfProductEntity($product),
-                    $this->getNameOfProductEntity($product),
-                    $this->getIdOfCategoryEntity($category),
-                    $this->getBreadcrumbsStringOfCategoryEntity($category)
+                    $product->id,
+                    $product->getTranslation('name'),
+                    $category->id,
+                    implode(' < ', $category->breadcrumb)
                 ),
                 ['product' => $product]
             );
@@ -113,7 +108,7 @@ abstract class AbstractXmlExport extends AbstractExport
             return null;
         }
 
-        $initialItem = $this->xmlFileConverter->createItem($this->getIdOfProductEntity($product));
+        $initialItem = $this->xmlFileConverter->createItem($product->id);
         $item = $this->exportItemAdapter->adaptProduct($initialItem, $product);
 
 //        $pageSize = $this->calculatePageSize($productEntity);
@@ -138,12 +133,12 @@ abstract class AbstractXmlExport extends AbstractExport
         return $item;
     }
 
-    private function calculatePageSize($product): int
+    private function calculatePageSize(ProductEntity $product): int
     {
         $maxPropertiesCount = $this->productSearcher->findMaxPropertiesCount(
-            $this->getIdOfProductEntity($product),
-            $this->getParentIdOfProductEntity($product),
-            $this->getPropertyIdsOfProductEntity($product)
+            $product->id,
+            $product->parentId,
+            $product->propertyIds
         );
         if ($maxPropertiesCount >= self::MAXIMUM_PROPERTIES_COUNT) {
             return 1;
@@ -152,14 +147,14 @@ abstract class AbstractXmlExport extends AbstractExport
         return intval(self::MAXIMUM_PROPERTIES_COUNT / max(1, $maxPropertiesCount));
     }
 
-    private function getConfiguredCrossSellingCategory(string $productId, array $productCategories)
+    private function getConfiguredCrossSellingCategory(string $productId, CategoryCollection $productCategories): ?CategoryEntity
     {
         // TODO: Get cross selling categories from configuration
         $crossSellingCategories = [];
         if (count($crossSellingCategories)) {
             $categories = array_merge(
-                $productCategories,
-                $this->dynamicProductGroupService->getCategories($productId)
+                $productCategories->getElements(),
+                $this->dynamicProductGroupService->getCategories($productId)->getElements()
             );
 
             foreach ($categories as $categoryId => $category) {
@@ -171,18 +166,4 @@ abstract class AbstractXmlExport extends AbstractExport
 
         return null;
     }
-
-    abstract protected function getIdOfProductEntity($product): string;
-
-    abstract protected function getParentIdOfProductEntity($product): string;
-
-    abstract protected function getPropertyIdsOfProductEntity($product): ?array;
-
-    abstract protected function getNameOfProductEntity($product): string;
-
-    abstract protected function getCategoriesOfProductEntity($product): array;
-
-    abstract protected function getIdOfCategoryEntity($category): string;
-
-    abstract protected function getBreadcrumbsStringOfCategoryEntity($category): string;
 }

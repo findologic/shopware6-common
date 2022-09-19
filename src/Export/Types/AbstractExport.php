@@ -9,6 +9,8 @@ use FINDOLOGIC\Shopware6Common\Export\AbstractHeaderHandler;
 use FINDOLOGIC\Shopware6Common\Export\Logger\Handler\ProductErrorHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractExport
 {
@@ -32,10 +34,20 @@ abstract class AbstractExport
         );
     }
 
-    abstract public function buildItems(array $products): array;
-
     /**
      * @param Item[] $items
      */
     abstract public function buildResponse(array $items, int $start, int $total, array $headers = []): Response;
+
+    /**
+     * Converts given product entities to Findologic XML items. In case items can not be exported, they won't
+     * be returned. Details about why specific products can not be exported, can be found in the logs.
+     *
+     * @param ProductEntity[] $products
+     *
+     * @return Item[]
+     */
+    abstract public function buildItems(array $products): array;
+
+
 }

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Search;
 
+use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
+use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
+
 abstract class AbstractProductSearcher
 {
     protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
@@ -17,7 +21,7 @@ abstract class AbstractProductSearcher
         ?int $limit = null,
         ?int $offset = null,
         ?string $productId = null
-    ): array {
+    ): ProductCollection {
         $products = $this->fetchProducts($limit, $offset, $productId);
 
         // TODO: Use config
@@ -33,7 +37,7 @@ abstract class AbstractProductSearcher
         ?int $limit = null,
         ?int $offset = null,
         ?string $productId = null
-    ): array;
+    ): ProductCollection;
 
     abstract public function findTotalProductCount(): int;
 
@@ -74,7 +78,72 @@ abstract class AbstractProductSearcher
             ->withActiveParentOrInactiveParentWithVariantsFilter();
     }
 
-    abstract protected function getCheapestProducts(array $products): array;
+    protected function getCheapestProducts(ProductCollection $products): ProductCollection
+    {
+        $cheapestVariants = new ProductCollection();
 
-    abstract protected function getConfiguredMainVariants(array $products): ?array;
+        /** @var ProductEntity $product */
+        foreach ($products as $product) {
+            $currencyId = $this->exportContext->getCurrencyId();
+            $productPrice = Utils::getCurrencyPrice($product->price, $currencyId);
+
+            if (!$cheapestVariant = $this->getCheapestChild($product->id)) {
+                if ($productPrice['gross'] > 0.0 && $product->active) {
+                    $cheapestVariants->add($product);
+                }
+
+                continue;
+            }
+
+            /** @var string[] $productPrice */
+            $cheapestVariantPrice = Utils::getCurrencyPrice($cheapestVariant->price, $currencyId);
+
+            if ($productPrice['gross'] === 0.0) {
+                $realCheapestProduct = $cheapestVariant;
+            } else {
+                $realCheapestProduct = $productPrice['gross'] <= $cheapestVariantPrice['gross']
+                    ? $product
+                    : $cheapestVariant;
+            }
+
+            $cheapestVariants->add($realCheapestProduct);
+        }
+
+        return $cheapestVariants;
+    }
+
+    protected function getConfiguredMainVariants(ProductCollection $products): ?ProductCollection
+    {
+        $realProductIds = [];
+
+        foreach ($products as $product) {
+            if ($mainVariantId = $product->mainVariantId) {
+                $realProductIds[] = $mainVariantId;
+
+                continue;
+            }
+
+            /**
+             * If product is inactive, try to fetch first variant product.
+             * This is related to main product by parent configuration.
+             */
+            if ($product->active) {
+                $realProductIds[] = $product->id;
+            } elseif ($childrenProductId = $this->getFirstVisibleChildId($product->id)) {
+                $realProductIds[] = $childrenProductId;
+            }
+        }
+
+        if (empty($realProductIds)) {
+            return null;
+        }
+
+        return $this->getRealMainVariants($realProductIds);
+    }
+
+    abstract protected function getCheapestChild(string $productId): ?ProductEntity;
+
+    abstract protected function getFirstVisibleChildId(string $productId): ?string;
+
+    abstract protected function getRealMainVariants(array $productIds): ProductCollection;
 }
