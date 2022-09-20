@@ -7,16 +7,14 @@ namespace FINDOLOGIC\Shopware6Common\Export\Types;
 use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\Export\Exporter;
 use FINDOLOGIC\Export\XML\XMLExporter;
-use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
-use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class XmlExport extends AbstractExport
@@ -25,27 +23,27 @@ class XmlExport extends AbstractExport
 
     protected AbstractDynamicProductGroupService $dynamicProductGroupService;
 
-    protected ContainerInterface $container;
+    protected AbstractProductSearcher $productSearcher;
+
+    protected PluginConfig $pluginConfig;
+
+    protected ExportItemAdapter $exportItemAdapter;
 
     protected ?LoggerInterface $logger;
 
     protected XMLExporter $xmlFileConverter;
 
-    protected ExportItemAdapter $exportItemAdapter;
-
-    protected AbstractProductSearcher $productSearcher;
-
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
         AbstractProductSearcher $productSearcher,
+        PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        ContainerInterface $container,
         ?LoggerInterface $logger = null
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
         $this->productSearcher = $productSearcher;
+        $this->pluginConfig = $pluginConfig;
         $this->exportItemAdapter = $exportItemAdapter;
-        $this->container = $container;
         $this->logger = $logger;
 
         /** @var XMLExporter $exporter */
@@ -149,8 +147,7 @@ class XmlExport extends AbstractExport
 
     private function getConfiguredCrossSellingCategory(string $productId, CategoryCollection $productCategories): ?CategoryEntity
     {
-        // TODO: Get cross selling categories from configuration
-        $crossSellingCategories = [];
+        $crossSellingCategories = $this->pluginConfig->getCrossSellingCategories();
         if (count($crossSellingCategories)) {
             $categories = array_merge(
                 $productCategories->getElements(),

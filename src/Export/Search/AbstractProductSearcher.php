@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Search;
 
+use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use InvalidArgumentException;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractProductSearcher
 {
+    protected PluginConfig $pluginConfig;
+
     protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
 
-    public function __construct(AbstractProductCriteriaBuilder $productCriteriaBuilder)
-    {
+    public function __construct(
+        PluginConfig $pluginConfig,
+        AbstractProductCriteriaBuilder $productCriteriaBuilder
+    ) {
+        $this->pluginConfig = $pluginConfig;
         $this->productCriteriaBuilder = $productCriteriaBuilder;
     }
 
@@ -24,11 +32,10 @@ abstract class AbstractProductSearcher
     ): ProductCollection {
         $products = $this->fetchProducts($limit, $offset, $productId);
 
-        // TODO: Use config
-//        $mainVariantConfig = '';
-//        if ($mainVariantConfig === MainVariant::CHEAPEST) {
-//            return $this->getCheapestProducts($products);
-//        }
+        $mainVariantConfig = $this->pluginConfig->getMainVariant();
+        if ($mainVariantConfig === MainVariant::CHEAPEST) {
+            return $this->getCheapestProducts($products);
+        }
 
         return $this->getConfiguredMainVariants($products) ?: $products;
     }
@@ -49,19 +56,19 @@ abstract class AbstractProductSearcher
 
     protected function adaptCriteriaBasedOnConfiguration(): void
     {
-        $mainVariantConfig = '';
+        $mainVariantConfig = $this->pluginConfig->getMainVariant();
 
-//        switch ($mainVariantConfig) {
-//            case MainVariant::SHOPWARE_DEFAULT:
-        $this->adaptParentCriteriaByShopwareDefault();
-//                break;
-//            case MainVariant::MAIN_PARENT:
-//            case MainVariant::CHEAPEST:
-//                $this->adaptParentCriteriaByMainOrCheapestProduct();
-//                break;
-//            default:
-//                throw new InvalidArgumentException($mainVariantConfig);
-//        }
+        switch ($mainVariantConfig) {
+            case MainVariant::SHOPWARE_DEFAULT:
+                $this->adaptParentCriteriaByShopwareDefault();
+                break;
+            case MainVariant::MAIN_PARENT:
+            case MainVariant::CHEAPEST:
+                $this->adaptParentCriteriaByMainOrCheapestProduct();
+                break;
+            default:
+                throw new InvalidArgumentException($mainVariantConfig);
+        }
     }
 
     protected function adaptParentCriteriaByShopwareDefault(): void

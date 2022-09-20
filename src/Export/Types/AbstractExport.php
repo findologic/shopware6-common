@@ -26,7 +26,7 @@ abstract class AbstractExport
      */
     public const TYPE_PRODUCT_ID = 1;
 
-    public static function buildErrorResponse(ProductErrorHandler $errorHandler, array $headers): JsonResponse
+    public static function buildErrorResponse(ProductErrorHandler $errorHandler): JsonResponse
     {
         return new JsonResponse(
             $errorHandler->getExportErrors()->buildErrorResponse(),

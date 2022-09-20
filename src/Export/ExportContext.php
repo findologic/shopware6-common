@@ -22,22 +22,18 @@ class ExportContext
 
     protected bool $shouldHideProductsOutOfStock;
 
-    protected bool $isIntegrationTypeApi;
-
     public function __construct(
         string $shopkey,
         SalesChannelEntity $salesChannel,
         CategoryEntity $navigationCategory,
         CustomerGroupCollection $customerGroups,
-        bool $shouldHideProductsOutOfStock,
-        bool $isIntegrationTypeApi,
+        bool $shouldHideProductsOutOfStock
     ) {
         $this->shopkey = $shopkey;
         $this->salesChannel = $salesChannel;
         $this->navigationCategory = $navigationCategory;
         $this->customerGroups = $customerGroups;
         $this->shouldHideProductsOutOfStock = $shouldHideProductsOutOfStock;
-        $this->isIntegrationTypeApi = $isIntegrationTypeApi;
     }
 
     public function getShopkey(): string
@@ -83,10 +79,5 @@ class ExportContext
     public function shouldHideProductsOutOfStock(): bool
     {
         return $this->shouldHideProductsOutOfStock;
-    }
-
-    public function isIntegrationTypeApi(): bool
-    {
-        return $this->isIntegrationTypeApi;
     }
 }

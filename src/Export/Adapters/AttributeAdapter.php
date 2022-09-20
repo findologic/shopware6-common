@@ -6,6 +6,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Export\Helpers\DataHelper;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
@@ -24,14 +25,18 @@ class AttributeAdapter
 
     protected ExportContext $exportContext;
 
+    protected PluginConfig $pluginConfig;
+
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
         AbstractUrlBuilderService $urlBuilderService,
         ExportContext $exportContext,
+        PluginConfig $pluginConfig
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
         $this->urlBuilderService = $urlBuilderService;
         $this->exportContext = $exportContext;
+        $this->pluginConfig = $pluginConfig;
     }
 
     /**
@@ -74,7 +79,7 @@ class AttributeAdapter
         $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
 
         $attributes = [];
-        if (!$this->exportContext->isIntegrationTypeApi() && !Utils::isEmpty($catUrls)) {
+        if (!$this->pluginConfig->isIntegrationTypeApi() && !Utils::isEmpty($catUrls)) {
             $catUrlAttribute = new Attribute('cat_url');
             $catUrlAttribute->setValues($this->decodeHtmlEntities(Utils::flattenWithUnique($catUrls)));
             $attributes[] = $catUrlAttribute;
@@ -119,7 +124,7 @@ class AttributeAdapter
                 $categories = array_merge($categories, [$categoryPath]);
             }
 
-            if ($this->exportContext->isIntegrationTypeApi()) {
+            if ($this->pluginConfig->isIntegrationTypeApi()) {
                 continue;
             }
 
@@ -155,7 +160,6 @@ class AttributeAdapter
     {
         $attributes = [];
 
-        /** @var PropertyGroupOptionEntity $propertyGroupOptionEntity */
         foreach ($productEntity->properties as $propertyGroupOptionEntity) {
             $group = $propertyGroupOptionEntity->group;
             if ($group && !$group->filterable) {
@@ -265,7 +269,7 @@ class AttributeAdapter
      */
     protected function getAttributeKey(?string $key): ?string
     {
-        if ($this->exportContext->isIntegrationTypeApi()) {
+        if ($this->pluginConfig->isIntegrationTypeApi()) {
             return Utils::removeSpecialChars($key);
         }
 

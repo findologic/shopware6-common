@@ -5,24 +5,23 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Property;
-use FINDOLOGIC\Shopware6Common\Export\ExportContext;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class ShopwarePropertiesAdapter
 {
-    protected ExportContext $exportContext;
+    protected PluginConfig $pluginConfig;
 
-    public function __construct(ExportContext $exportContext) {
-        $this->exportContext = $exportContext;
+    public function __construct(PluginConfig $pluginConfig) {
+        $this->pluginConfig = $pluginConfig;
     }
 
     public function adapt(ProductEntity $product): array
     {
         $properties = [];
 
-        /** @var PropertyGroupOptionEntity $propertyGroupOptionEntity */
         foreach ($product->properties as $propertyGroupOptionEntity) {
             $group = $propertyGroupOptionEntity->group;
             if ($group && !$group->filterable) {
@@ -58,7 +57,7 @@ class ShopwarePropertiesAdapter
 
     protected function getAttributeKey(?string $key): ?string
     {
-        if ($this->exportContext->isIntegrationTypeApi()) {
+        if ($this->pluginConfig->isIntegrationTypeApi()) {
             return Utils::removeSpecialChars($key);
         }
 

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Types;
 
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Logger\Handler\ProductErrorHandler;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 
 class ProductIdExport extends XmlExport
 {
@@ -20,11 +19,11 @@ class ProductIdExport extends XmlExport
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
         AbstractProductSearcher $productSearcher,
+        PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        ContainerInterface $container,
         ?LoggerInterface $logger = null
     ) {
-        parent::__construct($dynamicProductGroupService, $productSearcher, $exportItemAdapter, $container, $logger);
+        parent::__construct($dynamicProductGroupService, $productSearcher, $pluginConfig, $exportItemAdapter, $logger);
 
         $this->errorHandler = $this->pushErrorHandler();
     }
@@ -51,7 +50,7 @@ class ProductIdExport extends XmlExport
             return parent::buildResponse($items, $start, $total, $headers);
         }
 
-        return AbstractExport::buildErrorResponse($this->errorHandler, $headers);
+        return AbstractExport::buildErrorResponse($this->errorHandler);
     }
 
     private function pushErrorHandler(): ProductErrorHandler
