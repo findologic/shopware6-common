@@ -21,7 +21,7 @@ class ProductIdExport extends XmlExport
         AbstractProductSearcher $productSearcher,
         PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        ?LoggerInterface $logger = null
+        LoggerInterface $logger
     ) {
         parent::__construct($dynamicProductGroupService, $productSearcher, $pluginConfig, $exportItemAdapter, $logger);
 
@@ -56,10 +56,7 @@ class ProductIdExport extends XmlExport
     private function pushErrorHandler(): ProductErrorHandler
     {
         $errorHandler = new ProductErrorHandler();
-
-        if ($this->logger) {
-            $this->logger->pushHandler($errorHandler);
-        }
+        $this->logger->pushHandler($errorHandler);
 
         return $errorHandler;
     }

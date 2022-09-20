@@ -9,9 +9,11 @@ use FINDOLOGIC\Export\Exporter;
 use FINDOLOGIC\Export\XML\XMLExporter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemBuildEvent;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
@@ -29,7 +31,9 @@ class XmlExport extends AbstractExport
 
     protected ExportItemAdapter $exportItemAdapter;
 
-    protected ?LoggerInterface $logger;
+    protected LoggerInterface $logger;
+
+    protected ?EventDispatcherInterface $eventDispatcher;
 
     protected XMLExporter $xmlFileConverter;
 
@@ -38,13 +42,15 @@ class XmlExport extends AbstractExport
         AbstractProductSearcher $productSearcher,
         PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        ?LoggerInterface $logger = null
+        LoggerInterface $logger,
+        ?EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
         $this->productSearcher = $productSearcher;
         $this->pluginConfig = $pluginConfig;
         $this->exportItemAdapter = $exportItemAdapter;
         $this->logger = $logger;
+        $this->eventDispatcher = $eventDispatcher;
 
         /** @var XMLExporter $exporter */
         $exporter = Exporter::create(Exporter::TYPE_XML);
@@ -76,8 +82,10 @@ class XmlExport extends AbstractExport
             if (!$item) {
                 continue;
             }
-            // TODO: Event dispatching
-//            $this->eventDispatcher->dispatch(new AfterItemBuildEvent($item), AfterItemBuildEvent::NAME);
+
+            if ($this->eventDispatcher) {
+                $this->eventDispatcher->dispatch(new AfterItemBuildEvent($item), AfterItemBuildEvent::NAME);
+            }
 
             $items[] = $item;
         }
@@ -91,7 +99,7 @@ class XmlExport extends AbstractExport
             $product->id,
             $product->categories,
         );
-        if ($category && $this->logger) {
+        if ($category) {
             $this->logger->warning(
                 sprintf(
                     'Product with id %s (%s) was not exported because it is assigned to cross selling category %s (%s)',
@@ -107,7 +115,7 @@ class XmlExport extends AbstractExport
         }
 
         $initialItem = $this->xmlFileConverter->createItem($product->id);
-        $item = $this->exportItemAdapter->adaptProduct($initialItem, $product);
+        $item = $this->exportItemAdapter->adapt($initialItem, $product);
 
 //        $pageSize = $this->calculatePageSize($productEntity);
 //        $iterator = $this->productSearcher->buildVariantIterator($productEntity, $pageSize);

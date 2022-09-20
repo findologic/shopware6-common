@@ -50,7 +50,7 @@ class ProductDebugService
         string $productId,
         string $shopkey,
         ?XMLItem $xmlItem,
-        ProductEntity $exportedMainProduct,
+        ?ProductEntity $exportedMainProduct,
         ExportErrors $exportErrors
     ): JsonResponse {
         $this->initialize($productId, $shopkey, $xmlItem, $exportedMainProduct, $exportErrors);
@@ -107,7 +107,7 @@ class ProductDebugService
         string $productId,
         string $shopkey,
         ?XMLItem $xmlItem,
-        ProductEntity $exportedMainProduct,
+        ?ProductEntity $exportedMainProduct,
         ExportErrors $exportErrors
     ): void {
         $this->productId = $productId;
