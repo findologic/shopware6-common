@@ -117,24 +117,22 @@ class XmlExport extends AbstractExport
         $initialItem = $this->xmlFileConverter->createItem($product->id);
         $item = $this->exportItemAdapter->adapt($initialItem, $product);
 
-//        $pageSize = $this->calculatePageSize($productEntity);
-//        $iterator = $this->productSearcher->buildVariantIterator($productEntity, $pageSize);
-//
-//        while (($variantsResult = $iterator->fetch()) !== null) {
-//            /** @var ProductCollection $variants */
-//            $variants = $variantsResult->getEntities();
-//            foreach ($variants->getElements() as $variant) {
-//                if ($item) {
-//                    $adaptedItem = $this->exportItemAdapter->adaptVariant($item, $variant);
-//                } elseif ($adaptedItem = $this->exportItemAdapter->adapt($initialItem, $variant)) {
-//                    $adaptedItem->setId($variant->getId());
-//                }
-//
-//                if ($adaptedItem) {
-//                    $item = $adaptedItem;
-//                }
-//            }
-//        }
+        $pageSize = $this->calculatePageSize($product);
+        $iterator = $this->productSearcher->buildVariantIterator($product, $pageSize);
+
+        while (($variants = $iterator->fetch()) !== null) {
+            foreach ($variants as $variant) {
+                if ($item) {
+                    $adaptedItem = $this->exportItemAdapter->adaptVariant($item, $variant);
+                } elseif ($adaptedItem = $this->exportItemAdapter->adapt($initialItem, $variant)) {
+                    $adaptedItem->setId($variant->id);
+                }
+
+                if ($adaptedItem) {
+                    $item = $adaptedItem;
+                }
+            }
+        }
 
         return $item;
     }

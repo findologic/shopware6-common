@@ -54,6 +54,8 @@ abstract class AbstractProductSearcher
         ?array $propertyIds
     ): int;
 
+    abstract public function buildVariantIterator(ProductEntity $product, int $pageSize): VariantIteratorInterface;
+
     protected function adaptCriteriaBasedOnConfiguration(): void
     {
         $mainVariantConfig = $this->pluginConfig->getMainVariant();
