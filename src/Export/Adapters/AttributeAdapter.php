@@ -184,10 +184,10 @@ class AttributeAdapter
             $groupName = $this->getAttributeKey($group->getTranslation('name'));
             $propertyGroupOptionName = $propertyGroupOptionEntity->getTranslation('name');
             if (!Utils::isEmpty($groupName) && !Utils::isEmpty($propertyGroupOptionName)) {
-                $properyGroupAttrib = new Attribute($groupName);
-                $properyGroupAttrib->addValue(Utils::removeControlCharacters($propertyGroupOptionName));
+                $propertyGroupAttrib = new Attribute($groupName);
+                $propertyGroupAttrib->addValue(Utils::removeControlCharacters($propertyGroupOptionName));
 
-                $attributes[] = $properyGroupAttrib;
+                $attributes[] = $propertyGroupAttrib;
             }
         }
 
@@ -255,7 +255,7 @@ class AttributeAdapter
     {
         $attributes = [];
 
-        $shippingFree = $this->translateBooleanValue($product->shippingFree);
+        $shippingFree = $this->translateBooleanValue(!!$product->shippingFree);
         $attributes[] = new Attribute('shipping_free', [$shippingFree]);
         $rating = $product->ratingAverage ?? 0.0;
         $attributes[] = new Attribute('rating', [$rating]);

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="vendor/autoload.php" convertDeprecationsToExceptions="false">
+    <coverage/>
+    <testsuites>
+        <testsuite name="findologic/shopware6-common Tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <junit outputFile="build/logs/junit.xml"/>
+    </logging>
+</phpunit>

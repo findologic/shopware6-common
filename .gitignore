@@ -5,4 +5,5 @@
 /vendor/
 
 # Test files
+/build/
 .phpunit.result.cache
