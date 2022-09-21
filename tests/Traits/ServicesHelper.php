@@ -7,9 +7,14 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractUrlBuilderService;
 use Symfony\Component\Routing\Router;
+use Vin\ShopwareSdk\Data\Defaults;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
+use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
+use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainEntity;
+use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 trait ServicesHelper
 {
@@ -37,22 +42,13 @@ trait ServicesHelper
         };
     }
 
-    public function getExportContext(): ExportContext
+    public function getExportContext(?CustomerGroupCollection $customerGroupCollection = null): ExportContext
     {
-        /** @var SalesChannelEntity $salesChannel */
-        $salesChannel = Entity::createFromArray(SalesChannelEntity::class, [
-        ]);
-
-        $navigationCategory = $this->createTestCategory([
-            'id' => $this->navigationCategoryId,
-            'breadcrumb' => [$this->navigationCategoryId]
-        ]);
-
         return new ExportContext(
             $this->validShopkey,
-            $salesChannel,
-            $navigationCategory,
-            new CustomerGroupCollection(),
+            $this->buildSalesChannel(),
+            $this->buildNavigationCategory(),
+            $customerGroupCollection ?? new CustomerGroupCollection(),
             true,
         );
     }
@@ -63,5 +59,41 @@ trait ServicesHelper
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
             'active' => true
         ], $overrides));
+    }
+
+    public function buildSalesChannel(): SalesChannelEntity
+    {
+        /** @var SalesChannelEntity $salesChannel */
+        $salesChannel = Entity::createFromArray(SalesChannelEntity::class, [
+            'id' => Defaults::SALES_CHANNEL,
+            'languageId' => Defaults::LANGUAGE_SYSTEM
+        ]);
+        $storeFrontDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
+            'url' => 'https://test.uk',
+            'languageId' => Defaults::LANGUAGE_SYSTEM
+        ]);
+        $storeFrontDomain2 = Entity::createFromArray(SalesChannelDomainEntity::class, [
+            'url' => 'https://test.de',
+            'languageId' => Uuid::randomHex(),
+        ]);
+        $headlessDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
+            'url' => 'default.headless',
+            'languageId' => Defaults::LANGUAGE_SYSTEM,
+        ]);
+        $salesChannel->domains = new SalesChannelDomainCollection([
+            $storeFrontDomain,
+            $storeFrontDomain2,
+            $headlessDomain
+        ]);
+
+        return $salesChannel;
+    }
+
+    public function buildNavigationCategory(): CategoryEntity
+    {
+        return $this->createTestCategory([
+            'id' => $this->navigationCategoryId,
+            'breadcrumb' => [$this->navigationCategoryId]
+        ]);
     }
 }

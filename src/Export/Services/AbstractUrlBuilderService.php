@@ -121,6 +121,7 @@ abstract class AbstractUrlBuilderService
         }
 
         $applicableSeoUrls = $this->getApplicableSeoUrls($allSeoUrls);
+
         /** @var SeoUrlCollection $seoUrls */
         $seoUrls = $this->getTranslatedEntities($applicableSeoUrls);
         if (!$seoUrls || !$seoUrls->first()) {
@@ -249,6 +250,8 @@ abstract class AbstractUrlBuilderService
     {
         $salesChannelId = $this->exportContext->getSalesChannelId();
         $allSeoUrls = $this->fetchCategorySeoUrls($categoryEntity);
+
+        /** @var SeoUrlCollection $salesChannelSeoUrls */
         $salesChannelSeoUrls = $allSeoUrls->filter(static function (SeoUrlEntity $seoUrl) use ($salesChannelId) {
             return $seoUrl->salesChannelId === $salesChannelId;
         });
@@ -259,7 +262,7 @@ abstract class AbstractUrlBuilderService
 
         $seoUrls = [];
         foreach ($salesChannelSeoUrls as $seoUrl) {
-            $pathInfo = $seoUrl->getSeoPathInfo();
+            $pathInfo = $seoUrl->seoPathInfo;
             if (Utils::isEmpty($pathInfo)) {
                 continue;
             }

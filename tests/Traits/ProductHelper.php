@@ -51,7 +51,10 @@ trait ProductHelper
             'tax' => ['id' => Uuid::randomHex(),  'name' => '9%', 'taxRate' => 9],
             'categories' => $this->getDefaultCategories(),
             'seoUrls' => $this->getDefaultSeoUrlsData($id),
-            'customFields' => []
+            'customFields' => [],
+            'translated' => [
+                'description' => 'FINDOLOGIC Description',
+            ]
         ]);
 
         $productData = array_merge($productData, $this->getDefaultPropertySettingsData($redId, $colorId));
@@ -109,9 +112,27 @@ trait ProductHelper
         return [
             [
                 'pathInfo' => '/detail/' . $productId,
+                'seoPathInfo' => 'FINDOLOGIC-Product/FINDOLOGIC001',
+                'isCanonical' => true,
+                'routeName' => 'frontend.detail.page',
+                'salesChannelId' => Defaults::SALES_CHANNEL,
+                'languageId' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            [
+                'pathInfo' => '/detail/' . $productId,
+                'seoPathInfo' => 'FINDOLOGIC-Product-EN/FINDOLOGIC001',
+                'isCanonical' => true,
+                'routeName' => 'frontend.detail.page',
+                'salesChannelId' => Defaults::SALES_CHANNEL,
+                'languageId' => Uuid::randomHex(),
+            ],
+            [
+                'pathInfo' => '/detail/' . $productId,
                 'seoPathInfo' => 'Awesome-Seo-Url/&ecause/SÄÖ/is/$mportant+',
                 'isCanonical' => true,
-                'routeName' => 'frontend.detail.page'
+                'routeName' => 'frontend.detail.page',
+                'salesChannelId' => Defaults::SALES_CHANNEL,
+                'languageId' => Defaults::LANGUAGE_SYSTEM,
             ]
         ];
     }
