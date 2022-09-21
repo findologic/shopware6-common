@@ -1,1 +1,8 @@
+# IDE files
+.idea
+
+# packages
 /vendor/
+
+# Test files
+.phpunit.result.cache
