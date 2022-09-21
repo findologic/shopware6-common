@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductIdExport extends XmlExport
@@ -21,9 +22,17 @@ class ProductIdExport extends XmlExport
         AbstractProductSearcher $productSearcher,
         PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?EventDispatcherInterface $eventDispatcher = null
     ) {
-        parent::__construct($dynamicProductGroupService, $productSearcher, $pluginConfig, $exportItemAdapter, $logger);
+        parent::__construct(
+            $dynamicProductGroupService,
+            $productSearcher,
+            $pluginConfig,
+            $exportItemAdapter,
+            $logger,
+            $eventDispatcher
+        );
 
         $this->errorHandler = $this->pushErrorHandler();
     }
