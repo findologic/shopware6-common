@@ -10,10 +10,9 @@ use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
-use FINDOLOGIC\Shopware6Common\Export\Services\AbstractUrlBuilderService;
+use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
-use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
@@ -21,7 +20,7 @@ class AttributeAdapter
 {
     protected AbstractDynamicProductGroupService $dynamicProductGroupService;
 
-    protected AbstractUrlBuilderService $urlBuilderService;
+    protected AbstractCatUrlBuilderService $catUrlBuilderService;
 
     protected ExportContext $exportContext;
 
@@ -29,12 +28,12 @@ class AttributeAdapter
 
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
-        AbstractUrlBuilderService $urlBuilderService,
+        AbstractCatUrlBuilderService $catUrlBuilderService,
         ExportContext $exportContext,
         PluginConfig $pluginConfig
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
-        $this->urlBuilderService = $urlBuilderService;
+        $this->catUrlBuilderService = $catUrlBuilderService;
         $this->exportContext = $exportContext;
         $this->pluginConfig = $pluginConfig;
     }
@@ -99,10 +98,6 @@ class AttributeAdapter
         array &$catUrls,
         array &$categories
     ): void {
-        if (!$categoryCollection) {
-            return;
-        }
-
         $navigationCategoryId = $this->exportContext->getNavigationCategoryId();
 
         foreach ($categoryCollection as $categoryEntity) {
@@ -128,11 +123,10 @@ class AttributeAdapter
                 continue;
             }
 
-            // TODO: cat_urls
-//            $catUrls = array_merge(
-//                $catUrls,
-//                $this->urlBuilderService->getCategoryUrls($categoryEntity, $this->salesChannelContext->getContext())
-//            );
+            $catUrls = array_merge(
+                $catUrls,
+                $this->catUrlBuilderService->getCategoryUrls($categoryEntity)
+            );
         }
     }
 
