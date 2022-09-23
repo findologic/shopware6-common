@@ -2,6 +2,7 @@
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
@@ -26,17 +27,71 @@ trait CategoryHelper
         return $category;
     }
 
-    public function generateCategoryPaths(ProductEntity $product): ProductEntity
+    public function buildNavigationCategory(): CategoryEntity
     {
-        $categories = $product->categories;
+        return $this->createTestCategory([
+            'id' => $this->navigationCategoryId,
+            'breadcrumb' => [$this->navigationCategoryId]
+        ]);
+    }
+    public function generateProductCategoriesWithRelations(
+        CategoryCollection $categories,
+        ?array $productCatIds = null
+    ): CategoryCollection {
+        $productCategories = new CategoryCollection();
 
+        foreach ($categories as $category) {
+            $productCategories = $this->handleCategory(
+                $category->parentId === $this->navigationCategoryId ? $this->buildNavigationCategory() : null,
+                $category,
+                $productCategories,
+                $productCatIds
+            );
+        }
+
+        return $productCategories;
+    }
+
+    public function handleCategory(
+        ?CategoryEntity $parentCategory,
+        CategoryEntity $category,
+        CategoryCollection $productCategories,
+        ?array $productCatIds = null
+    ): CategoryCollection {
+        foreach ($category->children ?? [] as $child) {
+            $productCategories = $this->handleCategory($category, $child, $productCategories, $productCatIds);
+        }
+
+        if ($parentCategory) {
+            $category->parent = $parentCategory;
+            $category->parentId = $parentCategory->id;
+        }
+
+        if (!$productCatIds) {
+            if (!$category->children) {
+                $productCategories->add($category);
+            }
+
+            return $productCategories;
+        }
+
+        if (in_array($category->id, $productCatIds)) {
+            $productCategories->add($category);
+        }
+
+        return $productCategories;
+    }
+
+    public function generateCategoryPathsForProduct(ProductEntity $product): ProductEntity
+    {
         /** @var CategoryEntity $category */
-        $categories->map(function (CategoryEntity $category) {
+        $categories = $product->categories->map(function (CategoryEntity $category) {
             $category->path = sprintf('|%s|', $this->generateCategoryPath($category));
             $category->breadcrumb = explode('|', $this->generateBreadcrumbs($category));
-        });
 
-        $product->categories = $categories;
+            return $category;
+        });
+        $product->categories = new CategoryCollection($categories);
 
         return $product;
     }

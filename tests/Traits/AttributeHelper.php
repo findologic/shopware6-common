@@ -14,24 +14,22 @@ trait AttributeHelper
      */
     public function getAttributes(ProductEntity $productEntity, string $integrationType = IntegrationType::DI): array
     {
-        $catUrl1 = '/FINDOLOGIC-Category/';
         $defaultCatUrl = '';
 
         foreach ($productEntity->categories as $category) {
             if ($category->name === 'FINDOLOGIC Category') {
-                $defaultCatUrl = sprintf('/navigation/%s', $category->id);
+                $defaultCatUrl = $category->id;
             }
         }
 
         $attributes = [];
-        $catUrlAttribute = new Attribute('cat_url', [$catUrl1, $defaultCatUrl]);
+        $catUrlAttribute = new Attribute('cat_url', [$defaultCatUrl]);
         $catAttribute = new Attribute('cat', ['FINDOLOGIC Category']);
         $vendorAttribute = new Attribute('vendor', ['FINDOLOGIC']);
 
-//        // TODO: cat_url implementation
-//        if ($integrationType === 'Direct Integration') {
-//            $attributes[] = $catUrlAttribute;
-//        }
+        if ($integrationType === 'Direct Integration') {
+            $attributes[] = $catUrlAttribute;
+        }
 
         $attributes[] = $catAttribute;
         $attributes[] = $vendorAttribute;

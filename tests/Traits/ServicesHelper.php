@@ -5,9 +5,13 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
-use FINDOLOGIC\Shopware6Common\Export\Services\AbstractUrlBuilderService;
+use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
+use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
+use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Vin\ShopwareSdk\Data\Defaults;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\Entity;
@@ -28,18 +32,54 @@ trait ServicesHelper
             ->getMockForAbstractClass();
     }
 
-    public function getUrlBuilderService(): AbstractUrlBuilderService
+    public function getCatUrlBuilderService(): AbstractCatUrlBuilderService
     {
         $router = $this->getMockBuilder(Router::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        return new class($router, $this->getExportContext()) extends AbstractUrlBuilderService {
-            protected function fetchParentsFromCategoryPath(string $categoryPath): ?array
+        return new class($this->getExportContext(), $router) extends AbstractCatUrlBuilderService {
+            public function __construct(
+                ExportContext $exportContext,
+                ?RouterInterface $router = null
+            ) {
+                parent::__construct($exportContext, $router);
+            }
+
+            protected function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection
             {
-                return [];
+                $categoryCollection = new CategoryCollection();
+                $parentIds = array_filter(explode('|', $categoryPath));
+
+                foreach ($parentIds as $id) {
+                    $category = new CategoryEntity();
+                    $category->id = $id;
+
+                    $categoryCollection->add($category);
+                }
+
+                return $categoryCollection;
+            }
+
+            protected function buildCategoryUrls(CategoryEntity $category): array
+            {
+                return [$category->id];
             }
         };
+    }
+
+    public function getProductUrlService(): ProductUrlService
+    {
+        return new ProductUrlService($this->getExportContext());
+    }
+
+    public function getProductImageService(): ProductImageService
+    {
+        $router = $this->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return new ProductImageService($router);
     }
 
     public function getExportContext(?CustomerGroupCollection $customerGroupCollection = null): ExportContext
@@ -87,13 +127,5 @@ trait ServicesHelper
         ]);
 
         return $salesChannel;
-    }
-
-    public function buildNavigationCategory(): CategoryEntity
-    {
-        return $this->createTestCategory([
-            'id' => $this->navigationCategoryId,
-            'breadcrumb' => [$this->navigationCategoryId]
-        ]);
     }
 }

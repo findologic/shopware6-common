@@ -3,6 +3,7 @@
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Attribute;
+use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\IntegrationType;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\AccessEmptyPropertyException;
@@ -13,6 +14,7 @@ use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AttributeHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
@@ -200,16 +202,10 @@ class AttributeAdapterTest extends TestCase
         array $expectedCategories,
         array $expectedCatUrls
     ): void {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
         $config = $this->getPluginConfig([
             'integrationType' => $integrationType
         ]);
         $adapter = $this->getAttributeAdapter($config);
-
-        foreach ($categories as $key => $category) {
-            $categories[$key]['parentId'] = $this->navigationCategoryId;
-        }
 
         $productEntity = $this->createTestProduct(['categories' => $categories]);
         $attributes = $adapter->adapt($productEntity);
@@ -316,8 +312,6 @@ class AttributeAdapterTest extends TestCase
      */
     public function testProductCategoriesUrlWithoutSeoOrEmptyPath(array $data, string $categoryId): void
     {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
         $categoryData['categories'] = $data;
         $productEntity = $this->createTestProduct($categoryData);
 
@@ -325,52 +319,25 @@ class AttributeAdapterTest extends TestCase
 
         $attribute = current($attributes);
         $this->assertSame('cat_url', $attribute->getKey());
-        $this->assertNotContains('/Additional Main', $attribute->getValues());
-        $this->assertContains(sprintf('/navigation/%s', $categoryId), $attribute->getValues());
-    }
-
-    /**
-     * @throws AccessEmptyPropertyException
-     * @throws ProductHasNoCategoriesException
-     * @throws ProductHasNoNameException
-     * @throws ProductHasNoPricesException
-     */
-    public function testProductCategoriesSeoUrl(): void
-    {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
-        $productEntity = $this->createTestProduct();
-
-        $attributes = $this->attributeAdapter->adapt($productEntity);
-
-        $attribute = current($attributes);
-        $this->assertSame('cat_url', $attribute->getKey());
-        $this->assertContains('/FINDOLOGIC-Category/', $attribute->getValues());
+        $this->assertContains($categoryId, $attribute->getValues());
     }
 
     public function testEmptyCategoryNameShouldStillExportCategory(): void
     {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
-        $mainCatId = $this->getContainer()->get('category.repository')
-            ->searchIds(new Criteria(), Context::createDefaultContext())->firstId();
-
         $categoryId = Uuid::randomHex();
-        $pathInfo = 'navigation/' . $categoryId;
-        $seoPathInfo = '/FINDOLOGIC-Category/';
-        $expectedCatUrl = '/' . $pathInfo;
 
         $productEntity = $this->createTestProduct(
             [
                 'categories' => [
                     [
-                        'parentId' => $mainCatId,
+                        'parentId' => $this->navigationCategoryId,
                         'id' => $categoryId,
                         'name' => ' ',
+                        'active' => true,
                         'seoUrls' => [
                             [
-                                'pathInfo' => $pathInfo,
-                                'seoPathInfo' => $seoPathInfo,
+                                'pathInfo' => 'navigation/' . $categoryId,
+                                'seoPathInfo' => '/FINDOLOGIC-Category/',
                                 'isCanonical' => true,
                                 'routeName' => 'frontend.navigation.page',
                             ]
@@ -387,93 +354,20 @@ class AttributeAdapterTest extends TestCase
 
         $catUrls = $attributes[0]->getValues();
         $this->assertCount(1, $catUrls);
-        $this->assertSame([$expectedCatUrl], $catUrls);
+        $this->assertSame([$categoryId], $catUrls);
     }
 
-    public function testCatUrlsContainDomainPathAsPrefix(): void
+    public function testProductHasNoCategories(): void
     {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
-        $expectedPath = '/staging/public';
-        $fullDomain = 'http://test.de' . $expectedPath;
-        $domainRepo = $this->getContainer()->get('sales_channel_domain.repository');
-        $catUrlWithoutSeoUrlPrefix = '/navigation';
-
-        $domainRepo->create([
-            [
-                'url' => $fullDomain,
-                'salesChannelId' => Defaults::SALES_CHANNEL,
-                'currencyId' => Defaults::CURRENCY,
-                'snippetSet' => [
-                    'name' => 'oof',
-                    'baseFile' => 'de.json',
-                    'iso' => 'de_AT'
-                ]
-            ]
-        ], Context::createDefaultContext());
-
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('url', $fullDomain));
-
-        // Wait until the domain entity has been created, since DAL works with events and these events
-        // run asynchronously on a different thread.
-        do {
-            $result = $domainRepo->search($criteria, Context::createDefaultContext());
-        } while ($result->getTotal() <= 0);
-
-        // The sales channel should use the newly generated URL instead of the default domain.
-        $this->salesChannelContext->getSalesChannel()->setLanguageId($result->getEntities()->first()->getLanguageId());
-        $this->salesChannelContext->getSalesChannel()->setDomains($result->getEntities());
-
-        $productEntity = $this->createTestProduct();
-
-        $config = $this->getMockedConfig();
-        $adapter = $this->getAttributeAdapter($config);
-        $attributes = $adapter->adapt($productEntity);
-
-        $hasSeoCatUrls = false;
-        foreach ($attributes as $attribute) {
-            if ($attribute->getKey() === 'cat_url') {
-                foreach ($attribute->getValues() as $value) {
-                    // We only care about SEO URLs of categories. Non-SEO categories are automatically generated
-                    // by the Shopware router.
-                    if (!(strpos($value, $catUrlWithoutSeoUrlPrefix) === 0)) {
-                        $hasSeoCatUrls = true;
-                        $this->assertStringStartsWith($expectedPath, $value);
-                    }
-                }
-            }
-        }
-
-        $this->assertTrue($hasSeoCatUrls);
-    }
-
-    public function testProductAndVariantHaveNoCategories(): void
-    {
-        $this->markTestSkipped('cat_urls need to be implemented first');
-
         $this->expectException(ProductHasNoCategoriesException::class);
+
         $id = Uuid::randomHex();
-        $this->createTestProduct([
+        $product = $this->createTestProduct([
             'id' => $id,
             'categories' => []
         ]);
 
-        $this->createTestProduct([
-            'parentId' => $id,
-            'productNumber' => Uuid::randomHex(),
-            'categories' => []
-        ]);
-
-        $criteria = new Criteria([$id]);
-        $criteria = Utils::addProductAssociations($criteria);
-        $criteria->addAssociation('visibilities');
-        $productEntity = $this->getContainer()->get('product.repository')->search(
-            $criteria,
-            $this->salesChannelContext->getContext()
-        )->get($id);
-
-        $this->attributeAdapter->adapt($productEntity);
+        $this->attributeAdapter->adapt($product);
     }
 
     public function parentAndChildrenCategoryProvider(): array
@@ -499,34 +393,35 @@ class AttributeAdapterTest extends TestCase
      */
     public function testOnlyUniqueCategoriesAreExported(bool $isParentAssigned, bool $isVariantAssigned): void
     {
-        $this->markTestSkipped('cat_urls need to be implemented first');
         $id = Uuid::randomHex();
-        $mainNavigationCategoryId = $this->salesChannelContext->getSalesChannel()->getNavigationCategoryId();
-        $categoryOne = [
+        $category = [
             'id' => 'cce80a72bc3481d723c38cccf592d45a',
             'name' => 'Category1',
-            'parentId' => $mainNavigationCategoryId
+            'active' => true,
+            'parentId' => $this->navigationCategoryId
         ];
 
         $expectedCategories = ['Category1'];
         $expectedCatUrls = [
-            '/Category1/',
-            '/navigation/cce80a72bc3481d723c38cccf592d45a'
+            'cce80a72bc3481d723c38cccf592d45a'
         ];
 
         $productEntity = $this->createTestProduct([
             'id' => $id,
-            'categories' => $isParentAssigned ? [$categoryOne] : []
+            'categories' => $isParentAssigned ? [$category] : []
         ]);
 
         $childEntity = $this->createTestProduct([
             'parentId' => $id,
             'productNumber' => Uuid::randomHex(),
-            'categories' => $isVariantAssigned ? [$categoryOne] : [],
+            'categories' => $isVariantAssigned ? [$category] : [],
             'shippingFree' => false
         ]);
 
-        $config = $this->getMockedConfig();
+        $config = $this->getPluginConfig([
+            'integrationType' => IntegrationType::DI
+        ]);
+
         $initialItem = new XMLItem('123');
         $exportItemAdapter = $this->getExportItemAdapter($config);
 
@@ -580,6 +475,7 @@ class AttributeAdapterTest extends TestCase
                         'parentId' => $this->navigationCategoryId,
                         'id' => $categoryId,
                         'name' => 'FINDOLOGIC Category',
+                        'active' => true,
                         'seoUrls' => [
                             [
                                 'id' => Uuid::randomHex(),
@@ -608,6 +504,7 @@ class AttributeAdapterTest extends TestCase
                         'parentId' => $this->navigationCategoryId,
                         'id' => $categoryId,
                         'name' => 'FINDOLOGIC Category',
+                        'active' => true,
                         'seoUrls' => [
                             [
                                 'pathInfo' => 'navigation/' . $categoryId,
@@ -778,7 +675,9 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'name' => 'Category1'
+                        'parentId' => $this->navigationCategoryId,
+                        'name' => 'Category1',
+                        'active' => true,
                     ]
                 ],
                 'expectedCategories' => [
@@ -791,17 +690,27 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
+                        'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
+                        'active' => true,
                         'children' => [
                             [
                                 'id' => 'f03d845e0abf31e72409cf7c5c704a2e',
-                                'name' => 'Category2'
+                                'name' => 'Category2',
+                                'active' => true,
+                                'children' => [
+                                    [
+                                        'id' => '6a753ffefab44667b87d9260fbcb9fac',
+                                        'name' => 'Category3',
+                                        'active' => true,
+                                    ]
+                                ]
                             ]
                         ]
                     ]
                 ],
                 'expectedCategories' => [
-                    'Category1_Category2'
+                    'Category1_Category2_Category3'
                 ],
                 'expectedCatUrls' => [],
             ],
@@ -810,15 +719,16 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'name' => 'Category1'
+                        'parentId' => $this->navigationCategoryId,
+                        'name' => 'Category1',
+                        'active' => true,
                     ]
                 ],
                 'expectedCategories' => [
                     'Category1'
                 ],
                 'expectedCatUrls' => [
-                    '/Category1/',
-                    '/navigation/cce80a72bc3481d723c38cccf592d45a'
+                    'cce80a72bc3481d723c38cccf592d45a'
                 ],
             ],
             'Integration type is DI with nested categories' => [
@@ -826,11 +736,14 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
+                        'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
+                        'active' => true,
                         'children' => [
                             [
                                 'id' => 'f03d845e0abf31e72409cf7c5c704a2e',
-                                'name' => 'Category2'
+                                'name' => 'Category2',
+                                'active' => true,
                             ]
                         ]
                     ]
@@ -839,10 +752,8 @@ class AttributeAdapterTest extends TestCase
                     'Category1_Category2',
                 ],
                 'expectedCatUrls' => [
-                    '/Category1/Category2/',
-                    '/navigation/f03d845e0abf31e72409cf7c5c704a2e',
-                    '/Category1/',
-                    '/navigation/cce80a72bc3481d723c38cccf592d45a'
+                    'f03d845e0abf31e72409cf7c5c704a2e',
+                    'cce80a72bc3481d723c38cccf592d45a'
                 ],
             ],
             'Integration type is unknown and category is at first level' => [
@@ -850,7 +761,9 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'name' => 'Category1'
+                        'parentId' => $this->navigationCategoryId,
+                        'name' => 'Category1',
+                        'active' => true,
                     ]
                 ],
                 'expectedCategories' => [
@@ -863,11 +776,13 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
+                        'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
                         'children' => [
                             [
                                 'id' => 'f03d845e0abf31e72409cf7c5c704a2e',
-                                'name' => 'Category2'
+                                'name' => 'Category2',
+                                'active' => true,
                             ]
                         ]
                     ]

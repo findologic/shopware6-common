@@ -68,4 +68,9 @@ class PluginConfig extends Struct
     {
         return $this->integrationType === IntegrationType::API;
     }
+
+    public function isIntegrationTypesDirectIntegration(): bool
+    {
+        return $this->integrationType === IntegrationType::DI;
+    }
 }

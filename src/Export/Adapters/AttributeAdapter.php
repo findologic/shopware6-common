@@ -119,7 +119,7 @@ class AttributeAdapter
                 $categories = array_merge($categories, [$categoryPath]);
             }
 
-            if ($this->pluginConfig->isIntegrationTypeApi()) {
+            if (!$this->pluginConfig->isIntegrationTypesDirectIntegration()) {
                 continue;
             }
 

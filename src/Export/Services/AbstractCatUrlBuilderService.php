@@ -32,11 +32,11 @@ abstract class AbstractCatUrlBuilderService extends UrlBuilderService
      */
     public function getCategoryUrls(CategoryEntity $category): array
     {
-        $categories = $this->getParentCategories($category);
+        $parentCategories = $this->getParentCategories($category);
         $categoryUrls = [];
 
         $categoryUrls[] = $this->buildCategoryUrls($category);
-        foreach ($categories as $categoryEntity) {
+        foreach ($parentCategories as $categoryEntity) {
             $categoryUrls[] = $this->buildCategoryUrls($categoryEntity);
         }
 

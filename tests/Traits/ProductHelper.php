@@ -4,6 +4,7 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\ProductConfiguratorSetting\ProductConfiguratorSettingCollection;
@@ -49,7 +50,6 @@ trait ProductHelper
             'cover' => $this->getDefaultCoverData(),
             'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false]],
             'tax' => ['id' => Uuid::randomHex(),  'name' => '9%', 'taxRate' => 9],
-            'categories' => $this->getDefaultCategories(),
             'seoUrls' => $this->getDefaultSeoUrlsData($id),
             'customFields' => [],
             'translated' => [
@@ -83,10 +83,16 @@ trait ProductHelper
             ? array_replace_recursive($productData, $overrideData)
             : array_merge($productData, $overrideData);
 
+        unset($productData['categories']);
+
         /** @var ProductEntity $product */
         $product = Entity::createFromArray(ProductEntity::class, $productData);
 
-        return $this->generateCategoryPaths($product);
+        $product->categories = array_key_exists('categories', $overrideData)
+            ? $this->buildCustomCategories($overrideData['categories'])
+            : $this->getDefaultCategories();
+
+        return $this->generateCategoryPathsForProduct($product);
     }
 
     public function getNameValues(string $name): array
@@ -220,14 +226,11 @@ trait ProductHelper
         $categoryId = Uuid::randomHex();
         $childId = Uuid::randomHex();
 
-        $navigationCategory = $this->createTestCategory([
-            'id' => $this->navigationCategoryId
-        ]);
-
-        $category1 = $this->createTestCategory([
+        $category1 = Entity::createFromArray(CategoryEntity::class, [
             'id' => $categoryId,
             'parentId' => $this->navigationCategoryId,
             'name' => 'FINDOLOGIC Category',
+            'active' => true,
             'seoUrls' => [
                 [
                     'pathInfo' => 'navigation/' . $categoryId,
@@ -237,40 +240,50 @@ trait ProductHelper
                 ]
             ]
         ]);
-
-        $category2 = $this->createTestCategory([
+        $category2 = Entity::createFromArray(CategoryEntity::class, [
             'id' => Uuid::randomHex(),
             'name' => 'FINDOLOGIC Main 2',
+            'active' => true,
+            'children' => [
+                [
+                    'id' => Uuid::randomHex(),
+                    'name' => 'FINDOLOGIC Sub',
+                    'active' => true,
+                    'children' => [
+                        [
+                            'id' => Uuid::randomHex(),
+                            'name' => 'Very deep',
+                            'active' => true,
+                        ],
+                        [
+                            'id' => $childId,
+                            'name' => 'FINDOLOGIC Sub of Sub',
+                            'active' => true,
+                        ]
+                    ]
+                ]
+            ]
         ]);
 
-        $childCategory = $this->createTestCategory([
-            'id' => Uuid::randomHex(),
-            'parentId' => $category2->id,
-            'name' => 'FINDOLOGIC Sub',
-        ]);
+        return $this->generateProductCategoriesWithRelations(
+            new CategoryCollection([$category1, $category2]),
+            [$categoryId, $childId]
+        );
+    }
 
-        $childChildCategory = $this->createTestCategory([
-            'id' => $childId,
-            'parentId' => $childCategory->id,
-            'name' => 'Very deep'
-        ]);
+    public function buildCustomCategories(array $categories): CategoryCollection
+    {
+        $categoryCollection = new CategoryCollection();
 
-        $childChildCategory2 = $this->createTestCategory([
-            'id' => Uuid::randomHex(),
-            'parentId' => $childCategory->id,
-            'name' => 'FINDOLOGIC Sub of Sub'
-        ]);
+        foreach ($categories as $categoryData) {
+            /** @var CategoryEntity $category */
+            $category = Entity::createFromArray(CategoryEntity::class, $categoryData);
 
-        $childChildCategory->parent = $childCategory;
-        $childChildCategory2->parent = $childCategory;
-        $childCategory->children = new CategoryCollection([$childChildCategory, $childChildCategory2]);
+            $categoryCollection->add($category);
+        }
 
-        $childCategory->parent = $category2;
-        $category2->children = new CategoryCollection([$childCategory]);
-
-        $category1->parent = $navigationCategory;
-        $navigationCategory->children = new CategoryCollection([$category1]);
-
-        return new CategoryCollection([$category1, $childChildCategory2]);
+        return $this->generateProductCategoriesWithRelations(
+            $categoryCollection,
+        );
     }
 }

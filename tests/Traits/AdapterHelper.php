@@ -3,11 +3,13 @@
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AbstractSalesFrequencyAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\BonusAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\DateAddedAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\DefaultPropertiesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\DescriptionAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
@@ -19,6 +21,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\SummaryAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UserGroupsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use Monolog\Logger;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
@@ -26,11 +29,41 @@ trait AdapterHelper
 {
     use ServicesHelper;
 
+    public function getAdapterFactory(?PluginConfig $config = null): AdapterFactory
+    {
+        return new AdapterFactory(
+            $this->getAttributeAdapter($config),
+            $this->getBonusAdapter(),
+            $this->getDateAddedAdapter(),
+            $this->getDescriptionAdapter(),
+            $this->getDefaultPropertiesAdapter(),
+            $this->getImagesAdapter(),
+            $this->getKeywordsAdapter(),
+            $this->getNameAdapter(),
+            $this->getOrderNumberAdapter(),
+            $this->getPriceAdapter(),
+            $this->getSalesFrequencyAdapter(),
+            $this->getSortAdapter(),
+            $this->getSummaryAdapter(),
+            $this->getShopwarePropertiesAdapter(),
+            $this->getUrlAdapter(),
+            $this->getUserGroupAdapter(),
+        );
+    }
+
+    public function getExportItemAdapter(?PluginConfig $config = null): ExportItemAdapter
+    {
+        return new ExportItemAdapter(
+            $this->getAdapterFactory($config),
+            new Logger('test_logger'),
+        );
+    }
+
     public function getAttributeAdapter(?PluginConfig $config = null): AttributeAdapter
     {
         return new AttributeAdapter(
             $this->getDynamicProductGroupService(),
-            $this->getUrlBuilderService(),
+            $this->getCatUrlBuilderService(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig()
         );
@@ -58,7 +91,7 @@ trait AdapterHelper
 
     public function getImagesAdapter(): ImagesAdapter
     {
-        return new ImagesAdapter();
+        return new ImagesAdapter($this->getProductImageService());
     }
 
     public function getKeywordsAdapter(): KeywordsAdapter
@@ -114,7 +147,7 @@ trait AdapterHelper
 
     public function getUrlAdapter(): UrlAdapter
     {
-        return new UrlAdapter($this->getUrlBuilderService());
+        return new UrlAdapter($this->getProductUrlService());
     }
 
     public function getUserGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): UserGroupsAdapter
