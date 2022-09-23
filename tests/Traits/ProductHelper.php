@@ -48,7 +48,15 @@ trait ProductHelper
                 ['id' => Uuid::randomHex(), 'name' => 'FINDOLOGIC Tag']
             ],
             'cover' => $this->getDefaultCoverData(),
-            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false]],
+            'price' => [
+                [
+                    'currencyId' => Defaults::CURRENCY,
+                    'gross' => 15,
+                    'net' => 10,
+                    'linked' => false,
+                    'listPrice' => null,
+                ]
+            ],
             'tax' => ['id' => Uuid::randomHex(),  'name' => '9%', 'taxRate' => 9],
             'seoUrls' => $this->getDefaultSeoUrlsData($id),
             'customFields' => [],

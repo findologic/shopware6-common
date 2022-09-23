@@ -106,7 +106,8 @@ trait ServicesHelper
         /** @var SalesChannelEntity $salesChannel */
         $salesChannel = Entity::createFromArray(SalesChannelEntity::class, [
             'id' => Defaults::SALES_CHANNEL,
-            'languageId' => Defaults::LANGUAGE_SYSTEM
+            'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
         ]);
         $storeFrontDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.uk',

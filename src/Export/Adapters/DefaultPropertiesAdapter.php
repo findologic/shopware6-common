@@ -62,7 +62,6 @@ class DefaultPropertiesAdapter
             $properties[] = $this->getProperty('length', (string) $length);
         }
 
-
         if ($releaseDate = $product->releaseDate) {
             $value = $releaseDate->format(DATE_ATOM);
             $properties[] = $this->getProperty('releasedate', $value);
