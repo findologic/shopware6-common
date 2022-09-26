@@ -48,6 +48,7 @@ trait ProductHelper
                 ['id' => Uuid::randomHex(), 'name' => 'FINDOLOGIC Tag']
             ],
             'cover' => $this->getDefaultCoverData(),
+            'media' => [$this->getDefaultMediaData()],
             'price' => [
                 [
                     'currencyId' => Defaults::CURRENCY,
@@ -210,8 +211,29 @@ trait ProductHelper
     public function getDefaultCoverData(): array
     {
         return [
+            'media' => $this->getDefaultMediaData(),
+        ];
+    }
+
+    public function getDefaultMediaData(): array
+    {
+        return [
+            'url' => 'https://via.placeholder.com/findologic.png',
+            'private' => false,
+            'mediaType' => ['name' => 'IMAGE'],
+            'mimeType' => 'image/png',
+            'fileExtension' => 'png',
+            'fileName' => 'findologic',
+            'thumbnails' => [
+                [
+                    'width' => 600,
+                    'height' => 600,
+                    'highDpi' => false,
+                    'url' => 'https://via.placeholder.com/600x600'
+                ]
+            ],
             'media' => [
-                'url' => 'https://via.placeholder.com/1000',
+                'url' => 'https://via.placeholder.com/findologic.png',
                 'private' => false,
                 'mediaType' => ['name' => 'IMAGE'],
                 'mimeType' => 'image/png',
@@ -222,10 +244,10 @@ trait ProductHelper
                         'width' => 600,
                         'height' => 600,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/600'
+                        'url' => 'https://via.placeholder.com/600x600'
                     ]
                 ]
-            ],
+            ]
         ];
     }
 

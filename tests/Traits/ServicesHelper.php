@@ -8,6 +8,7 @@ use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupServic
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 use Vin\ShopwareSdk\Data\Defaults;
@@ -25,6 +26,19 @@ trait ServicesHelper
     use CategoryHelper;
     use Constants;
 
+    public function getRouterMock(): Router
+    {
+        $routerContext = new RequestContext();
+
+        $router = $this->getMockBuilder(Router::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $router->method('getContext')->willReturn($routerContext);
+
+        return $router;
+    }
+
     public function getDynamicProductGroupService(): AbstractDynamicProductGroupService
     {
         return $this->getMockBuilder(AbstractDynamicProductGroupService::class)
@@ -34,11 +48,7 @@ trait ServicesHelper
 
     public function getCatUrlBuilderService(): AbstractCatUrlBuilderService
     {
-        $router = $this->getMockBuilder(Router::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return new class($this->getExportContext(), $router) extends AbstractCatUrlBuilderService {
+        return new class($this->getExportContext(), $this->getRouterMock()) extends AbstractCatUrlBuilderService {
             public function __construct(
                 ExportContext $exportContext,
                 ?RouterInterface $router = null
@@ -75,11 +85,7 @@ trait ServicesHelper
 
     public function getProductImageService(): ProductImageService
     {
-        $router = $this->getMockBuilder(Router::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return new ProductImageService($router);
+        return new ProductImageService($this->getRouterMock());
     }
 
     public function getExportContext(?CustomerGroupCollection $customerGroupCollection = null): ExportContext
