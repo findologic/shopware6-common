@@ -88,11 +88,13 @@ trait ServicesHelper
         return new ProductImageService($this->getRouterMock());
     }
 
-    public function getExportContext(?CustomerGroupCollection $customerGroupCollection = null): ExportContext
-    {
+    public function getExportContext(
+        ?CustomerGroupCollection $customerGroupCollection = null,
+        ?SalesChannelEntity $salesChannel = null
+    ): ExportContext {
         return new ExportContext(
             $this->validShopkey,
-            $this->buildSalesChannel(),
+            $salesChannel ?? $this->buildSalesChannel(),
             $this->buildNavigationCategory(),
             $customerGroupCollection ?? new CustomerGroupCollection(),
             true,

@@ -24,6 +24,7 @@ use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
+use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
 
 trait AdapterHelper
 {
@@ -109,9 +110,13 @@ trait AdapterHelper
         return new OrderNumberAdapter();
     }
 
-    public function getPriceAdapter(): PriceAdapter
-    {
-        return new PriceAdapter($this->getExportContext());
+    public function getPriceAdapter(
+        ?CustomerGroupCollection $customerGroupCollection = null,
+        ?SalesChannelEntity $salesChannel = null
+    ): PriceAdapter {
+        return new PriceAdapter(
+            $this->getExportContext($customerGroupCollection, $salesChannel)
+        );
     }
 
     public function getSalesFrequencyAdapter(?int $orderCount = 1337): AbstractSalesFrequencyAdapter

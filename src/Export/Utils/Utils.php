@@ -158,6 +158,6 @@ class Utils
             return $price['currencyId'] === $currencyId;
         });
 
-        return count($filteredProductPrice) ? $filteredProductPrice[0] : null;
+        return count($filteredProductPrice) ? $filteredProductPrice[array_key_first($filteredProductPrice)] : null;
     }
 }
