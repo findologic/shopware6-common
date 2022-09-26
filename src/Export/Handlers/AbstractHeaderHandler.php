@@ -1,6 +1,6 @@
 <?php
 
-namespace FINDOLOGIC\Shopware6Common\Export;
+namespace FINDOLOGIC\Shopware6Common\Export\Handlers;
 
 abstract class AbstractHeaderHandler
 {

@@ -31,6 +31,9 @@ class ExportConfigurationBase
 
     /**
      * @Assert\Type("string")
+     * @Assert\Uuid(
+     *     strict=false
+     * )
      */
     protected ?string $productId;
 

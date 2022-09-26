@@ -26,7 +26,7 @@ class PluginConfig extends Struct
         $config = new self();
 
         foreach ($values as $key => $value) {
-            if (property_exists($config, $key)) {
+            if (property_exists($config, $key) && !is_null($value)) {
                 $config->$key = $value;
             }
         }
