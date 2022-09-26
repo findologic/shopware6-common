@@ -106,7 +106,7 @@ class XmlExport extends AbstractExport
                     $product->id,
                     $product->getTranslation('name'),
                     $category->id,
-                    implode(' < ', $category->breadcrumb)
+                    implode(' > ', $category->breadcrumb)
                 ),
                 ['product' => $product]
             );
@@ -155,16 +155,15 @@ class XmlExport extends AbstractExport
     {
         $crossSellingCategories = $this->pluginConfig->getCrossSellingCategories();
         if (count($crossSellingCategories)) {
-            $categories = array_merge(
-                $productCategories->getElements(),
-                $this->dynamicProductGroupService->getCategories($productId)->getElements()
-            );
+            $categories = new CategoryCollection();
+            $categories->merge($productCategories);
+            $categories->merge($this->dynamicProductGroupService->getCategories($productId));
 
-            foreach ($categories as $categoryId => $category) {
-                if (in_array($categoryId, $crossSellingCategories)) {
-                    return $category;
-                }
-            }
+            $categories = $categories->filter(static function (CategoryEntity $category) use ($crossSellingCategories) {
+                return in_array($category->id, $crossSellingCategories);
+            });
+
+            return $categories->first();
         }
 
         return null;

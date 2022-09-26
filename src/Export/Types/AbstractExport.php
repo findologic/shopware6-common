@@ -37,7 +37,7 @@ abstract class AbstractExport
         AbstractProductSearcher $productSearcher,
         PluginConfig $pluginConfig,
         ExportItemAdapter $exportItemAdapter,
-        ?LoggerInterface $logger = null,
+        LoggerInterface $logger,
         ?EventDispatcherInterface $eventDispatcher = null
     ): AbstractExport {
         switch ($type) {

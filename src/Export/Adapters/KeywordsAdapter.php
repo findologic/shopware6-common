@@ -15,9 +15,11 @@ class KeywordsAdapter
      */
     public function adapt(ProductEntity $product): array
     {
-        $keywords = $product->searchKeywords->getElements();
+        if(!$keywords = $product->searchKeywords) {
+            return [];
+        }
 
-        return $this->getKeywords($keywords, $this->getBlacklistedKeywords($product));
+        return $this->getKeywords($keywords->getElements(), $this->getBlacklistedKeywords($product));
     }
 
     /**

@@ -33,7 +33,7 @@ class ExportItemAdapter
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function adapt(Item $item, ProductEntity $product, ?LoggerInterface $logger = null): ?Item
+    public function adapt(Item $item, ProductEntity $product): ?Item
     {
         if ($this->eventDispatcher) {
             $this->eventDispatcher->dispatch(new BeforeItemAdaptEvent($product, $item), BeforeItemAdaptEvent::NAME);
@@ -42,7 +42,7 @@ class ExportItemAdapter
         try {
             $item = $this->adaptProduct($item, $product);
         } catch (Throwable $exception) {
-            $exceptionLogger = new ExportExceptionLogger($logger ?: $this->logger);
+            $exceptionLogger = new ExportExceptionLogger($this->logger);
             $exceptionLogger->log($product, $exception);
 
             return null;
@@ -122,7 +122,7 @@ class ExportItemAdapter
         return $item;
     }
 
-    public function adaptVariant(Item $item, ProductEntity $product, ?LoggerInterface $logger = null): ?Item
+    public function adaptVariant(Item $item, ProductEntity $product): ?Item
     {
         if ($this->eventDispatcher) {
             $this->eventDispatcher->dispatch(new BeforeVariantAdaptEvent($product, $item), BeforeVariantAdaptEvent::NAME);
@@ -141,7 +141,7 @@ class ExportItemAdapter
                 $item->addProperty($property);
             }
         } catch (Throwable $exception) {
-            $exceptionLogger = new ExportExceptionLogger($logger ?: $this->logger);
+            $exceptionLogger = new ExportExceptionLogger($this->logger);
             $exceptionLogger->log($product, $exception);
 
             return null;
