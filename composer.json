@@ -3,7 +3,6 @@
     "description": "Files shared among Shopware6 plugin and Shopware App",
     "type": "library",
     "license": "GPL-3.0-or-later",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "FINDOLOGIC Developers",
@@ -24,7 +23,7 @@
         "symfony/cache": "5.4.x",
         "symfony/routing": "5.4.x",
         "symfony/validator": "5.4.x",
-        "doctrine/annotations": "1.14.x-dev"
+        "doctrine/annotations": "^1.13"
     },
     "autoload": {
         "psr-4": {
