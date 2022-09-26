@@ -423,7 +423,7 @@ class AttributeAdapterTest extends TestCase
         ]);
 
         $initialItem = new XMLItem('123');
-        $exportItemAdapter = $this->getExportItemAdapter($config);
+        $exportItemAdapter = $this->getExportItemAdapter(null, $config);
 
         $item = $exportItemAdapter->adapt($initialItem, $productEntity);
 

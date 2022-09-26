@@ -24,6 +24,9 @@ trait CategoryHelper
         /** @var CategoryEntity $category */
         $category = Entity::createFromArray(CategoryEntity::class, $categoryData);
 
+        $category->path = sprintf('|%s|', $this->generateCategoryPath($category));
+        $category->breadcrumb = explode('|', $this->generateBreadcrumbs($category));
+
         return $category;
     }
 

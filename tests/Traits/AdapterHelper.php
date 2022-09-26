@@ -22,6 +22,8 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UserGroupsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
@@ -52,18 +54,23 @@ trait AdapterHelper
         );
     }
 
-    public function getExportItemAdapter(?PluginConfig $config = null): ExportItemAdapter
-    {
+    public function getExportItemAdapter(
+        ?AdapterFactory $adapterFactory = null,
+        ?PluginConfig $config = null,
+        ?LoggerInterface $logger = null,
+        ?EventDispatcherInterface $eventDispatcher = null
+    ): ExportItemAdapter {
         return new ExportItemAdapter(
-            $this->getAdapterFactory($config),
-            new Logger('test_logger'),
+            $adapterFactory ?? $this->getAdapterFactory($config),
+                $logger ?? new Logger('test_logger'),
+                $eventDispatcher
         );
     }
 
     public function getAttributeAdapter(?PluginConfig $config = null): AttributeAdapter
     {
         return new AttributeAdapter(
-            $this->getDynamicProductGroupService(),
+            $this->getDynamicProductGroupServiceMock(),
             $this->getCatUrlBuilderService(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig()

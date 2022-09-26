@@ -4,10 +4,16 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
+use FINDOLOGIC\Shopware6Common\Export\Search\ProductDebugSearcherInterface;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
+use Monolog\Logger;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
@@ -20,6 +26,7 @@ use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainEntity;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
+use function PHPUnit\Framework\returnValueMap;
 
 trait ServicesHelper
 {
@@ -39,7 +46,19 @@ trait ServicesHelper
         return $router;
     }
 
-    public function getDynamicProductGroupService(): AbstractDynamicProductGroupService
+    public function getLogger(?string $name = 'test'): Logger
+    {
+        return new Logger($name);
+    }
+
+    public function getEventDispatcherMock(): MockObject
+    {
+        return $this->getMockBuilder(EventDispatcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    public function getDynamicProductGroupServiceMock(): MockObject
     {
         return $this->getMockBuilder(AbstractDynamicProductGroupService::class)
             ->disableOriginalConstructor()
@@ -107,6 +126,20 @@ trait ServicesHelper
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
             'active' => true
         ], $overrides));
+    }
+
+    public function getProductCriteriaBuilderMock(): AbstractProductCriteriaBuilder
+    {
+        return $this->getMockBuilder(AbstractProductCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+    }
+
+    public function getProductSearcherMock(): AbstractProductSearcher
+    {
+        return $this->getMockBuilder(AbstractProductSearcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function buildSalesChannel(): SalesChannelEntity

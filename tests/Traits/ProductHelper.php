@@ -33,13 +33,10 @@ trait ProductHelper
         $colorId = Uuid::randomHex();
 
         $productData = [];
-        $productData = array_merge(
-            $productData,
-            $this->getNameValues($overrideData['name'] ?? 'FINDOLOGIC Product')
-        );
 
         $productData = array_merge($productData, [
             'id' => $id,
+            'active' => true,
             'productNumber' => 'FINDOLOGIC001',
             'stock' => 10,
             'ean' => 'FL001',
@@ -65,6 +62,11 @@ trait ProductHelper
                 'description' => 'FINDOLOGIC Description',
             ]
         ]);
+
+        $productData = array_merge_recursive(
+            $productData,
+            $this->getNameValues($overrideData['name'] ?? 'FINDOLOGIC Product')
+        );
 
         $productData = array_merge($productData, $this->getDefaultPropertySettingsData($redId, $colorId));
 
