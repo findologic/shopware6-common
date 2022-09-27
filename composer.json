@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": "^7.4 || ^8.0",
         "findologic/libflexport": "^2.9",
         "monolog/monolog": "^2.0",
         "vin-sw/shopware-sdk": "^1.5",
