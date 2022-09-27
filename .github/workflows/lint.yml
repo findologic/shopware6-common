@@ -25,6 +25,4 @@ jobs:
         run: composer install
 
       - name: Run linting
-        run: |
-          composer analyse
-          composer lint
+        run: composer lint

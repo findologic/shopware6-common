@@ -1,8 +1,0 @@
-parameters:
-    level: 8
-    paths:
-        - src
-    checkAlwaysTrueStrictComparison: true
-    checkTooWideReturnTypesInProtectedAndPublicMethods: true
-    ignoreErrors:
-    		- '#\(Vin\\ShopwareSdk\\Repository\\EntityRepository\) does not accept Vin\\ShopwareSdk\\Repository\\RepositoryInterface#'
