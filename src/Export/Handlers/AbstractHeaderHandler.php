@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Handlers;
 
 abstract class AbstractHeaderHandler
@@ -23,7 +25,8 @@ abstract class AbstractHeaderHandler
 
     protected string $extensionPluginVersion;
 
-    public function __construct(string $shopwareVersion) {
+    public function __construct(string $shopwareVersion)
+    {
         $this->shopwareVersion = sprintf(self::SHOPWARE_VERSION, $shopwareVersion);
 
         $this->pluginVersion = $this->fetchPluginVersion();

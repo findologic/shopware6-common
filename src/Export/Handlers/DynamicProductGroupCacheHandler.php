@@ -71,7 +71,7 @@ class DynamicProductGroupCacheHandler
         $categories = [];
         $cacheItem = $this->getDynamicProductGroupOffsetCacheItem($offset);
         if ($cacheItem->isHit()) {
-            $categories = (array)$cacheItem->get();
+            $categories = (array) $cacheItem->get();
         }
 
         return $categories;
@@ -101,7 +101,7 @@ class DynamicProductGroupCacheHandler
 
         $this->cache->deleteItems([
             $totalCacheItem->getKey(),
-            $warmedUpCacheItem->getKey()
+            $warmedUpCacheItem->getKey(),
         ]);
     }
 

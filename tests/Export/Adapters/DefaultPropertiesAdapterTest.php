@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\DefaultPropertiesAdapter;
@@ -28,7 +30,7 @@ class DefaultPropertiesAdapterTest extends TestCase
             'weight' => 50,
             'width' => 8,
             'height' => 8,
-            'length' => 20
+            'length' => 20,
         ]);
 
         $expectedProperties = $this->getProperties($product);
@@ -44,7 +46,7 @@ class DefaultPropertiesAdapterTest extends TestCase
     {
         $productEntity = $this->createTestProduct(
             ['markAsTopseller' => $markAsTopSeller],
-            true
+            true,
         );
         $properties = $this->defaultPropertiesAdapter->adapt($productEntity);
 
@@ -76,9 +78,9 @@ class DefaultPropertiesAdapterTest extends TestCase
                             'gross' => 25,
                             'linked' => false,
                         ],
-                    ]
+                    ],
                 ],
-            ]
+            ],
         );
 
         $properties = $this->defaultPropertiesAdapter->adapt($productEntity);
@@ -106,12 +108,12 @@ class DefaultPropertiesAdapterTest extends TestCase
         return [
             'List price is available for the sales channel currency' => [
                 'currencyId' => Defaults::CURRENCY,
-                'isPriceAvailable' => true
+                'isPriceAvailable' => true,
             ],
             'List price is available for a different currency' => [
                 'currencyId' => null,
-                'isPriceAvailable' => false
-            ]
+                'isPriceAvailable' => false,
+            ],
         ];
     }
 
@@ -120,7 +122,7 @@ class DefaultPropertiesAdapterTest extends TestCase
         return [
             'Product has promotion set to false' => [false, 'No'],
             'Product has promotion set to true' => [true, 'Yes'],
-            'Product promotion is set to null' => [null, 'No']
+            'Product promotion is set to null' => [null, 'No'],
         ];
     }
 }

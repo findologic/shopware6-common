@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Types;
 
 use FINDOLOGIC\Shopware6Common\Export\Types\AbstractExport;
@@ -31,9 +33,9 @@ class ProductIdExportTest extends XmlExportTest
                 $product->id,
                 $product->getTranslation('name'),
                 $category->id,
-                implode(' > ', $category->breadcrumb)
+                implode(' > ', $category->breadcrumb),
             ),
-            $errors[0]
+            $errors[0],
         );
     }
 
@@ -73,11 +75,11 @@ class ProductIdExportTest extends XmlExportTest
                         sprintf(
                             'Product "%s" with id %s was not exported because it has no categories assigned',
                             $expectedName,
-                            $product->id
-                        )
-                    ]
-                ]
-            ]
+                            $product->id,
+                        ),
+                    ],
+                ],
+            ],
         ];
 
         $this->assertSame($expectedErrors, $errors);
@@ -94,7 +96,7 @@ class ProductIdExportTest extends XmlExportTest
             $this->getPluginConfig(['crossSellingCategories' => $this->crossSellCategories]),
             $this->getExportItemAdapter(null, null, $this->logger),
             $this->logger,
-            $this->getEventDispatcherMock()
+            $this->getEventDispatcherMock(),
         );
     }
 }

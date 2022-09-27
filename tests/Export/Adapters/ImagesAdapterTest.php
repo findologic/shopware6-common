@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Image;
@@ -71,7 +73,7 @@ class ImagesAdapterTest extends TestCase
         $media = new MediaCollection(
             $mediaCollection->fmap(function (ProductMediaEntity $productMedia) {
                 return $productMedia->media;
-            })
+            }),
         );
         $thumbnailCollection = $media->first()->thumbnails;
 
@@ -106,7 +108,7 @@ class ImagesAdapterTest extends TestCase
                 'width' => $width,
                 'height' => 100,
                 'highDpi' => false,
-                'url' => 'https://via.placeholder.com/100'
+                'url' => 'https://via.placeholder.com/100',
             ];
         }
 
@@ -122,31 +124,31 @@ class ImagesAdapterTest extends TestCase
                         'width' => 400,
                         'height' => 400,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/400x400'
+                        'url' => 'https://via.placeholder.com/400x400',
                     ],
                     [
                         'width' => 600,
                         'height' => 600,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/600x600'
+                        'url' => 'https://via.placeholder.com/600x600',
                     ],
                     [
                         'width' => 1000,
                         'height' => 100,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1000x100'
-                    ]
+                        'url' => 'https://via.placeholder.com/1000x100',
+                    ],
                 ],
                 'expectedImages' => [
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_DEFAULT
+                        'type' => Image::TYPE_DEFAULT,
                     ],
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_THUMBNAIL
+                        'type' => Image::TYPE_THUMBNAIL,
                     ],
-                ]
+                ],
             ],
             '2 thumbnails 800x800 and 2000x200, the image of width 800 is taken' => [
                 'thumbnails' => [
@@ -154,25 +156,25 @@ class ImagesAdapterTest extends TestCase
                         'width' => 800,
                         'height' => 800,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/800x800'
+                        'url' => 'https://via.placeholder.com/800x800',
                     ],
                     [
                         'width' => 2000,
                         'height' => 200,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/2000x200'
-                    ]
+                        'url' => 'https://via.placeholder.com/2000x200',
+                    ],
                 ],
                 'expectedImages' => [
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_DEFAULT
+                        'type' => Image::TYPE_DEFAULT,
                     ],
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_THUMBNAIL
+                        'type' => Image::TYPE_THUMBNAIL,
                     ],
-                ]
+                ],
             ],
             '3 thumbnails 100x100, 200x200 and 400x400, the image directly assigned to the product is taken' => [
                 'thumbnails' => [
@@ -180,40 +182,40 @@ class ImagesAdapterTest extends TestCase
                         'width' => 100,
                         'height' => 100,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/100x100'
+                        'url' => 'https://via.placeholder.com/100x100',
                     ],
                     [
                         'width' => 200,
                         'height' => 200,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/200x200'
+                        'url' => 'https://via.placeholder.com/200x200',
                     ],
                     [
                         'width' => 400,
                         'height' => 400,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/400x400'
-                    ]
+                        'url' => 'https://via.placeholder.com/400x400',
+                    ],
                 ],
                 'expectedImages' => [
                     [
                         'url' => 'findologic.png',
-                        'type' => Image::TYPE_DEFAULT
+                        'type' => Image::TYPE_DEFAULT,
                     ],
-                ]
+                ],
             ],
             '0 thumbnails, the automatically generated thumbnail is taken' => [
                 'thumbnails' => [],
                 'expectedImages' => [
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_DEFAULT
+                        'type' => Image::TYPE_DEFAULT,
                     ],
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_THUMBNAIL
+                        'type' => Image::TYPE_THUMBNAIL,
                     ],
-                ]
+                ],
             ],
             'Same thumbnail exists in various sizes will only export one size' => [
                 'thumbnails' => [
@@ -221,50 +223,50 @@ class ImagesAdapterTest extends TestCase
                         'width' => 800,
                         'height' => 800,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/800x800'
+                        'url' => 'https://via.placeholder.com/800x800',
                     ],
                     [
                         'width' => 1000,
                         'height' => 1000,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1000x1000'
+                        'url' => 'https://via.placeholder.com/1000x1000',
                     ],
                     [
                         'width' => 1200,
                         'height' => 1200,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1200x1200'
+                        'url' => 'https://via.placeholder.com/1200x1200',
                     ],
                     [
                         'width' => 1400,
                         'height' => 1400,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1400x1400'
+                        'url' => 'https://via.placeholder.com/1400x1400',
                     ],
                     [
                         'width' => 1600,
                         'height' => 1600,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1600x1600'
+                        'url' => 'https://via.placeholder.com/1600x1600',
                     ],
                     [
                         'width' => 1800,
                         'height' => 1800,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/1800x1800'
+                        'url' => 'https://via.placeholder.com/1800x1800',
                     ],
                 ],
                 'expectedImages' => [
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_DEFAULT
+                        'type' => Image::TYPE_DEFAULT,
                     ],
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_THUMBNAIL
+                        'type' => Image::TYPE_THUMBNAIL,
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -273,20 +275,20 @@ class ImagesAdapterTest extends TestCase
         return [
             'Max 600 width is provided' => [
                 'widthSizes' => [100, 200, 300, 400, 500, 600],
-                'expected' => [600]
+                'expected' => [600],
             ],
             'Min 600 width is provided' => [
                 'widthSizes' => [600, 800, 200, 500],
-                'expected' => [600, 800]
+                'expected' => [600, 800],
             ],
             'Random width are provided' => [
                 'widthSizes' => [800, 100, 650, 120, 2000, 1000],
-                'expected' => [650, 800, 1000, 2000]
+                'expected' => [650, 800, 1000, 2000],
             ],
             'Less than 600 width is provided' => [
                 'widthSizes' => [100, 200, 300, 500],
-                'expected' => []
-            ]
+                'expected' => [],
+            ],
         ];
     }
 }

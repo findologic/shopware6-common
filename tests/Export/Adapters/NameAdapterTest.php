@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameException;
@@ -33,7 +35,7 @@ class NameAdapterTest extends TestCase
             'name' => $productName,
             'translated' => [
                 'name' => $productName,
-            ]
+            ],
         ]);
 
         $name = $this->getNameAdapter()->adapt($product);

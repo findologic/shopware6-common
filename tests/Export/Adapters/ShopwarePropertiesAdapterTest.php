@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Property;
@@ -34,7 +36,7 @@ class ShopwarePropertiesAdapterTest extends TestCase
 
         $expectedPropertiesNames = [
             $expectedPropertyName1,
-            $expectedPropertyName2
+            $expectedPropertyName2,
         ];
 
         $productEntity = $this->createTestProduct(
@@ -48,12 +50,12 @@ class ShopwarePropertiesAdapterTest extends TestCase
                             'name' => $expectedPropertyName1,
                             'filterable' => false,
                             'translated' => [
-                                'name' => $expectedPropertyName1
-                            ]
+                                'name' => $expectedPropertyName1,
+                            ],
                         ],
                         'translated' => [
-                            'name' => $expectedPropertyValue1
-                        ]
+                            'name' => $expectedPropertyValue1,
+                        ],
                     ],
                     [
                         'id' => Uuid::randomHex(),
@@ -63,12 +65,12 @@ class ShopwarePropertiesAdapterTest extends TestCase
                             'name' => $expectedPropertyName2,
                             'filterable' => false,
                             'translated' => [
-                                'name' => $expectedPropertyName2
-                            ]
+                                'name' => $expectedPropertyName2,
+                            ],
                         ],
                         'translated' => [
-                            'name' => $expectedPropertyValue2
-                        ]
+                            'name' => $expectedPropertyValue2,
+                        ],
                     ],
                     [
                         'id' => Uuid::randomHex(),
@@ -78,32 +80,32 @@ class ShopwarePropertiesAdapterTest extends TestCase
                             'name' => $expectedPropertyName3,
                             'filterable' => true,
                             'translated' => [
-                                'name' => $expectedPropertyName3
-                            ]
+                                'name' => $expectedPropertyName3,
+                            ],
                         ],
                         'translated' => [
-                            'name' => $expectedPropertyValue3
-                        ]
-                    ]
-                ]
-            ]
+                            'name' => $expectedPropertyValue3,
+                        ],
+                    ],
+                ],
+            ],
         );
 
         $properties = array_merge(
-            $this->shopwarePropertiesAdapter->adapt($productEntity)
+            $this->shopwarePropertiesAdapter->adapt($productEntity),
         );
 
         $foundProperties = array_filter(
             $properties,
             static function (Property $property) use ($expectedPropertiesNames) {
                 return in_array($property->getKey(), $expectedPropertiesNames);
-            }
+            },
         );
         $foundPropertyValues = array_map(
             static function (Property $property) {
                 return $property->getAllValues()[''];
             },
-            array_values($foundProperties)
+            array_values($foundProperties),
         );
 
         $this->assertCount(2, $foundProperties);

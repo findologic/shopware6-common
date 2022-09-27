@@ -15,7 +15,7 @@ class KeywordsAdapter
      */
     public function adapt(ProductEntity $product): array
     {
-        if(!$keywords = $product->searchKeywords) {
+        if (!$keywords = $product->searchKeywords) {
             return [];
         }
 

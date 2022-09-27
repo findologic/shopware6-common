@@ -88,6 +88,7 @@ class ProductErrorHandler implements HandlerInterface
             $exception = $record['context']['exception'];
             if (!$exception instanceof ProductInvalidException) {
                 $this->handleGeneralException($exception);
+
                 return;
             }
 

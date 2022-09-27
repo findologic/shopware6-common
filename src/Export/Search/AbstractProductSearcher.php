@@ -132,7 +132,7 @@ abstract class AbstractProductSearcher
                 continue;
             }
 
-            /**
+            /*
              * If product is inactive, try to fetch first variant product.
              * This is related to main product by parent configuration.
              */

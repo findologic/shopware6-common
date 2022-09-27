@@ -24,7 +24,7 @@ trait ImageHelper
             $fallbackImage = sprintf(
                 '%s/%s',
                 getenv('APP_URL') ? getenv('APP_URL') : 'http://localhost',
-                'bundles/storefront/assets/icon/default/placeholder.svg'
+                'bundles/storefront/assets/icon/default/placeholder.svg',
             );
 
             $images[] = new Image($fallbackImage);
@@ -37,7 +37,7 @@ trait ImageHelper
         $media = new MediaCollection(
             $mediaCollection->fmap(function (ProductMediaEntity $productMedia) {
                 return $productMedia->media;
-            })
+            }),
         );
         $thumbnails = $media->first()->thumbnails;
 

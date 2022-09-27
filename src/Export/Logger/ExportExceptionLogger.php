@@ -39,65 +39,67 @@ class ExportExceptionLogger
         }
     }
 
-    public function setLogger(LoggerInterface $logger): ExportExceptionLogger
+    public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
 
         return $this;
     }
 
-    private function logProductInvalidException(ProductEntity $product, ProductInvalidException $e): void {
+    private function logProductInvalidException(ProductEntity $product, ProductInvalidException $e): void
+    {
         switch (get_class($e)) {
             case AccessEmptyPropertyException::class:
                 $message = sprintf(
                     'Product "%s" with id %s was not exported because the property does not exist',
                     $product->getTranslation('name'),
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
                 break;
             case ProductHasNoAttributesException::class:
                 $message = sprintf(
                     'Product "%s" with id %s was not exported because it has no attributes',
                     $product->getTranslation('name'),
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
                 break;
             case ProductHasNoNameException::class:
                 $message = sprintf(
                     'Product with id %s was not exported because it has no name set',
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
                 break;
             case ProductHasNoPricesException::class:
                 $message = sprintf(
                     'Product "%s" with id %s was not exported because it has no price associated to it',
                     $product->getTranslation('name'),
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
                 break;
             case ProductHasNoCategoriesException::class:
                 $message = sprintf(
                     'Product "%s" with id %s was not exported because it has no categories assigned',
                     $product->getTranslation('name'),
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
                 break;
             default:
                 $message = sprintf(
                     'Product "%s" with id %s could not be exported.',
                     $product->getTranslation('name'),
-                    $e->getProduct()->id
+                    $e->getProduct()->id,
                 );
         }
 
         $this->logger->warning($message, ['exception' => $e]);
     }
 
-    private function logEmptyValueNotAllowedException(ProductEntity $product, EmptyValueNotAllowedException $e): void {
+    private function logEmptyValueNotAllowedException(ProductEntity $product, EmptyValueNotAllowedException $e): void
+    {
         $error = sprintf(
             'Product "%s" with id "%s" could not be exported.',
             $product->getTranslation('name'),
-            $product->id
+            $product->id,
         );
         $reason = 'It appears to have empty values assigned to it.';
         $help = 'If you see this message in your logs, please report this as a bug.';
@@ -105,11 +107,12 @@ class ExportExceptionLogger
         $this->logger->warning(implode(' ', [$error, $reason, $help]), ['exception' => $e]);
     }
 
-    private function logGenericException(ProductEntity $product, Throwable $e): void {
+    private function logGenericException(ProductEntity $product, Throwable $e): void
+    {
         $error = sprintf(
             'Error while exporting the product "%s" with id "%s".',
             $product->getTranslation('name'),
-            $product->id
+            $product->id,
         );
         $help = 'If you see this message in your logs, please report this as a bug.';
         $errorDetails = sprintf('Error message: %s', $e->getMessage());

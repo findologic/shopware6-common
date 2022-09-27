@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Usergroup;
-use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +25,7 @@ class UserGroupsAdapterTest extends TestCase
         $expectedUserGroup = new Usergroup($customerGroup->id);
 
         $adapter = $this->getUserGroupAdapter(
-            new CustomerGroupCollection([$customerGroup])
+            new CustomerGroupCollection([$customerGroup]),
         );
         $product = $this->createTestProduct([]);
 

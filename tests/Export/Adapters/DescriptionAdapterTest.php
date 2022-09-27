@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
@@ -31,7 +33,7 @@ class DescriptionAdapterTest extends TestCase
             'description' => $value,
             'translated' => [
                 'description' => $value,
-            ]
+            ],
         ];
 
         $product = $this->createTestProduct($data);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Attribute;
@@ -38,24 +40,24 @@ class AttributeAdapterTest extends TestCase
         $variantProductNumber = Uuid::randomHex();
 
         $product = $this->createTestProduct([
-            'id' => $id
+            'id' => $id,
         ]);
 
         $variantProduct = $this->createTestProduct([
             'id' => $variantId,
             'parentId' => $id,
             'productNumber' => $variantProductNumber,
-            'shippingFree' => false
+            'shippingFree' => false,
         ]);
 
         $expected = array_merge(
             $this->getAttributes($product),
-            $this->getAttributes($variantProduct)
+            $this->getAttributes($variantProduct),
         );
 
         $attributes = array_merge(
             $this->attributeAdapter->adapt($product),
-            $this->attributeAdapter->adapt($variantProduct)
+            $this->attributeAdapter->adapt($variantProduct),
         );
 
         $this->assertEquals($expected, $attributes);
@@ -70,7 +72,7 @@ class AttributeAdapterTest extends TestCase
         string $expectedName
     ): void {
         $config = $this->getPluginConfig([
-            'integrationType' => $integrationType
+            'integrationType' => $integrationType,
         ]);
 
         $adapter = $this->getAttributeAdapter($config);
@@ -86,15 +88,15 @@ class AttributeAdapterTest extends TestCase
                             'name' => $attributeName,
                             'filterable' => true,
                             'translated' => [
-                                'name' => $attributeName
-                            ]
+                                'name' => $attributeName,
+                            ],
                         ],
                         'translated' => [
-                            'name' => 'some value'
-                        ]
-                    ]
-                ]
-            ]
+                            'name' => 'some value',
+                        ],
+                    ],
+                ],
+            ],
         );
 
         $attributes = $adapter->adapt($productEntity);
@@ -103,7 +105,7 @@ class AttributeAdapterTest extends TestCase
             $attributes,
             static function (Attribute $attribute) use ($expectedName) {
                 return $attribute->getKey() === $expectedName;
-            }
+            },
         );
 
         /** @var Attribute $attribute */
@@ -111,7 +113,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertInstanceOf(
             Attribute::class,
             $attribute,
-            sprintf('Attribute "%s" not present in attributes.', $expectedName)
+            sprintf('Attribute "%s" not present in attributes.', $expectedName),
         );
     }
 
@@ -176,14 +178,14 @@ class AttributeAdapterTest extends TestCase
     public function testEmptyAttributeNamesAreSkipped(?string $value): void
     {
         $config = $this->getPluginConfig([
-            'integrationType' => IntegrationType::API
+            'integrationType' => IntegrationType::API,
         ]);
         $adapter = $this->getAttributeAdapter($config);
 
         $data = [
             'description' => 'Really interesting',
             'referenceunit' => 'cm',
-            'customFields' => [$value => 'something']
+            'customFields' => [$value => 'something'],
         ];
 
         $productEntity = $this->createTestProduct($data);
@@ -203,7 +205,7 @@ class AttributeAdapterTest extends TestCase
         array $expectedCatUrls
     ): void {
         $config = $this->getPluginConfig([
-            'integrationType' => $integrationType
+            'integrationType' => $integrationType,
         ]);
         $adapter = $this->getAttributeAdapter($config);
 
@@ -244,8 +246,8 @@ class AttributeAdapterTest extends TestCase
         $data = [
             'customFields' => [
                 'findologic_size' => 100,
-                'findologic_color' => 'yellow'
-            ]
+                'findologic_color' => 'yellow',
+            ],
         ];
         $productEntity = $this->createTestProduct($data, true);
         $productFields = $productEntity->getCustomFields();
@@ -263,9 +265,9 @@ class AttributeAdapterTest extends TestCase
         $data = [
             'customFields' => [
                 'multidimensional' => [
-                    ['interesting' => 'this is some multidimensional data wow!']
-                ]
-            ]
+                    ['interesting' => 'this is some multidimensional data wow!'],
+                ],
+            ],
         ];
         $productEntity = $this->createTestProduct($data, true);
         $attributes = $this->attributeAdapter->adapt($productEntity);
@@ -292,7 +294,7 @@ class AttributeAdapterTest extends TestCase
     public function testEmptyAttributeValuesAreSkipped(?string $value): void
     {
         $data = [
-            'customFields' => [$value => 100, 'findologic_color' => $value]
+            'customFields' => [$value => 100, 'findologic_color' => $value],
         ];
 
         $productEntity = $this->createTestProduct($data);
@@ -340,11 +342,11 @@ class AttributeAdapterTest extends TestCase
                                 'seoPathInfo' => '/FINDOLOGIC-Category/',
                                 'isCanonical' => true,
                                 'routeName' => 'frontend.navigation.page',
-                            ]
+                            ],
                         ],
                     ],
                 ],
-            ]
+            ],
         );
 
         $attributes = $this->attributeAdapter->adapt($productEntity);
@@ -364,7 +366,7 @@ class AttributeAdapterTest extends TestCase
         $id = Uuid::randomHex();
         $product = $this->createTestProduct([
             'id' => $id,
-            'categories' => []
+            'categories' => [],
         ]);
 
         $this->attributeAdapter->adapt($product);
@@ -379,12 +381,12 @@ class AttributeAdapterTest extends TestCase
             ],
             'Parent has no categories and children have some categories assigned' => [
                 'isParentAssigned' => false,
-                'isVariantAssigned' => true
+                'isVariantAssigned' => true,
             ],
             'Parent has categories and children have no categories assigned' => [
                 'isParentAssigned' => true,
-                'isVariantAssigned' => false
-            ]
+                'isVariantAssigned' => false,
+            ],
         ];
     }
 
@@ -398,28 +400,28 @@ class AttributeAdapterTest extends TestCase
             'id' => 'cce80a72bc3481d723c38cccf592d45a',
             'name' => 'Category1',
             'active' => true,
-            'parentId' => $this->navigationCategoryId
+            'parentId' => $this->navigationCategoryId,
         ];
 
         $expectedCategories = ['Category1'];
         $expectedCatUrls = [
-            'cce80a72bc3481d723c38cccf592d45a'
+            'cce80a72bc3481d723c38cccf592d45a',
         ];
 
         $productEntity = $this->createTestProduct([
             'id' => $id,
-            'categories' => $isParentAssigned ? [$category] : []
+            'categories' => $isParentAssigned ? [$category] : [],
         ]);
 
         $childEntity = $this->createTestProduct([
             'parentId' => $id,
             'productNumber' => Uuid::randomHex(),
             'categories' => $isVariantAssigned ? [$category] : [],
-            'shippingFree' => false
+            'shippingFree' => false,
         ]);
 
         $config = $this->getPluginConfig([
-            'integrationType' => IntegrationType::DI
+            'integrationType' => IntegrationType::DI,
         ]);
 
         $initialItem = new XMLItem('123');
@@ -483,7 +485,7 @@ class AttributeAdapterTest extends TestCase
                                 'pathInfo' => 'navigation/' . $categoryId,
                                 'seoPathInfo' => 'Main',
                                 'isCanonical' => true,
-                                'routeName' => 'frontend.navigation.page'
+                                'routeName' => 'frontend.navigation.page',
                             ],
                             [
                                 'id' => Uuid::randomHex(),
@@ -491,12 +493,12 @@ class AttributeAdapterTest extends TestCase
                                 'pathInfo' => 'navigation/' . $categoryId,
                                 'seoPathInfo' => 'Additional Main',
                                 'isCanonical' => true,
-                                'routeName' => 'frontend.navigation.page'
-                            ]
-                        ]
-                    ]
+                                'routeName' => 'frontend.navigation.page',
+                            ],
+                        ],
+                    ],
                 ],
-                'categoryId' => $categoryId
+                'categoryId' => $categoryId,
             ],
             'Category have a pseudo empty SEO path assigned' => [
                 'data' => [
@@ -510,16 +512,15 @@ class AttributeAdapterTest extends TestCase
                                 'pathInfo' => 'navigation/' . $categoryId,
                                 'seoPathInfo' => ' ',
                                 'isCanonical' => true,
-                                'routeName' => 'frontend.navigation.page'
-                            ]
-                        ]
-                    ]
+                                'routeName' => 'frontend.navigation.page',
+                            ],
+                        ],
+                    ],
                 ],
-                'categoryId' => $categoryId
-            ]
+                'categoryId' => $categoryId,
+            ],
         ];
     }
-
 
     public function attributeProvider(): array
     {
@@ -527,52 +528,52 @@ class AttributeAdapterTest extends TestCase
             'API Integration filter with some special characters' => [
                 'integrationType' => 'API',
                 'attributeName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
-                'expectedName' => 'SpecialCharacters'
+                'expectedName' => 'SpecialCharacters',
             ],
             'API Integration filter with brackets' => [
                 'integrationType' => 'API',
                 'attributeName' => 'Farbwiedergabe (Ra/CRI)',
-                'expectedName' => 'FarbwiedergabeRaCRI'
+                'expectedName' => 'FarbwiedergabeRaCRI',
             ],
             'API Integration filter with special UTF-8 characters' => [
                 'integrationType' => 'API',
                 'attributeName' => 'Ausschnitt D ø (mm)',
-                'expectedName' => 'AusschnittDmm'
+                'expectedName' => 'AusschnittDmm',
             ],
             'API Integration filter dots and dashes' => [
                 'integrationType' => 'API',
                 'attributeName' => 'free_shipping.. Really Cool--__',
-                'expectedName' => 'free_shippingReallyCool--__'
+                'expectedName' => 'free_shippingReallyCool--__',
             ],
             'API Integration filter with umlauts' => [
                 'integrationType' => 'API',
                 'attributeName' => 'Umläüts äre cööl',
-                'expectedName' => 'Umläütsärecööl'
+                'expectedName' => 'Umläütsärecööl',
             ],
             'Direct Integration filter with some special characters' => [
                 'integrationType' => 'Direct Integration',
                 'attributeName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
-                'expectedName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|'
+                'expectedName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
             ],
             'Direct Integration filter with brackets' => [
                 'integrationType' => 'Direct Integration',
                 'attributeName' => 'Farbwiedergabe (Ra/CRI)',
-                'expectedName' => 'Farbwiedergabe (Ra/CRI)'
+                'expectedName' => 'Farbwiedergabe (Ra/CRI)',
             ],
             'Direct Integration filter with special UTF-8 characters' => [
                 'integrationType' => 'Direct Integration',
                 'attributeName' => 'Ausschnitt D ø (mm)',
-                'expectedName' => 'Ausschnitt D ø (mm)'
+                'expectedName' => 'Ausschnitt D ø (mm)',
             ],
             'Direct Integration filter dots and dashes' => [
                 'integrationType' => 'Direct Integration',
                 'attributeName' => 'free_shipping.. Really Cool--__',
-                'expectedName' => 'free_shipping.. Really Cool--__'
+                'expectedName' => 'free_shipping.. Really Cool--__',
             ],
             'Direct Integration filter with umlauts' => [
                 'integrationType' => 'Direct Integration',
                 'attributeName' => 'Umläüts äre cööl',
-                'expectedName' => 'Umläüts äre cööl'
+                'expectedName' => 'Umläüts äre cööl',
             ],
         ];
     }
@@ -585,14 +586,14 @@ class AttributeAdapterTest extends TestCase
                     'multi' => [
                         'one value',
                         'another value',
-                        'even a third one!'
+                        'even a third one!',
                     ],
                 ],
                 'expectedCustomFieldAttributes' => [
                     'multi' => [
                         'one value',
                         'another value',
-                        'even a third one!'
+                        'even a third one!',
                     ],
                 ],
                 'expectAssertions' => true,
@@ -603,14 +604,14 @@ class AttributeAdapterTest extends TestCase
                         'one value',
                         'another value',
                         'even a third one!',
-                        null
+                        null,
                     ],
                 ],
                 'expectedCustomFieldAttributes' => [
                     'multiWithNull' => [
                         'one value',
                         'another value',
-                        'even a third one!'
+                        'even a third one!',
                     ],
                 ],
                 'expectAssertions' => false,
@@ -621,18 +622,18 @@ class AttributeAdapterTest extends TestCase
                         'one value',
                         'another value',
                         'even a third one!',
-                        ''
+                        '',
                     ],
                 ],
                 'expectedCustomFieldAttributes' => [
                     'multiWithEmptyValue' => [
                         'one value',
                         'another value',
-                        'even a third one!'
+                        'even a third one!',
                     ],
                 ],
                 'expectAssertions' => false,
-            ]
+            ],
         ];
     }
 
@@ -644,7 +645,7 @@ class AttributeAdapterTest extends TestCase
         return [
             'No rating is provided' => ['ratings' => [], 'expectedRating' => 0.0],
             'Single rating is provided' => ['ratings' => [2.0], 'expectedRating' => 2.0],
-            'Multiple ratings is provided' => ['ratings' => $multipleRatings, 'expectedRating' => $average]
+            'Multiple ratings is provided' => ['ratings' => $multipleRatings, 'expectedRating' => $average],
         ];
     }
 
@@ -678,10 +679,10 @@ class AttributeAdapterTest extends TestCase
                         'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
                         'active' => true,
-                    ]
+                    ],
                 ],
                 'expectedCategories' => [
-                    'Category1'
+                    'Category1',
                 ],
                 'expectedCatUrls' => [],
             ],
@@ -703,14 +704,14 @@ class AttributeAdapterTest extends TestCase
                                         'id' => '6a753ffefab44667b87d9260fbcb9fac',
                                         'name' => 'Category3',
                                         'active' => true,
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 'expectedCategories' => [
-                    'Category1_Category2_Category3'
+                    'Category1_Category2_Category3',
                 ],
                 'expectedCatUrls' => [],
             ],
@@ -722,13 +723,13 @@ class AttributeAdapterTest extends TestCase
                         'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
                         'active' => true,
-                    ]
+                    ],
                 ],
                 'expectedCategories' => [
-                    'Category1'
+                    'Category1',
                 ],
                 'expectedCatUrls' => [
-                    'cce80a72bc3481d723c38cccf592d45a'
+                    'cce80a72bc3481d723c38cccf592d45a',
                 ],
             ],
             'Integration type is DI with nested categories' => [
@@ -744,16 +745,16 @@ class AttributeAdapterTest extends TestCase
                                 'id' => 'f03d845e0abf31e72409cf7c5c704a2e',
                                 'name' => 'Category2',
                                 'active' => true,
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 'expectedCategories' => [
                     'Category1_Category2',
                 ],
                 'expectedCatUrls' => [
                     'f03d845e0abf31e72409cf7c5c704a2e',
-                    'cce80a72bc3481d723c38cccf592d45a'
+                    'cce80a72bc3481d723c38cccf592d45a',
                 ],
             ],
             'Integration type is unknown and category is at first level' => [
@@ -764,10 +765,10 @@ class AttributeAdapterTest extends TestCase
                         'parentId' => $this->navigationCategoryId,
                         'name' => 'Category1',
                         'active' => true,
-                    ]
+                    ],
                 ],
                 'expectedCategories' => [
-                    'Category1'
+                    'Category1',
                 ],
                 'expectedCatUrls' => [],
             ],
@@ -783,12 +784,12 @@ class AttributeAdapterTest extends TestCase
                                 'id' => 'f03d845e0abf31e72409cf7c5c704a2e',
                                 'name' => 'Category2',
                                 'active' => true,
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ],
                 'expectedCategories' => [
-                    'Category1_Category2'
+                    'Category1_Category2',
                 ],
                 'expectedCatUrls' => [],
             ],

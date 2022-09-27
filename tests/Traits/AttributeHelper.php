@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Export\Data\Attribute;
@@ -41,11 +43,11 @@ trait AttributeHelper
             [
                 $productEntity->properties
                     ->first()
-                    ->name
-            ]
+                    ->name,
+            ],
         );
 
-        $shippingFree = $this->translateBooleanValue(!!$productEntity->shippingFree);
+        $shippingFree = $this->translateBooleanValue((bool) $productEntity->shippingFree);
         $attributes[] = new Attribute('shipping_free', [$shippingFree]);
 
         $rating = $productEntity->ratingAverage ?? 0.0;

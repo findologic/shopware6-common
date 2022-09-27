@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use Exception;
@@ -7,10 +9,6 @@ use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemAdaptEvent;
-use FINDOLOGIC\Shopware6Common\Export\Events\AfterVariantAdaptEvent;
-use FINDOLOGIC\Shopware6Common\Export\Events\BeforeItemAdaptEvent;
-use FINDOLOGIC\Shopware6Common\Export\Events\BeforeVariantAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -51,13 +49,13 @@ class ExportItemAdapterTest extends TestCase
         $expectedMessage = sprintf(
             'Product "%s" with id %s was not exported because it has no categories assigned',
             $productEntity->getTranslation('name'),
-            $productEntity->id
+            $productEntity->id,
         );
 
         $this->expectAdapterException(
             $productEntity,
             new ProductHasNoCategoriesException($productEntity),
-            $expectedMessage
+            $expectedMessage,
         );
     }
 
@@ -68,7 +66,7 @@ class ExportItemAdapterTest extends TestCase
         $error = sprintf(
             'Product "%s" with id "%s" could not be exported.',
             $productEntity->getTranslation('name'),
-            $productEntity->id
+            $productEntity->id,
         );
         $reason = 'It appears to have empty values assigned to it.';
         $help = 'If you see this message in your logs, please report this as a bug.';
@@ -77,7 +75,7 @@ class ExportItemAdapterTest extends TestCase
         $this->expectAdapterException(
             $productEntity,
             new EmptyValueNotAllowedException(''),
-            $expectedMessage
+            $expectedMessage,
         );
     }
 
@@ -89,7 +87,7 @@ class ExportItemAdapterTest extends TestCase
         $error = sprintf(
             'Error while exporting the product "%s" with id "%s".',
             $productEntity->getTranslation('name'),
-            $productEntity->id
+            $productEntity->id,
         );
         $help = 'If you see this message in your logs, please report this as a bug.';
         $reason = sprintf('Error message: %s', $errorMessage);
@@ -98,7 +96,7 @@ class ExportItemAdapterTest extends TestCase
         $this->expectAdapterException(
             $productEntity,
             new Exception($errorMessage),
-            $expectedMessage
+            $expectedMessage,
         );
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Utils;
 
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
@@ -13,33 +15,33 @@ class UtilsTest extends TestCase
             'Strings with only letters and numbers' => [
                 'Findologic123',
                 'Findologic123',
-                'Expected string to return unchanged'
+                'Expected string to return unchanged',
             ],
             'Strings with whitespace' => [
                 ' Findologic123 ',
                 'Findologic123',
-                'Expected string to be trimmed'
+                'Expected string to be trimmed',
             ],
             'String with control characters' => [
                 "Findologic\n1\t2\r3",
                 'Findologic123',
-                'Expected control characters to be stripped way'
+                'Expected control characters to be stripped way',
             ],
             'String with another set of control characters' => [
                 "Findologic\xC2\x9F\xC2\x80 Rocks",
                 'Findologic Rocks',
-                'Expected control characters to be stripped way'
+                'Expected control characters to be stripped way',
             ],
             'String with special characters' => [
                 'Findologic&123',
                 'Findologic&123',
-                'Expected special characters to be returned as they are'
+                'Expected special characters to be returned as they are',
             ],
             'String with umlauts' => [
                 'Findolögic123',
                 'Findolögic123',
-                'Expected umlauts to be left unaltered.'
-            ]
+                'Expected umlauts to be left unaltered.',
+            ],
         ];
     }
 
@@ -58,53 +60,53 @@ class UtilsTest extends TestCase
             'String with HTML tags' => [
                 '<span>Findologic Rocks</span>',
                 'Findologic Rocks',
-                'Expected HTML tags to be stripped away'
+                'Expected HTML tags to be stripped away',
             ],
             'String with single quotes' => [
                 "Findologic's team rocks",
                 'Findologic\'s team rocks',
-                'Expected single quotes to be escaped with back slash'
+                'Expected single quotes to be escaped with back slash',
             ],
             'String with double quotes' => [
                 'Findologic "Rocks!"',
                 'Findologic "Rocks!"',
-                'Expected double quotes to be escaped with back slash'
+                'Expected double quotes to be escaped with back slash',
             ],
             'String with back slashes' => [
                 "Findologic\ Rocks!\\",
                 'Findologic Rocks!',
-                'Expected back slashes to be stripped away'
+                'Expected back slashes to be stripped away',
             ],
             'String with preceding space' => [
                 ' Findologic Rocks ',
                 'Findologic Rocks',
-                'Expected preceding and succeeding spaces to be stripped away'
+                'Expected preceding and succeeding spaces to be stripped away',
             ],
             'Strings with only letters and numbers' => [
                 'Findologic123',
                 'Findologic123',
-                'Expected string to return unchanged'
+                'Expected string to return unchanged',
             ],
             'String with control characters' => [
                 "Findologic\n1\t2\r3",
                 'Findologic 1 2 3',
-                'Expected control characters to be stripped way'
+                'Expected control characters to be stripped way',
             ],
             'String with another set of control characters' => [
                 "Findologic\xC2\x9F\xC2\x80 Rocks",
                 'Findologic Rocks',
-                'Expected control characters to be stripped way'
+                'Expected control characters to be stripped way',
             ],
             'String with special characters' => [
                 'Findologic&123!',
                 'Findologic&123!',
-                'Expected special characters to be returned as they are'
+                'Expected special characters to be returned as they are',
             ],
             'String with umlauts' => [
                 'Findolögic123',
                 'Findolögic123',
-                'Expected umlauts to be left unaltered.'
-            ]
+                'Expected umlauts to be left unaltered.',
+            ],
         ];
     }
 

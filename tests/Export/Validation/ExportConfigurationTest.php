@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Validation;
 
 use FINDOLOGIC\Shopware6Common\Export\Validation\ExportConfigurationBase;
@@ -21,7 +23,7 @@ class ExportConfigurationTest extends TestCase
         $request = $this->createFindologicRequest([
             'shopkey' => $expectedShopkey,
             'start' => $expectedStart,
-            'count' => $expectedCount
+            'count' => $expectedCount,
         ]);
 
         $config = ExportConfigurationBase::getInstance($request);
@@ -40,7 +42,7 @@ class ExportConfigurationTest extends TestCase
         $request = $this->createExportRequest([
             'shopkey' => $expectedShopkey,
             'page' => $expectedPage,
-            'count' => $expectedCount
+            'count' => $expectedCount,
         ]);
 
         $config = ExportConfigurationBase::getInstance($request);
@@ -86,11 +88,11 @@ class ExportConfigurationTest extends TestCase
 
         $requestFindologic = $this->createFindologicRequest([
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
-            'productId' => $expectedProductId
+            'productId' => $expectedProductId,
         ]);
         $requestExport = $this->createExportRequest([
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
-            'productId' => $expectedProductId
+            'productId' => $expectedProductId,
         ]);
 
         $configFindologic = ExportConfigurationBase::getInstance($requestFindologic);
@@ -108,7 +110,7 @@ class ExportConfigurationTest extends TestCase
             ],
             'Shopkey does not match the schema' => [
                 'queryParams' => [
-                    'shopkey' => 'hehe i am a bad shopkey'
+                    'shopkey' => 'hehe i am a bad shopkey',
                 ],
             ],
             'Shopkey matches the schema but count is negative' => [
@@ -121,7 +123,7 @@ class ExportConfigurationTest extends TestCase
                 'queryParams' => [
                     'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
                     'count' => 0,
-                ]
+                ],
             ],
             'Shopkey matches the schema but start is negative' => [
                 'queryParams' => [
@@ -143,7 +145,7 @@ class ExportConfigurationTest extends TestCase
                     'count' => -55,
                     'start' => -134,
                 ],
-                'exportPath' => 'findologic'
+                'exportPath' => 'findologic',
             ],
             'Export: All params are invalid' => [
                 'queryParams' => [
@@ -151,7 +153,7 @@ class ExportConfigurationTest extends TestCase
                     'count' => -55,
                     'page' => -134,
                 ],
-                'exportPath' => 'export'
+                'exportPath' => 'export',
             ],
         ];
     }
@@ -181,7 +183,7 @@ class ExportConfigurationTest extends TestCase
         $validationsList = new ConstraintViolationList();
         foreach ($configs as $config) {
             $validationsList->addAll(
-                $validator->validate($config)
+                $validator->validate($config),
             );
         }
 
@@ -193,27 +195,27 @@ class ExportConfigurationTest extends TestCase
         return [
             'Findologic: Export path' => [
                 'path' => 'findologic',
-                'expectedClass' => OffsetExportConfiguration::class
+                'expectedClass' => OffsetExportConfiguration::class,
             ],
             'Findologic: Dynamic product groups path' => [
                 'path' => 'findologic/dynamic-product-groups',
-                'expectedClass' => OffsetExportConfiguration::class
+                'expectedClass' => OffsetExportConfiguration::class,
             ],
             'Findologic: Export debug path' => [
                 'path' => 'findologic/debug',
-                'expectedClass' => OffsetExportConfiguration::class
+                'expectedClass' => OffsetExportConfiguration::class,
             ],
             'Export: Export path' => [
                 'path' => 'export',
-                'expectedClass' => PageExportConfiguration::class
+                'expectedClass' => PageExportConfiguration::class,
             ],
             'Export: Dynamic product groups path' => [
                 'path' => 'export/dynamic-product-groups',
-                'expectedClass' => PageExportConfiguration::class
+                'expectedClass' => PageExportConfiguration::class,
             ],
             'Export: Export debug path' => [
                 'path' => 'export/debug',
-                'expectedClass' => PageExportConfiguration::class
+                'expectedClass' => PageExportConfiguration::class,
             ],
         ];
     }

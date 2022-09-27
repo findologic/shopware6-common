@@ -55,7 +55,7 @@ class AttributeAdapter
             $manufacturerAttributes,
             $propertyAttributes,
             $customFieldAttributes,
-            $additionalAttributes
+            $additionalAttributes,
         );
     }
 
@@ -112,7 +112,7 @@ class AttributeAdapter
 
             $categoryPath = Utils::buildCategoryPath(
                 $categoryEntity->breadcrumb,
-                $this->exportContext->getNavigationCategory()->breadcrumb
+                $this->exportContext->getNavigationCategory()->breadcrumb,
             );
 
             if (!Utils::isEmpty($categoryPath)) {
@@ -125,7 +125,7 @@ class AttributeAdapter
 
             $catUrls = array_merge(
                 $catUrls,
-                $this->catUrlBuilderService->getCategoryUrls($categoryEntity)
+                $this->catUrlBuilderService->getCategoryUrls($categoryEntity),
             );
         }
     }
@@ -211,7 +211,7 @@ class AttributeAdapter
                 // Filter null, false and empty strings, but not "0". See: https://stackoverflow.com/a/27501297/6281648
                 $customFieldAttribute = new Attribute(
                     $key,
-                    $this->decodeHtmlEntities(array_filter((array)$cleanedValue, 'strlen'))
+                    $this->decodeHtmlEntities(array_filter((array) $cleanedValue, 'strlen')),
                 );
                 $attributes[] = $customFieldAttribute;
             }
@@ -249,7 +249,7 @@ class AttributeAdapter
     {
         $attributes = [];
 
-        $shippingFree = $this->translateBooleanValue(!!$product->shippingFree);
+        $shippingFree = $this->translateBooleanValue((bool) $product->shippingFree);
         $attributes[] = new Attribute('shipping_free', [$shippingFree]);
         $rating = $product->ratingAverage ?? 0.0;
         $attributes[] = new Attribute('rating', [$rating]);

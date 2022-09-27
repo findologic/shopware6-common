@@ -13,7 +13,8 @@ class DefaultPropertiesAdapter
 {
     protected ExportContext $exportContext;
 
-    public function __construct(ExportContext $exportContext) {
+    public function __construct(ExportContext $exportContext)
+    {
         $this->exportContext = $exportContext;
     }
 
@@ -22,7 +23,7 @@ class DefaultPropertiesAdapter
         $properties = [];
 
         if ($product->tax) {
-            $value = (string)$product->tax->taxRate;
+            $value = (string) $product->tax->taxRate;
             $properties[] = $this->getProperty('tax', $value);
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
@@ -18,7 +20,7 @@ class ProductUrlService extends UrlBuilderService
      * E.g.
      * * http://localhost:8000/Lightweight-Paper-Prior-IT/7562a1140f7f4abd8c6a4a4b6d050b77
      * * https://your-shop.com/detail/032c79962b3f4fb4bd1e9117005b42c1
-     * * https://your-shop.com/de/Cooles-Produkt/c0421a8d8af840ecad60971ec5280476
+     * * https://your-shop.com/de/Cooles-Produkt/c0421a8d8af840ecad60971ec5280476.
      */
     public function buildProductUrl(ProductEntity $product): string
     {
@@ -39,7 +41,7 @@ class ProductUrlService extends UrlBuilderService
      * Gets the SEO path of the given product for the currently used language. Prefixed slashes are removed.
      * E.g.
      * * Lightweight-Paper-Prior-IT/7562a1140f7f4abd8c6a4a4b6d050b77
-     * * Sony-Alpha-7-III-Sigma-AF-24-70mm-1-2-8-DG-DN-ART/145055000510
+     * * Sony-Alpha-7-III-Sigma-AF-24-70mm-1-2-8-DG-DN-ART/145055000510.
      */
     protected function getProductSeoPath(ProductEntity $product): ?string
     {
@@ -78,7 +80,7 @@ class ProductUrlService extends UrlBuilderService
         $seoUrlCollection = $seoUrls->filter(function (SeoUrlEntity $seoUrl) {
             return filter_var(
                 sprintf('https://dummy.com%s"', $seoUrl->seoPathInfo),
-                FILTER_VALIDATE_URL
+                FILTER_VALIDATE_URL,
             );
         });
 
@@ -96,6 +98,7 @@ class ProductUrlService extends UrlBuilderService
         $seoUrlCollection = $collection->filter(static function (SeoUrlEntity $seoUrl) use ($salesChannelId) {
             return $seoUrl->salesChannelId === $salesChannelId && !$seoUrl->isDeleted;
         });
+
         return $seoUrlCollection;
     }
 
@@ -110,7 +113,7 @@ class ProductUrlService extends UrlBuilderService
 
         $translatedEntities = $collection->filterByProperty(
             'languageId',
-            $this->exportContext->getLanguageId()
+            $this->exportContext->getLanguageId(),
         );
 
         if ($translatedEntities->count() === 0) {
@@ -125,7 +128,7 @@ class ProductUrlService extends UrlBuilderService
      * E.g.
      * * http://localhost:8000
      * * https://your-domain.com
-     * * https://your-domain.com/de
+     * * https://your-domain.com/de.
      */
     protected function getSalesChannelDomain(): ?string
     {
@@ -150,7 +153,7 @@ class ProductUrlService extends UrlBuilderService
         return $this->router->generate(
             'frontend.detail.page',
             ['productId' => $product->id],
-            RouterInterface::ABSOLUTE_URL
+            RouterInterface::ABSOLUTE_URL,
         );
     }
 

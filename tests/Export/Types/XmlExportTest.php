@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Types;
 
 use FINDOLOGIC\Shopware6Common\Export\Logger\Handler\ProductErrorHandler;
@@ -101,9 +103,9 @@ class XmlExportTest extends TestCase
                 $product->id,
                 $product->name,
                 $category->id,
-                implode(' > ', $category->breadcrumb)
+                implode(' > ', $category->breadcrumb),
             ),
-            $errors[0]
+            $errors[0],
         );
     }
 
@@ -159,7 +161,7 @@ class XmlExportTest extends TestCase
             $this->getPluginConfig(['crossSellingCategories' => $this->crossSellCategories]),
             $this->getExportItemAdapter(),
             $this->logger,
-            $this->getEventDispatcherMock()
+            $this->getEventDispatcherMock(),
         );
     }
 }

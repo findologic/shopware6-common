@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Config;
 
 use FINDOLOGIC\Shopware6Common\Export\Config\AdvancedPricing;

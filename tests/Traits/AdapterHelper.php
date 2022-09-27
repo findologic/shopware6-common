@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AbstractSalesFrequencyAdapter;
@@ -62,8 +64,8 @@ trait AdapterHelper
     ): ExportItemAdapter {
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
-                $logger ?? new Logger('test_logger'),
-                $eventDispatcher
+            $logger ?? new Logger('test_logger'),
+            $eventDispatcher,
         );
     }
 
@@ -73,7 +75,7 @@ trait AdapterHelper
             $this->getDynamicProductGroupServiceMock(),
             $this->getCatUrlBuilderService(),
             $this->getExportContext(),
-            $config ?? $this->getPluginConfig()
+            $config ?? $this->getPluginConfig(),
         );
     }
 
@@ -122,7 +124,7 @@ trait AdapterHelper
         ?SalesChannelEntity $salesChannel = null
     ): PriceAdapter {
         return new PriceAdapter(
-            $this->getExportContext($customerGroupCollection, $salesChannel)
+            $this->getExportContext($customerGroupCollection, $salesChannel),
         );
     }
 
@@ -131,7 +133,8 @@ trait AdapterHelper
         return new class($orderCount) extends AbstractSalesFrequencyAdapter {
             private int $orderCount;
 
-            public function __construct($orderCount) {
+            public function __construct($orderCount)
+            {
                 $this->orderCount = $orderCount;
             }
 

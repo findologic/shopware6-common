@@ -31,7 +31,7 @@ class ProductIdExport extends XmlExport
             $pluginConfig,
             $exportItemAdapter,
             $logger,
-            $eventDispatcher
+            $eventDispatcher,
         );
 
         $this->errorHandler = $this->pushErrorHandler();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
@@ -34,7 +36,7 @@ trait CategoryHelper
     {
         return $this->createTestCategory([
             'id' => $this->navigationCategoryId,
-            'breadcrumb' => [$this->navigationCategoryId]
+            'breadcrumb' => [$this->navigationCategoryId],
         ]);
     }
     public function generateProductCategoriesWithRelations(
@@ -48,7 +50,7 @@ trait CategoryHelper
                 $category->parentId === $this->navigationCategoryId ? $this->buildNavigationCategory() : null,
                 $category,
                 $productCategories,
-                $productCatIds
+                $productCatIds,
             );
         }
 

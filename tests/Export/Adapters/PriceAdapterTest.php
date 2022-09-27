@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
@@ -43,9 +45,9 @@ class PriceAdapterTest extends TestCase
                     'currencyId' => Defaults::CURRENCY,
                     'gross' => $expectedPrice,
                     'net' => 10,
-                    'linked' => false
-                ]
-            ]
+                    'linked' => false,
+                ],
+            ],
         ]);
 
         $prices = $this->priceAdapter->adapt($product);
@@ -70,34 +72,34 @@ class PriceAdapterTest extends TestCase
                 'grossPrice' => 13.37,
                 'netPrice' => 10.11,
                 'customerGroups' => [
-                    $grossCustomerGroup
+                    $grossCustomerGroup,
                 ],
                 'expectedPrices' => [
-                    $grossCustomerGroup->id => 13.37
-                ]
+                    $grossCustomerGroup->id => 13.37,
+                ],
             ],
             'Net customer group' => [
                 'grossPrice' => 13.37,
                 'netPrice' => 10.11,
                 'customerGroups' => [
-                    $netCustomerGroup
+                    $netCustomerGroup,
                 ],
                 'expectedPrices' => [
-                    $netCustomerGroup->id => 10.11
-                ]
+                    $netCustomerGroup->id => 10.11,
+                ],
             ],
             'Net and gross customer group' => [
                 'grossPrice' => 13.37,
                 'netPrice' => 10.11,
                 'customerGroups' => [
                     $grossCustomerGroup,
-                    $netCustomerGroup
+                    $netCustomerGroup,
                 ],
                 'expectedPrices' => [
                     $grossCustomerGroup->id => 13.37,
-                    $netCustomerGroup->id => 10.11
-                ]
-            ]
+                    $netCustomerGroup->id => 10.11,
+                ],
+            ],
         ];
     }
 
@@ -115,7 +117,7 @@ class PriceAdapterTest extends TestCase
         array $expectedPrices
     ): void {
         $adapter = $this->getPriceAdapter(
-            new CustomerGroupCollection($customerGroups)
+            new CustomerGroupCollection($customerGroups),
         );
 
         $product = $this->createTestProduct([
@@ -124,9 +126,9 @@ class PriceAdapterTest extends TestCase
                     'currencyId' => Defaults::CURRENCY,
                     'gross' => $grossPrice,
                     'net' => $netPrice,
-                    'linked' => false
-                ]
-            ]
+                    'linked' => false,
+                ],
+            ],
         ]);
 
         $prices = $adapter->adapt($product);
@@ -149,7 +151,7 @@ class PriceAdapterTest extends TestCase
         $this->assertEquals($expectedGroupPrices, $actualGroupPrices, sprintf(
             'Expected %d group(s) to have prices. Actual price count: %d',
             $expectedGroupPrices,
-            $actualGroupPrices
+            $actualGroupPrices,
         ));
     }
 
@@ -163,8 +165,8 @@ class PriceAdapterTest extends TestCase
         $testProduct = $this->createTestProduct([
             'price' => [
                 ['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false],
-                ['currencyId' => $currencyId, 'gross' => 7.5, 'net' => 5, 'linked' => false]
-            ]
+                ['currencyId' => $currencyId, 'gross' => 7.5, 'net' => 5, 'linked' => false],
+            ],
         ]);
 
         $prices = $adapter->adapt($testProduct);

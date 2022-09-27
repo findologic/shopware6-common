@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Validation;
 
 use InvalidArgumentException;
@@ -44,7 +46,7 @@ class ExportConfigurationBase
         $this->productId = $productId;
     }
 
-    public static function getInstance(Request $request): ExportConfigurationBase
+    public static function getInstance(Request $request): self
     {
         switch ($request->getPathInfo()) {
             case '/findologic':
@@ -52,7 +54,7 @@ class ExportConfigurationBase
                     $request->query->get('shopkey', ''),
                     $request->query->getInt('start', OffsetExportConfiguration::DEFAULT_START_PARAM),
                     $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
-                    $request->query->get('productId')
+                    $request->query->get('productId'),
                 );
             case '/findologic/dynamic-product-groups':
                 return new OffsetExportConfiguration(
@@ -65,7 +67,7 @@ class ExportConfigurationBase
                     $request->query->get('shopkey', ''),
                     OffsetExportConfiguration::DEFAULT_START_PARAM,
                     1,
-                    $request->query->get('productId', '')
+                    $request->query->get('productId', ''),
                 );
             case '/export':
             case '/export/dynamic-product-groups':
@@ -73,18 +75,18 @@ class ExportConfigurationBase
                     $request->query->get('shopkey', ''),
                     $request->query->getInt('page', PageExportConfiguration::DEFAULT_PAGE_PARAM),
                     $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
-                    $request->query->get('productId')
+                    $request->query->get('productId'),
                 );
             case '/export/debug':
                 return new PageExportConfiguration(
                     $request->query->get('shopkey', ''),
                     PageExportConfiguration::DEFAULT_PAGE_PARAM,
                     1,
-                    $request->query->get('productId', '')
+                    $request->query->get('productId', ''),
                 );
             default:
                 throw new InvalidArgumentException(
-                    sprintf('Unknown export configuration type for path %d.', $request->getPathInfo())
+                    sprintf('Unknown export configuration type for path %d.', $request->getPathInfo()),
                 );
         }
     }

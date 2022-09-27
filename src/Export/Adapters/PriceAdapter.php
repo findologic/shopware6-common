@@ -14,7 +14,8 @@ class PriceAdapter
 {
     protected ExportContext $exportContext;
 
-    public function __construct(ExportContext $exportContext) {
+    public function __construct(ExportContext $exportContext)
+    {
         $this->exportContext = $exportContext;
     }
 

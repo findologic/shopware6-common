@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Utils;
 
-use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainEntity;
 
@@ -45,7 +46,7 @@ class Utils
     {
         $encoded = '';
         $length = mb_strlen($string);
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0; $i < $length; $i++) {
             $encoded .= '%' . wordwrap(bin2hex(mb_substr($string, $i, 1)), 2, '%', true);
         }
 
@@ -65,7 +66,7 @@ class Utils
             isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '',
             isset($parsedUrl['path']) ? "{$parsedUrl['path']}" : '',
             isset($parsedUrl['query']) ? "?{$parsedUrl['query']}" : '',
-            isset($parsedUrl['fragment']) ? "#{$parsedUrl['fragment']}" : ''
+            isset($parsedUrl['fragment']) ? "#{$parsedUrl['fragment']}" : '',
         );
     }
 
@@ -123,12 +124,13 @@ class Utils
         $new = $original->filter(function (SalesChannelDomainEntity $domainEntity) {
             return !str_starts_with($domainEntity->url, 'default.headless');
         });
+
         return $new;
     }
 
     /**
      * Flattens a given array. This method is similar to the JavaScript method "Array.prototype.flat()".
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat.
      *
      * @param array $array
      *

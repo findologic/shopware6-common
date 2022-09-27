@@ -11,7 +11,8 @@ class ImagesAdapter
 {
     protected ProductImageService $productImageService;
 
-    public function __construct(ProductImageService $productImageService) {
+    public function __construct(ProductImageService $productImageService)
+    {
         $this->productImageService = $productImageService;
     }
 

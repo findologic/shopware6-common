@@ -64,7 +64,7 @@ class XmlExport extends AbstractExport
             $items,
             $start,
             count($items),
-            $total
+            $total,
         );
 
         $response = new Response($rawXml);
@@ -106,9 +106,9 @@ class XmlExport extends AbstractExport
                     $product->id,
                     $product->getTranslation('name'),
                     $category->id,
-                    implode(' > ', $category->breadcrumb)
+                    implode(' > ', $category->breadcrumb),
                 ),
-                ['product' => $product]
+                ['product' => $product],
             );
 
             return null;
@@ -142,7 +142,7 @@ class XmlExport extends AbstractExport
         $maxPropertiesCount = $this->productSearcher->findMaxPropertiesCount(
             $product->id,
             $product->parentId,
-            $product->propertyIds
+            $product->propertyIds,
         );
         if ($maxPropertiesCount >= self::MAXIMUM_PROPERTIES_COUNT) {
             return 1;

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
-use FINDOLOGIC\Shopware6Common\Export\Services\UrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Tests\TestHelper\Helper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
@@ -32,28 +33,28 @@ class ProductUrlServiceTest extends TestCase
         return [
             'All valid urls' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => '/correctSeoUrl-One' ],
-                    [ 'seoPathInfo' => '/correctSeoUrlTwo' ],
-                    [ 'seoPathInfo' => '/correctSeoUrl/Three' ]
+                    ['seoPathInfo' => '/correctSeoUrl-One'],
+                    ['seoPathInfo' => '/correctSeoUrlTwo'],
+                    ['seoPathInfo' => '/correctSeoUrl/Three'],
                 ],
-                'expectedUrlCount' => 3
+                'expectedUrlCount' => 3,
             ],
             'Half valid urls' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => '/failed seo url with spaces' ],
-                    [ 'seoPathInfo' => 'failedSeoUrlWithoutSlash' ],
-                    [ 'seoPathInfo' => '/correctSeoUrl-One' ],
-                    [ 'seoPathInfo' => '/correctSeoUrlTwo' ]
+                    ['seoPathInfo' => '/failed seo url with spaces'],
+                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash'],
+                    ['seoPathInfo' => '/correctSeoUrl-One'],
+                    ['seoPathInfo' => '/correctSeoUrlTwo'],
                 ],
-                'expectedUrlCount' => 2
+                'expectedUrlCount' => 2,
             ],
             'All Invalid urls' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => '/failed seo url with spaces' ],
-                    [ 'seoPathInfo' => 'failedSeoUrlWithoutSlash' ],
-                    [ 'seoPathInfo' => 'failedSeoUrlWithoutSlash and with spaces' ],
+                    ['seoPathInfo' => '/failed seo url with spaces'],
+                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash'],
+                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash and with spaces'],
                 ],
-                'expectedUrlCount' => 0
+                'expectedUrlCount' => 0,
             ],
         ];
     }
@@ -77,8 +78,8 @@ class ProductUrlServiceTest extends TestCase
             Helper::callMethod(
                 $this->productUrlService,
                 'removeInvalidUrls',
-                [$seoUrlCollection]
-            )->count()
+                [$seoUrlCollection],
+            )->count(),
         );
     }
 
@@ -87,39 +88,39 @@ class ProductUrlServiceTest extends TestCase
         return [
             'Has valid url, canonical and not deleted' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => 'invalid url one', 'isCanonical' => false, 'isDeleted' => false ],
-                    [ 'seoPathInfo' => '/validUrlOne', 'isCanonical' => true, 'isDeleted' => false ]
+                    ['seoPathInfo' => 'invalid url one', 'isCanonical' => false, 'isDeleted' => false],
+                    ['seoPathInfo' => '/validUrlOne', 'isCanonical' => true, 'isDeleted' => false],
                 ],
-                'expectedSeoUrl' => 'validUrlOne'
+                'expectedSeoUrl' => 'validUrlOne',
             ],
             'Has valid url not canonical and not deleted' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => 'invalid url two', 'isCanonical' => false, 'isDeleted' => false ],
-                    [ 'seoPathInfo' => '/validUrlTwo', 'isCanonical' => false, 'isDeleted' => false ]
+                    ['seoPathInfo' => 'invalid url two', 'isCanonical' => false, 'isDeleted' => false],
+                    ['seoPathInfo' => '/validUrlTwo', 'isCanonical' => false, 'isDeleted' => false],
                 ],
-                'expectedSeoUrl' => 'validUrlTwo'
+                'expectedSeoUrl' => 'validUrlTwo',
             ],
             'Has valid and canonical url, but deleted' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => 'invalid url five', 'isCanonical' => false, 'isDeleted' => false ],
-                    [ 'seoPathInfo' => '/validUrlThree', 'isCanonical' => true, 'isDeleted' => true ]
+                    ['seoPathInfo' => 'invalid url five', 'isCanonical' => false, 'isDeleted' => false],
+                    ['seoPathInfo' => '/validUrlThree', 'isCanonical' => true, 'isDeleted' => true],
                 ],
-                'expectedSeoUrl' => null
+                'expectedSeoUrl' => null,
             ],
             'Has valid and not canonical url and deleted' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => 'invalid url five', 'isCanonical' => false, 'isDeleted' => false ],
-                    [ 'seoPathInfo' => '/validUrlFour', 'isCanonical' => false, 'isDeleted' => true ]
+                    ['seoPathInfo' => 'invalid url five', 'isCanonical' => false, 'isDeleted' => false],
+                    ['seoPathInfo' => '/validUrlFour', 'isCanonical' => false, 'isDeleted' => true],
                 ],
-                'expectedSeoUrl' => null
+                'expectedSeoUrl' => null,
             ],
             'No valid url, all not canonical' => [
                 'seoUrlArray' => [
-                    [ 'seoPathInfo' => 'invalid url three', 'isCanonical' => false, 'isDeleted' => false ],
-                    [ 'seoPathInfo' => 'invalid url four', 'isCanonical' => false, 'isDeleted' => false ]
+                    ['seoPathInfo' => 'invalid url three', 'isCanonical' => false, 'isDeleted' => false],
+                    ['seoPathInfo' => 'invalid url four', 'isCanonical' => false, 'isDeleted' => false],
                 ],
-                'expectedSeoUrl' => null
-            ]
+                'expectedSeoUrl' => null,
+            ],
         ];
     }
 
@@ -148,7 +149,7 @@ class ProductUrlServiceTest extends TestCase
         $seoUrl = Helper::callMethod(
             $this->productUrlService,
             'getProductSeoPath',
-            [$product]
+            [$product],
         );
 
         $this->assertSame($expectedSeoUrl, $seoUrl);

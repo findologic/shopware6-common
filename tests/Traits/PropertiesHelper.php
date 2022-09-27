@@ -21,67 +21,67 @@ trait PropertiesHelper
 
         if ($product->tax) {
             $property = new Property('tax');
-            $property->addValue((string)$product->tax->taxRate);
+            $property->addValue((string) $product->tax->taxRate);
             $properties[] = $property;
         }
 
         if ($product->purchaseUnit) {
             $property = new Property('purchaseunit');
-            $property->addValue((string)$product->purchaseUnit);
+            $property->addValue((string) $product->purchaseUnit);
             $properties[] = $property;
         }
 
         if ($product->referenceUnit) {
             $property = new Property('referenceunit');
-            $property->addValue((string)$product->referenceUnit);
+            $property->addValue((string) $product->referenceUnit);
             $properties[] = $property;
         }
 
         if ($product->packUnit) {
             $property = new Property('packunit');
-            $property->addValue((string)$product->packUnit);
+            $property->addValue((string) $product->packUnit);
             $properties[] = $property;
         }
 
         if ($product->stock) {
             $property = new Property('stock');
-            $property->addValue((string)$product->stock);
+            $property->addValue((string) $product->stock);
             $properties[] = $property;
         }
 
         if ($product->availableStock) {
             $property = new Property('availableStock');
-            $property->addValue((string)$product->availableStock);
+            $property->addValue((string) $product->availableStock);
             $properties[] = $property;
         }
 
         if ($product->weight) {
             $property = new Property('weight');
-            $property->addValue((string)$product->weight);
+            $property->addValue((string) $product->weight);
             $properties[] = $property;
         }
 
         if ($product->width) {
             $property = new Property('width');
-            $property->addValue((string)$product->width);
+            $property->addValue((string) $product->width);
             $properties[] = $property;
         }
 
         if ($product->height) {
             $property = new Property('height');
-            $property->addValue((string)$product->height);
+            $property->addValue((string) $product->height);
             $properties[] = $property;
         }
 
         if ($product->length) {
             $property = new Property('length');
-            $property->addValue((string)$product->length);
+            $property->addValue((string) $product->length);
             $properties[] = $property;
         }
 
         if ($product->releaseDate) {
             $property = new Property('releasedate');
-            $property->addValue((string)$product->releaseDate->format(DATE_ATOM));
+            $property->addValue((string) $product->releaseDate->format(DATE_ATOM));
             $properties[] = $property;
         }
 
@@ -97,11 +97,11 @@ trait PropertiesHelper
             if ($price) {
                 if ($listPrice = $price['listPrice']) {
                     $property = new Property('old_price');
-                    $property->addValue((string)$listPrice['gross']);
+                    $property->addValue((string) $listPrice['gross']);
                     $properties[] = $property;
 
                     $property = new Property('old_price_net');
-                    $property->addValue((string)$listPrice['net']);
+                    $property->addValue((string) $listPrice['net']);
                     $properties[] = $property;
                 }
             }

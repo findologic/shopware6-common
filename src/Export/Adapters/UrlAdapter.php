@@ -12,7 +12,8 @@ class UrlAdapter
 {
     protected ProductUrlService $productUrlService;
 
-    public function __construct(ProductUrlService $productUrlService) {
+    public function __construct(ProductUrlService $productUrlService)
+    {
         $this->productUrlService = $productUrlService;
     }
 

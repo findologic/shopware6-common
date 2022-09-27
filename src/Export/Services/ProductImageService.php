@@ -58,7 +58,7 @@ class ProductImageService
         return sprintf(
             '%s/%s',
             $schemaAuthority,
-            'bundles/storefront/assets/icon/default/placeholder.svg'
+            'bundles/storefront/assets/icon/default/placeholder.svg',
         );
     }
 
@@ -173,7 +173,7 @@ class ProductImageService
 
         return [
             new Image($fallbackImage),
-            new Image($fallbackImage, Image::TYPE_THUMBNAIL)
+            new Image($fallbackImage, Image::TYPE_THUMBNAIL),
         ];
     }
 

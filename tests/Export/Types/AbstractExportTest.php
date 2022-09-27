@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Types;
 
 use FINDOLOGIC\Shopware6Common\Export\Types\AbstractExport;
@@ -20,12 +22,12 @@ class AbstractExportTest extends TestCase
         return [
             'XML export' => [
                 'type' => AbstractExport::TYPE_XML,
-                'expectedInstance' => XmlExport::class
+                'expectedInstance' => XmlExport::class,
             ],
             'Product ID export' => [
                 'type' => AbstractExport::TYPE_PRODUCT_ID,
-                'expectedInstance' => ProductIdExport::class
-            ]
+                'expectedInstance' => ProductIdExport::class,
+            ],
         ];
     }
 
@@ -40,7 +42,7 @@ class AbstractExportTest extends TestCase
             $this->getProductSearcherMock(),
             $this->getPluginConfig(),
             $this->getExportItemAdapter(),
-            $this->getLogger()
+            $this->getLogger(),
         );
 
         $this->assertInstanceOf($expectedInstance, $export);
@@ -59,7 +61,7 @@ class AbstractExportTest extends TestCase
             $this->getProductSearcherMock(),
             $this->getPluginConfig(),
             $this->getExportItemAdapter(),
-            $this->getLogger()
+            $this->getLogger(),
         );
     }
 }

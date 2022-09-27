@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Services;
 
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Constants;
 use FINDOLOGIC\Shopware6Common\Export\Errors\ExportErrors;
-use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\ProductDebugSearcherInterface;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductDebugService;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\Constants as ConstantsTrait;
@@ -13,7 +14,6 @@ use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Criteria;
-use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 class ProductDebugServiceTest extends TestCase
@@ -36,7 +36,7 @@ class ProductDebugServiceTest extends TestCase
             ->method('getProductById')
             ->willReturnCallback(fn (string $productId) => $this->createTestProduct([
                 'id' => $productId,
-                'parentId' => Uuid::randomHex()
+                'parentId' => Uuid::randomHex(),
             ]));
         $productDebugSearcher->expects($this->once())
             ->method('buildCriteria')
@@ -51,14 +51,14 @@ class ProductDebugServiceTest extends TestCase
             ->willReturnCallback(fn (string $parentId, int $count) => [
                 $this->createTestProduct(),
                 $this->createTestProduct(),
-                $this->createTestProduct()
+                $this->createTestProduct(),
             ]);
 
         $this->productDebugService = new ProductDebugService(
             $this->getExportContext(),
             $productDebugSearcher,
             $productCriteriaBuilder,
-            'export'
+            'export',
         );
     }
 
@@ -70,7 +70,7 @@ class ProductDebugServiceTest extends TestCase
 
         $this->assertSame(
             $data['export']['productId'],
-            $productId
+            $productId,
         );
     }
 
@@ -83,11 +83,11 @@ class ProductDebugServiceTest extends TestCase
 
         $this->assertSame(
             $data['export']['productId'],
-            $productId
+            $productId,
         );
         $this->assertSame(
             $data['export']['exportedMainProductId'],
-            $mainProductId
+            $mainProductId,
         );
     }
 
@@ -101,7 +101,7 @@ class ProductDebugServiceTest extends TestCase
         $this->assertFalse($data['export']['isExported']);
         $this->assertContains(
             'Product is not visible for search',
-            $data['export']['reasons']
+            $data['export']['reasons'],
         );
     }
 
@@ -115,11 +115,11 @@ class ProductDebugServiceTest extends TestCase
         $this->assertFalse($data['export']['isExported']);
         $this->assertContains(
             'Product is not visible for search',
-            $data['export']['reasons']
+            $data['export']['reasons'],
         );
         $this->assertContains(
             'Product is not the exported variant.',
-            $data['export']['reasons']
+            $data['export']['reasons'],
         );
 
         $this->assertStringContainsString($mainProductId, $data['debugLinks']['exportUrl']);
@@ -156,7 +156,7 @@ class ProductDebugServiceTest extends TestCase
             $this->validShopkey,
             $xmlItem,
             $product,
-            new ExportErrors()
+            new ExportErrors(),
         )->getContent();
         $json = json_decode($data, true);
 
@@ -177,14 +177,14 @@ class ProductDebugServiceTest extends TestCase
     ): array {
         $product = $this->createTestProduct([
             'id' => $productId ?? Uuid::randomHex(),
-            'productNumber' => 'FINDOLOGIC1'
+            'productNumber' => 'FINDOLOGIC1',
         ]);
 
         $mainProduct = $productId === $mainProductId
             ? $product
             : $this->createTestProduct([
                 'id' => $mainProductId ?? Uuid::randomHex(),
-                'productNumber' => 'FINDOLOGIC2'
+                'productNumber' => 'FINDOLOGIC2',
             ]);
         $xmlItem = $withXmlItem ? new XMLItem($mainProduct->id) : null;
 
@@ -193,7 +193,7 @@ class ProductDebugServiceTest extends TestCase
             $this->validShopkey,
             $xmlItem,
             $mainProduct,
-            new ExportErrors()
+            new ExportErrors(),
         )->getContent();
 
         return json_decode($data, true);

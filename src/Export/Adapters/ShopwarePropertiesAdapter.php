@@ -14,7 +14,8 @@ class ShopwarePropertiesAdapter
 {
     protected PluginConfig $pluginConfig;
 
-    public function __construct(PluginConfig $pluginConfig) {
+    public function __construct(PluginConfig $pluginConfig)
+    {
         $this->pluginConfig = $pluginConfig;
     }
 
@@ -28,7 +29,7 @@ class ShopwarePropertiesAdapter
                 // Non-filterable properties should be available in the properties field.
                 $properties = array_merge(
                     $properties,
-                    $this->getAttributePropertyAsProperty($propertyGroupOptionEntity)
+                    $this->getAttributePropertyAsProperty($propertyGroupOptionEntity),
                 );
             }
         }

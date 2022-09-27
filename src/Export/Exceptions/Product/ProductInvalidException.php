@@ -12,7 +12,7 @@ class ProductInvalidException extends ExportException
 {
     private ProductEntity $failedProduct;
 
-    public function __construct(ProductEntity $failedProduct, $message = "", $code = 0, Throwable $previous = null)
+    public function __construct(ProductEntity $failedProduct, $message = '', $code = 0, Throwable $previous = null)
     {
         $this->failedProduct = $failedProduct;
 

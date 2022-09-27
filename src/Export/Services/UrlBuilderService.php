@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
@@ -31,7 +33,7 @@ class UrlBuilderService
 
         $translatedEntities = $collection->filterByProperty(
             'languageId',
-            $this->exportContext->getLanguageId()
+            $this->exportContext->getLanguageId(),
         );
 
         if ($translatedEntities->count() === 0) {

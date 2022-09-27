@@ -25,7 +25,7 @@ abstract class AbstractProductCriteriaBuilder
         ?int $limit = null,
         ?int $offset = null,
         ?string $productId = null
-    ): AbstractProductCriteriaBuilder {
+    ): self {
         $this->withCreatedAtSorting()
             ->withIdSorting()
             ->withPagination($limit, $offset)
@@ -36,7 +36,7 @@ abstract class AbstractProductCriteriaBuilder
         return $this;
     }
 
-    public function withChildCriteria(string $parentId): AbstractProductCriteriaBuilder
+    public function withChildCriteria(string $parentId): self
     {
         $this->withParentIdFilter($parentId)
             ->withPriceSorting()
@@ -49,7 +49,7 @@ abstract class AbstractProductCriteriaBuilder
         return $this;
     }
 
-    public function withPagination(?int $limit, ?int $offset): AbstractProductCriteriaBuilder
+    public function withPagination(?int $limit, ?int $offset): self
     {
         $this->withLimit($limit);
         $this->withOffset($offset);
@@ -57,7 +57,7 @@ abstract class AbstractProductCriteriaBuilder
         return $this;
     }
 
-    public function withParentIdFilterWithVisibility(string $productId, ?string $parentId = null): AbstractProductCriteriaBuilder
+    public function withParentIdFilterWithVisibility(string $productId, ?string $parentId = null): self
     {
         if ($parentId) {
             $this->adaptProductIdCriteriaWithoutParentId($productId, $parentId);
@@ -68,35 +68,35 @@ abstract class AbstractProductCriteriaBuilder
         return $this;
     }
 
-    abstract public function withLimit(?int $limit): AbstractProductCriteriaBuilder;
+    abstract public function withLimit(?int $limit): self;
 
-    abstract public function withOffset(?int $offset): AbstractProductCriteriaBuilder;
+    abstract public function withOffset(?int $offset): self;
 
-    abstract public function withCreatedAtSorting(): AbstractProductCriteriaBuilder;
+    abstract public function withCreatedAtSorting(): self;
 
-    abstract public function withIdSorting(): AbstractProductCriteriaBuilder;
+    abstract public function withIdSorting(): self;
 
-    abstract public function withPriceSorting(): AbstractProductCriteriaBuilder;
+    abstract public function withPriceSorting(): self;
 
-    abstract public function withIds(array $ids): AbstractProductCriteriaBuilder;
+    abstract public function withIds(array $ids): self;
 
-    abstract public function withOutOfStockFilter(): AbstractProductCriteriaBuilder;
+    abstract public function withOutOfStockFilter(): self;
 
-    abstract public function withVisibilityFilter(): AbstractProductCriteriaBuilder;
+    abstract public function withVisibilityFilter(): self;
 
-    abstract public function withDisplayGroupFilter(): AbstractProductCriteriaBuilder;
+    abstract public function withDisplayGroupFilter(): self;
 
-    abstract public function withParentIdFilter(string $parentId): AbstractProductCriteriaBuilder;
+    abstract public function withParentIdFilter(string $parentId): self;
 
-    abstract public function withProductIdFilter(?string $productId, ?bool $considerVariants = false): AbstractProductCriteriaBuilder;
+    abstract public function withProductIdFilter(?string $productId, ?bool $considerVariants = false): self;
 
-    abstract public function withProductAssociations(): AbstractProductCriteriaBuilder;
+    abstract public function withProductAssociations(): self;
 
-    abstract public function withVariantAssociations(): AbstractProductCriteriaBuilder;
+    abstract public function withVariantAssociations(): self;
 
-    abstract public function withPriceZeroFilter(): AbstractProductCriteriaBuilder;
+    abstract public function withPriceZeroFilter(): self;
 
-    abstract public function withActiveParentOrInactiveParentWithVariantsFilter(): AbstractProductCriteriaBuilder;
+    abstract public function withActiveParentOrInactiveParentWithVariantsFilter(): self;
 
     abstract protected function adaptProductIdCriteriaWithParentId(string $productId): void;
 

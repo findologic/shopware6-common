@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
-use FINDOLOGIC\Shopware6Common\Export\Search\ProductDebugSearcherInterface;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
@@ -26,7 +27,6 @@ use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainEntity;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
-use function PHPUnit\Framework\returnValueMap;
 
 trait ServicesHelper
 {
@@ -124,7 +124,7 @@ trait ServicesHelper
     {
         return PluginConfig::createFromArray(array_merge([
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
-            'active' => true
+            'active' => true,
         ], $overrides));
     }
 
@@ -152,7 +152,7 @@ trait ServicesHelper
         ]);
         $storeFrontDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.uk',
-            'languageId' => Defaults::LANGUAGE_SYSTEM
+            'languageId' => Defaults::LANGUAGE_SYSTEM,
         ]);
         $storeFrontDomain2 = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.de',
@@ -165,7 +165,7 @@ trait ServicesHelper
         $salesChannel->domains = new SalesChannelDomainCollection([
             $storeFrontDomain,
             $storeFrontDomain2,
-            $headlessDomain
+            $headlessDomain,
         ]);
 
         return $salesChannel;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Export\XML\XMLItem;
@@ -57,12 +59,12 @@ class ProductDebugService
 
         if (!$this->requestedProduct) {
             $this->exportErrors->addGeneralError(
-                sprintf('Product or variant with ID %s does not exist.', $this->productId)
+                sprintf('Product or variant with ID %s does not exist.', $this->productId),
             );
 
             return new JsonResponse(
                 $this->exportErrors->buildErrorResponse(),
-                422
+                422,
             );
         }
 
@@ -79,7 +81,7 @@ class ProductDebugService
                     ? $this->exportedMainProduct->id
                     : self::NO_PRODUCT_EXPORTED,
                 'isExported' => $isExported,
-                'reasons' => $this->parseExportErrors()
+                'reasons' => $this->parseExportErrors(),
             ],
             'debugLinks' => [
                 'exportUrl' => $this->exportedMainProduct
@@ -99,7 +101,7 @@ class ProductDebugService
                 'associations' => $this->productDebugSearcher
                     ->buildCriteria()
                     ->getAssociations(),
-            ]
+            ],
         ]);
     }
 
@@ -118,7 +120,7 @@ class ProductDebugService
         $this->debugUrlBuilderService = new DebugUrlBuilderService(
             $this->exportContext,
             $shopkey,
-            $this->basePath
+            $this->basePath,
         );
         $this->requestedProduct = $this->productDebugSearcher->getProductById($productId);
     }

@@ -39,25 +39,25 @@ abstract class AbstractExport
         ExportItemAdapter $exportItemAdapter,
         LoggerInterface $logger,
         ?EventDispatcherInterface $eventDispatcher = null
-    ): AbstractExport {
+    ): self {
         switch ($type) {
-            case AbstractExport::TYPE_XML:
+            case self::TYPE_XML:
                 return new XmlExport(
                     $dynamicProductGroupService,
                     $productSearcher,
                     $pluginConfig,
                     $exportItemAdapter,
                     $logger,
-                    $eventDispatcher
+                    $eventDispatcher,
                 );
-            case AbstractExport::TYPE_PRODUCT_ID:
+            case self::TYPE_PRODUCT_ID:
                 return new ProductIdExport(
                     $dynamicProductGroupService,
                     $productSearcher,
                     $pluginConfig,
                     $exportItemAdapter,
                     $logger,
-                    $eventDispatcher
+                    $eventDispatcher,
                 );
             default:
                 throw new InvalidArgumentException(sprintf('Unknown export type %d.', $type));
@@ -68,7 +68,7 @@ abstract class AbstractExport
     {
         return new JsonResponse(
             $errorHandler->getExportErrors()->buildErrorResponse(),
-            Response::HTTP_UNPROCESSABLE_ENTITY
+            Response::HTTP_UNPROCESSABLE_ENTITY,
         );
     }
 
@@ -86,6 +86,4 @@ abstract class AbstractExport
      * @return Item[]
      */
     abstract public function buildItems(array $products): array;
-
-
 }

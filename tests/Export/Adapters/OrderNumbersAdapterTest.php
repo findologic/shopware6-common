@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Ordernumber;
@@ -26,7 +28,7 @@ class OrderNumbersAdapterTest extends TestCase
         ];
 
         $product = $this->createTestProduct([
-            'id' => Uuid::randomHex()
+            'id' => Uuid::randomHex(),
         ]);
 
         $variantProduct = $this->createTestProduct([
@@ -34,7 +36,7 @@ class OrderNumbersAdapterTest extends TestCase
             'parentId' => $product->id,
             'productNumber' => $variantProductNumber,
             'ean' => 'childEan',
-            'manufacturerNumber' => 'MAN002'
+            'manufacturerNumber' => 'MAN002',
         ]);
         $variantProduct->parent = $product;
 

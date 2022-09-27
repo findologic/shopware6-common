@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
-use Symfony\Component\Routing\RouterInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
@@ -26,7 +25,7 @@ abstract class AbstractCatUrlBuilderService extends UrlBuilderService
      * In case there is a language prefix assigned to the Sales Channel, this would also be included.
      * E.g.
      * * /de/Men/Shirts/T-Shirts/
-     * * /de/navigation/4e43b925d5ec43339d2b3414a91151ab
+     * * /de/navigation/4e43b925d5ec43339d2b3414a91151ab.
      *
      * @return string[]
      */

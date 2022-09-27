@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use Vin\ShopwareSdk\Data\Defaults;
@@ -7,15 +9,6 @@ use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
-use Vin\ShopwareSdk\Data\Entity\ProductConfiguratorSetting\ProductConfiguratorSettingCollection;
-use Vin\ShopwareSdk\Data\Entity\ProductConfiguratorSetting\ProductConfiguratorSettingEntity;
-use Vin\ShopwareSdk\Data\Entity\ProductManufacturer\ProductManufacturerEntity;
-use Vin\ShopwareSdk\Data\Entity\ProductManufacturerTranslation\ProductManufacturerTranslationCollection;
-use Vin\ShopwareSdk\Data\Entity\ProductManufacturerTranslation\ProductManufacturerTranslationEntity;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
-use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlCollection;
-use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlEntity;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 trait ProductHelper
@@ -42,7 +35,7 @@ trait ProductHelper
             'ean' => 'FL001',
             'description' => 'FINDOLOGIC Description',
             'tags' => [
-                ['id' => Uuid::randomHex(), 'name' => 'FINDOLOGIC Tag']
+                ['id' => Uuid::randomHex(), 'name' => 'FINDOLOGIC Tag'],
             ],
             'cover' => $this->getDefaultCoverData(),
             'media' => [$this->getDefaultMediaData()],
@@ -53,19 +46,19 @@ trait ProductHelper
                     'net' => 10,
                     'linked' => false,
                     'listPrice' => null,
-                ]
+                ],
             ],
             'tax' => ['id' => Uuid::randomHex(),  'name' => '9%', 'taxRate' => 9],
             'seoUrls' => $this->getDefaultSeoUrlsData($id),
             'customFields' => [],
             'translated' => [
                 'description' => 'FINDOLOGIC Description',
-            ]
+            ],
         ]);
 
         $productData = array_merge_recursive(
             $productData,
-            $this->getNameValues($overrideData['name'] ?? 'FINDOLOGIC Product')
+            $this->getNameValues($overrideData['name'] ?? 'FINDOLOGIC Product'),
         );
 
         $productData = array_merge($productData, $this->getDefaultPropertySettingsData($redId, $colorId));
@@ -76,7 +69,7 @@ trait ProductHelper
                 'manufacturer' => [
                     'name' => 'FINDOLOGIC',
                     'translated' => [
-                        'name' => 'FINDOLOGIC'
+                        'name' => 'FINDOLOGIC',
                     ],
                     'translations' => [
                         'de-DE' => [
@@ -85,8 +78,8 @@ trait ProductHelper
                         'en-GB' => [
                             'name' => 'FINDOLOGIC EN',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
         }
 
@@ -150,7 +143,7 @@ trait ProductHelper
                 'routeName' => 'frontend.detail.page',
                 'salesChannelId' => Defaults::SALES_CHANNEL,
                 'languageId' => Defaults::LANGUAGE_SYSTEM,
-            ]
+            ],
         ];
     }
 
@@ -166,13 +159,13 @@ trait ProductHelper
                         'name' => 'color',
                         'filterable' => true,
                         'translated' => [
-                            'name' => 'color'
-                        ]
+                            'name' => 'color',
+                        ],
                     ],
                     'translated' => [
-                        'name' => 'red'
-                    ]
-                ]
+                        'name' => 'red',
+                    ],
+                ],
             ],
             'options' => [
                 [
@@ -182,13 +175,13 @@ trait ProductHelper
                         'id' => $groupId,
                         'name' => $groupId,
                         'translated' => [
-                            'name' => $groupId
-                        ]
+                            'name' => $groupId,
+                        ],
                     ],
                     'translated' => [
-                        'name' => 'red'
-                    ]
-                ]
+                        'name' => 'red',
+                    ],
+                ],
             ],
             'configuratorSettings' => [
                 [
@@ -201,11 +194,11 @@ trait ProductHelper
                             'id' => $groupId,
                             'name' => $groupId,
                             'translated' => [
-                                'name' => $groupId
-                            ]
+                                'name' => $groupId,
+                            ],
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }
@@ -231,8 +224,8 @@ trait ProductHelper
                     'width' => 600,
                     'height' => 600,
                     'highDpi' => false,
-                    'url' => 'https://via.placeholder.com/600x600'
-                ]
+                    'url' => 'https://via.placeholder.com/600x600',
+                ],
             ],
             'media' => [
                 'url' => 'https://via.placeholder.com/findologic.png',
@@ -246,10 +239,10 @@ trait ProductHelper
                         'width' => 600,
                         'height' => 600,
                         'highDpi' => false,
-                        'url' => 'https://via.placeholder.com/600x600'
-                    ]
-                ]
-            ]
+                        'url' => 'https://via.placeholder.com/600x600',
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -268,9 +261,9 @@ trait ProductHelper
                     'pathInfo' => 'navigation/' . $categoryId,
                     'seoPathInfo' => 'Findologic-Category',
                     'isCanonical' => true,
-                    'routeName' => 'frontend.navigation.page'
-                ]
-            ]
+                    'routeName' => 'frontend.navigation.page',
+                ],
+            ],
         ]);
         $category2 = Entity::createFromArray(CategoryEntity::class, [
             'id' => Uuid::randomHex(),
@@ -291,15 +284,15 @@ trait ProductHelper
                             'id' => $childId,
                             'name' => 'FINDOLOGIC Sub of Sub',
                             'active' => true,
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         return $this->generateProductCategoriesWithRelations(
             new CategoryCollection([$category1, $category2]),
-            [$categoryId, $childId]
+            [$categoryId, $childId],
         );
     }
 
