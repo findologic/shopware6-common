@@ -23,7 +23,9 @@
         "symfony/cache": "5.4.x",
         "symfony/routing": "5.4.x",
         "symfony/validator": "5.4.x",
-        "doctrine/annotations": "^1.13"
+        "doctrine/annotations": "^1.13",
+        "friendsofphp/php-cs-fixer": "^3.11",
+        "phpstan/phpstan": "^1.8"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +38,9 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "analyse": "phpstan analyse -c ../shopware6-common/phpstan.neon",
+        "lint": "./vendor/bin/php-cs-fixer fix src tests --path-mode=intersection --dry-run --allow-risky=yes --verbose --config=.php-cs-fixer.dist.php --using-cache=no",
+        "lint-fix": "./vendor/bin/php-cs-fixer fix src tests --path-mode=intersection --allow-risky=yes --verbose --config=.php-cs-fixer.dist.php --using-cache=no"
     }
 }
