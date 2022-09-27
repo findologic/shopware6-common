@@ -100,7 +100,7 @@ abstract class AbstractDynamicProductGroupService
     abstract public function getCategories(string $productId): CategoryCollection;
 
     /**
-     * @return array<string, array<int, string>>
+     * @return array<string, array<string, string>>
      */
     abstract protected function parseProductGroups(): array;
 
