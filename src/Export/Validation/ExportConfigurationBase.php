@@ -63,10 +63,8 @@ class ExportConfigurationBase
                     self::DEFAULT_COUNT_PARAM,
                 );
             case '/findologic/debug':
-                return new OffsetExportConfiguration(
+                return new OffsetDebugConfiguration(
                     $request->query->get('shopkey', ''),
-                    OffsetExportConfiguration::DEFAULT_START_PARAM,
-                    1,
                     $request->query->get('productId', ''),
                 );
             case '/export':
@@ -78,10 +76,8 @@ class ExportConfigurationBase
                     $request->query->get('productId'),
                 );
             case '/export/debug':
-                return new PageExportConfiguration(
+                return new PageDebugConfiguration(
                     $request->query->get('shopkey', ''),
-                    PageExportConfiguration::DEFAULT_PAGE_PARAM,
-                    1,
                     $request->query->get('productId', ''),
                 );
             default:
