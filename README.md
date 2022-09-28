@@ -16,7 +16,7 @@ Adapt `composer.json` to contain the following entries:
   "repositories": [
     {
       "type": "git",
-      "url": "git@github.com:findologic/shopware6-common.git"
+      "url": "https://github.com/findologic/shopware6-common.git"
     }
   ]
 }
