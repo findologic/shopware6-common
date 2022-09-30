@@ -153,14 +153,17 @@ trait ServicesHelper
         $storeFrontDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.uk',
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
         ]);
         $storeFrontDomain2 = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.de',
             'languageId' => Uuid::randomHex(),
+            'currencyId' => Uuid::randomHex(),
         ]);
         $headlessDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'default.headless',
             'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
         ]);
         $salesChannel->domains = new SalesChannelDomainCollection([
             $storeFrontDomain,
