@@ -9,7 +9,7 @@ use FINDOLOGIC\Shopware6Common\Export\Constants;
 use FINDOLOGIC\Shopware6Common\Export\Errors\ExportErrors;
 use FINDOLOGIC\Shopware6Common\Export\Search\ProductDebugSearcherInterface;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductDebugService;
-use FINDOLOGIC\Shopware6Common\Tests\Traits\Constants as ConstantsTrait;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,6 @@ use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 class ProductDebugServiceTest extends TestCase
 {
-    use ConstantsTrait;
     use ProductHelper;
     use ServicesHelper;
 
@@ -153,7 +152,7 @@ class ProductDebugServiceTest extends TestCase
 
         $data = $this->productDebugService->getDebugInformation(
             $product->id,
-            $this->validShopkey,
+            CommonConstants::VALID_SHOPKEY,
             $xmlItem,
             $product,
             new ExportErrors(),
@@ -190,7 +189,7 @@ class ProductDebugServiceTest extends TestCase
 
         $data = $this->productDebugService->getDebugInformation(
             $product->id,
-            $this->validShopkey,
+            CommonConstants::VALID_SHOPKEY,
             $xmlItem,
             $mainProduct,
             new ExportErrors(),

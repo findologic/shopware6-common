@@ -12,12 +12,12 @@ use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\AccessEmptyPropertyExce
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AttributeHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 class AttributeAdapterTest extends TestCase
@@ -332,7 +332,7 @@ class AttributeAdapterTest extends TestCase
             [
                 'categories' => [
                     [
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'id' => $categoryId,
                         'name' => ' ',
                         'active' => true,
@@ -400,7 +400,7 @@ class AttributeAdapterTest extends TestCase
             'id' => 'cce80a72bc3481d723c38cccf592d45a',
             'name' => 'Category1',
             'active' => true,
-            'parentId' => $this->navigationCategoryId,
+            'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
         ];
 
         $expectedCategories = ['Category1'];
@@ -474,14 +474,14 @@ class AttributeAdapterTest extends TestCase
             'Category does not have SEO path assigned' => [
                 'data' => [
                     [
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'id' => $categoryId,
                         'name' => 'FINDOLOGIC Category',
                         'active' => true,
                         'seoUrls' => [
                             [
                                 'id' => Uuid::randomHex(),
-                                'salesChannelId' => Defaults::SALES_CHANNEL,
+                                'salesChannelId' => CommonConstants::SALES_CHANNEL_ID,
                                 'pathInfo' => 'navigation/' . $categoryId,
                                 'seoPathInfo' => 'Main',
                                 'isCanonical' => true,
@@ -489,7 +489,7 @@ class AttributeAdapterTest extends TestCase
                             ],
                             [
                                 'id' => Uuid::randomHex(),
-                                'salesChannelId' => Uuid::randomHex(),
+                                'salesChannelId' => CommonConstants::SALES_CHANNEL2_ID,
                                 'pathInfo' => 'navigation/' . $categoryId,
                                 'seoPathInfo' => 'Additional Main',
                                 'isCanonical' => true,
@@ -503,7 +503,7 @@ class AttributeAdapterTest extends TestCase
             'Category have a pseudo empty SEO path assigned' => [
                 'data' => [
                     [
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'id' => $categoryId,
                         'name' => 'FINDOLOGIC Category',
                         'active' => true,
@@ -676,7 +676,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'active' => true,
                     ],
@@ -691,7 +691,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'active' => true,
                         'children' => [
@@ -720,7 +720,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'active' => true,
                     ],
@@ -737,7 +737,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'active' => true,
                         'children' => [
@@ -762,7 +762,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'active' => true,
                     ],
@@ -777,7 +777,7 @@ class AttributeAdapterTest extends TestCase
                 'categories' => [
                     [
                         'id' => 'cce80a72bc3481d723c38cccf592d45a',
-                        'parentId' => $this->navigationCategoryId,
+                        'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
                         'name' => 'Category1',
                         'children' => [
                             [

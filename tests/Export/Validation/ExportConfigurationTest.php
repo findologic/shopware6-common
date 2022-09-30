@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Validation;
 
 use FINDOLOGIC\Shopware6Common\Export\Validation\ExportConfigurationBase;
+use FINDOLOGIC\Shopware6Common\Export\Validation\OffsetDebugConfiguration;
 use FINDOLOGIC\Shopware6Common\Export\Validation\OffsetExportConfiguration;
+use FINDOLOGIC\Shopware6Common\Export\Validation\PageDebugConfiguration;
 use FINDOLOGIC\Shopware6Common\Export\Validation\PageExportConfiguration;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -16,7 +19,7 @@ class ExportConfigurationTest extends TestCase
 {
     public function testGetInstanceReturnsConfigWithGivenStartArguments(): void
     {
-        $expectedShopkey = 'ABCDABCDABCDABCDABCDABCDABCDABCD';
+        $expectedShopkey = CommonConstants::VALID_SHOPKEY;
         $expectedStart = 0;
         $expectedCount = 100;
 
@@ -35,7 +38,7 @@ class ExportConfigurationTest extends TestCase
 
     public function testGetInstanceReturnsConfigWithGivenOffsetArguments(): void
     {
-        $expectedShopkey = 'ABCDABCDABCDABCDABCDABCDABCDABCD';
+        $expectedShopkey = CommonConstants::VALID_SHOPKEY;
         $expectedPage = 1;
         $expectedCount = 100;
 
@@ -58,7 +61,7 @@ class ExportConfigurationTest extends TestCase
         $expectedDefaultCount = 20;
 
         $request = $this->createFindologicRequest([
-            'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+            'shopkey' => CommonConstants::VALID_SHOPKEY,
         ]);
 
         $config = ExportConfigurationBase::getInstance($request);
@@ -73,7 +76,7 @@ class ExportConfigurationTest extends TestCase
         $expectedDefaultCount = 20;
 
         $request = $this->createExportRequest([
-            'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+            'shopkey' => CommonConstants::VALID_SHOPKEY,
         ]);
 
         $config = ExportConfigurationBase::getInstance($request);
@@ -87,11 +90,11 @@ class ExportConfigurationTest extends TestCase
         $expectedProductId = '03cca9ceac4047e4b331b6827e245594';
 
         $requestFindologic = $this->createFindologicRequest([
-            'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+            'shopkey' => CommonConstants::VALID_SHOPKEY,
             'productId' => $expectedProductId,
         ]);
         $requestExport = $this->createExportRequest([
-            'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+            'shopkey' => CommonConstants::VALID_SHOPKEY,
             'productId' => $expectedProductId,
         ]);
 
@@ -115,26 +118,26 @@ class ExportConfigurationTest extends TestCase
             ],
             'Shopkey matches the schema but count is negative' => [
                 'queryParams' => [
-                    'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+                    'shopkey' => CommonConstants::VALID_SHOPKEY,
                     'count' => -1,
                 ],
             ],
             'Shopkey matches the schema but count is zero' => [
                 'queryParams' => [
-                    'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+                    'shopkey' => CommonConstants::VALID_SHOPKEY,
                     'count' => 0,
                 ],
             ],
             'Shopkey matches the schema but start is negative' => [
                 'queryParams' => [
-                    'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+                    'shopkey' => CommonConstants::VALID_SHOPKEY,
                     'start' => -1,
                 ],
                 'exportPath' => 'findologic',
             ],
             'Shopkey matches the schema but page is zero' => [
                 'queryParams' => [
-                    'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+                    'shopkey' => CommonConstants::VALID_SHOPKEY,
                     'page' => 0,
                 ],
                 'exportPath' => 'export',
@@ -203,7 +206,7 @@ class ExportConfigurationTest extends TestCase
             ],
             'Findologic: Export debug path' => [
                 'path' => 'findologic/debug',
-                'expectedClass' => OffsetExportConfiguration::class,
+                'expectedClass' => OffsetDebugConfiguration::class,
             ],
             'Export: Export path' => [
                 'path' => 'export',
@@ -215,7 +218,7 @@ class ExportConfigurationTest extends TestCase
             ],
             'Export: Export debug path' => [
                 'path' => 'export/debug',
-                'expectedClass' => PageExportConfiguration::class,
+                'expectedClass' => PageDebugConfiguration::class,
             ],
         ];
     }

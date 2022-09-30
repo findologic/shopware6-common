@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
-use Vin\ShopwareSdk\Data\Defaults;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Entity;
@@ -14,7 +14,6 @@ use Vin\ShopwareSdk\Data\Uuid\Uuid;
 trait ProductHelper
 {
     use CategoryHelper;
-    use Constants;
 
     public function createTestProduct(
         array $overrideData = [],
@@ -41,7 +40,7 @@ trait ProductHelper
             'media' => [$this->getDefaultMediaData()],
             'price' => [
                 [
-                    'currencyId' => Defaults::CURRENCY,
+                    'currencyId' => CommonConstants::CURRENCY_ID,
                     'gross' => 15,
                     'net' => 10,
                     'linked' => false,
@@ -125,24 +124,24 @@ trait ProductHelper
                 'seoPathInfo' => 'FINDOLOGIC-Product/FINDOLOGIC001',
                 'isCanonical' => true,
                 'routeName' => 'frontend.detail.page',
-                'salesChannelId' => Defaults::SALES_CHANNEL,
-                'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'salesChannelId' => CommonConstants::SALES_CHANNEL_ID,
+                'languageId' => CommonConstants::LANGUAGE_ID,
             ],
             [
                 'pathInfo' => '/detail/' . $productId,
                 'seoPathInfo' => 'FINDOLOGIC-Product-EN/FINDOLOGIC001',
                 'isCanonical' => true,
                 'routeName' => 'frontend.detail.page',
-                'salesChannelId' => Defaults::SALES_CHANNEL,
-                'languageId' => Uuid::randomHex(),
+                'salesChannelId' => CommonConstants::SALES_CHANNEL_ID,
+                'languageId' => CommonConstants::LANGUAGE2_ID,
             ],
             [
                 'pathInfo' => '/detail/' . $productId,
                 'seoPathInfo' => 'Awesome-Seo-Url/&ecause/SÄÖ/is/$mportant+',
                 'isCanonical' => true,
                 'routeName' => 'frontend.detail.page',
-                'salesChannelId' => Defaults::SALES_CHANNEL,
-                'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'salesChannelId' => CommonConstants::SALES_CHANNEL_ID,
+                'languageId' => CommonConstants::LANGUAGE_ID,
             ],
         ];
     }
@@ -186,7 +185,7 @@ trait ProductHelper
             'configuratorSettings' => [
                 [
                     'id' => $optionId,
-                    'price' => ['currencyId' => Defaults::CURRENCY, 'gross' => 50, 'net' => 25, 'linked' => false],
+                    'price' => ['currencyId' => CommonConstants::CURRENCY_ID, 'gross' => 50, 'net' => 25, 'linked' => false],
                     'option' => [
                         'id' => $optionId,
                         'name' => 'red',
@@ -253,7 +252,7 @@ trait ProductHelper
 
         $category1 = Entity::createFromArray(CategoryEntity::class, [
             'id' => $categoryId,
-            'parentId' => $this->navigationCategoryId,
+            'parentId' => CommonConstants::NAVIGATION_CATEGORY_ID,
             'name' => 'FINDOLOGIC Category',
             'active' => true,
             'seoUrls' => [

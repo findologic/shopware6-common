@@ -12,13 +12,13 @@ use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupServic
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
-use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
@@ -26,12 +26,10 @@ use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainEntity;
-use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 trait ServicesHelper
 {
     use CategoryHelper;
-    use Constants;
 
     public function getRouterMock(): Router
     {
@@ -112,7 +110,7 @@ trait ServicesHelper
         ?SalesChannelEntity $salesChannel = null
     ): ExportContext {
         return new ExportContext(
-            $this->validShopkey,
+            CommonConstants::VALID_SHOPKEY,
             $salesChannel ?? $this->buildSalesChannel(),
             $this->buildNavigationCategory(),
             $customerGroupCollection ?? new CustomerGroupCollection(),
@@ -142,28 +140,28 @@ trait ServicesHelper
             ->getMock();
     }
 
-    public function buildSalesChannel(): SalesChannelEntity
+    public function buildSalesChannel(?string $salesChannelId = CommonConstants::SALES_CHANNEL_ID): SalesChannelEntity
     {
         /** @var SalesChannelEntity $salesChannel */
         $salesChannel = Entity::createFromArray(SalesChannelEntity::class, [
-            'id' => Defaults::SALES_CHANNEL,
-            'languageId' => Defaults::LANGUAGE_SYSTEM,
-            'currencyId' => Defaults::CURRENCY,
+            'id' => $salesChannelId,
+            'languageId' => CommonConstants::LANGUAGE_ID,
+            'currencyId' => CommonConstants::CURRENCY_ID,
         ]);
         $storeFrontDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.uk',
-            'languageId' => Defaults::LANGUAGE_SYSTEM,
-            'currencyId' => Defaults::CURRENCY,
+            'languageId' => CommonConstants::LANGUAGE_ID,
+            'currencyId' => CommonConstants::CURRENCY_ID,
         ]);
         $storeFrontDomain2 = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'https://test.de',
-            'languageId' => Uuid::randomHex(),
-            'currencyId' => Uuid::randomHex(),
+            'languageId' => CommonConstants::LANGUAGE2_ID,
+            'currencyId' => CommonConstants::CURRENCY2_ID,
         ]);
         $headlessDomain = Entity::createFromArray(SalesChannelDomainEntity::class, [
             'url' => 'default.headless',
-            'languageId' => Defaults::LANGUAGE_SYSTEM,
-            'currencyId' => Defaults::CURRENCY,
+            'languageId' => CommonConstants::LANGUAGE_ID,
+            'currencyId' => CommonConstants::CURRENCY_ID,
         ]);
         $salesChannel->domains = new SalesChannelDomainCollection([
             $storeFrontDomain,

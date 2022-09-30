@@ -6,13 +6,12 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
-use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
-use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 class PriceAdapterTest extends TestCase
 {
@@ -42,7 +41,7 @@ class PriceAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'price' => [
                 [
-                    'currencyId' => Defaults::CURRENCY,
+                    'currencyId' => CommonConstants::CURRENCY_ID,
                     'gross' => $expectedPrice,
                     'net' => 10,
                     'linked' => false,
@@ -60,11 +59,11 @@ class PriceAdapterTest extends TestCase
     public function customerGroupsProvider(): array
     {
         $grossCustomerGroup = new CustomerGroupEntity();
-        $grossCustomerGroup->id = Uuid::randomHex();
+        $grossCustomerGroup->id = CommonConstants::GROSS_CUSTOMER_GROUP_ID;
         $grossCustomerGroup->displayGross = true;
 
         $netCustomerGroup = new CustomerGroupEntity();
-        $netCustomerGroup->id = Uuid::randomHex();
+        $netCustomerGroup->id = CommonConstants::NET_CUSTOMER_GROUP_ID;
         $netCustomerGroup->displayGross = false;
 
         return [
@@ -123,7 +122,7 @@ class PriceAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'price' => [
                 [
-                    'currencyId' => Defaults::CURRENCY,
+                    'currencyId' => CommonConstants::CURRENCY_ID,
                     'gross' => $grossPrice,
                     'net' => $netPrice,
                     'linked' => false,
@@ -157,15 +156,14 @@ class PriceAdapterTest extends TestCase
 
     public function testProductPriceWithCurrency(): void
     {
-        $currencyId = Uuid::randomHex();
         $salesChannel = $this->buildSalesChannel();
-        $salesChannel->currencyId = $currencyId;
+        $salesChannel->currencyId = CommonConstants::CURRENCY2_ID;
 
         $adapter = $this->getPriceAdapter(null, $salesChannel);
         $testProduct = $this->createTestProduct([
             'price' => [
-                ['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false],
-                ['currencyId' => $currencyId, 'gross' => 7.5, 'net' => 5, 'linked' => false],
+                ['currencyId' => CommonConstants::CURRENCY_ID, 'gross' => 15, 'net' => 10, 'linked' => false],
+                ['currencyId' => CommonConstants::CURRENCY2_ID, 'gross' => 7.5, 'net' => 5, 'linked' => false],
             ],
         ]);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\Entity;
@@ -12,8 +13,6 @@ use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
 trait CategoryHelper
 {
-    use Constants;
-
     public function createTestCategory(?array $overrideData = []): CategoryEntity
     {
         $defaultData = [
@@ -35,8 +34,8 @@ trait CategoryHelper
     public function buildNavigationCategory(): CategoryEntity
     {
         return $this->createTestCategory([
-            'id' => $this->navigationCategoryId,
-            'breadcrumb' => [$this->navigationCategoryId],
+            'id' => CommonConstants::NAVIGATION_CATEGORY_ID,
+            'breadcrumb' => [CommonConstants::NAVIGATION_CATEGORY_ID],
         ]);
     }
     public function generateProductCategoriesWithRelations(
@@ -47,7 +46,9 @@ trait CategoryHelper
 
         foreach ($categories as $category) {
             $productCategories = $this->handleCategory(
-                $category->parentId === $this->navigationCategoryId ? $this->buildNavigationCategory() : null,
+                $category->parentId === CommonConstants::NAVIGATION_CATEGORY_ID
+                    ? $this->buildNavigationCategory()
+                    : null,
                 $category,
                 $productCategories,
                 $productCatIds,

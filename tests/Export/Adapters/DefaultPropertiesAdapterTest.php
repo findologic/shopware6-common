@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Export\Adapters\DefaultPropertiesAdapter;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\PropertiesHelper;
 use PHPUnit\Framework\TestCase;
-use Vin\ShopwareSdk\Data\Defaults;
 
 class DefaultPropertiesAdapterTest extends TestCase
 {
@@ -107,7 +107,7 @@ class DefaultPropertiesAdapterTest extends TestCase
     {
         return [
             'List price is available for the sales channel currency' => [
-                'currencyId' => Defaults::CURRENCY,
+                'currencyId' => CommonConstants::CURRENCY_ID,
                 'isPriceAvailable' => true,
             ],
             'List price is available for a different currency' => [

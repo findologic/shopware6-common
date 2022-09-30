@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
+use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\TestHelper\Helper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
 use PHPUnit\Framework\TestCase;
-use Vin\ShopwareSdk\Data\Defaults;
 use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlCollection;
 use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlEntity;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
@@ -134,8 +134,8 @@ class ProductUrlServiceTest extends TestCase
         foreach ($seoUrlArray as $seoPath) {
             $seoUrlEntity = new SeoUrlEntity();
             $seoUrlEntity->id = Uuid::randomHex();
-            $seoUrlEntity->salesChannelId = Defaults::SALES_CHANNEL;
-            $seoUrlEntity->languageId = Defaults::LANGUAGE_SYSTEM;
+            $seoUrlEntity->salesChannelId = CommonConstants::SALES_CHANNEL_ID;
+            $seoUrlEntity->languageId = CommonConstants::LANGUAGE_ID;
             $seoUrlEntity->seoPathInfo = $seoPath['seoPathInfo'];
             $seoUrlEntity->isCanonical = $seoPath['isCanonical'];
             $seoUrlEntity->isDeleted = $seoPath['isDeleted'];
