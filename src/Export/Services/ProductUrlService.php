@@ -153,7 +153,7 @@ class ProductUrlService extends UrlBuilderService
                 ['productId' => $product->id],
                 RouterInterface::ABSOLUTE_URL,
             );
-        } catch (RouteNotFoundException) {
+        } catch (RouteNotFoundException $e) {
             return sprintf('%s/detail/%s', $this->getSalesChannelDomain(), $product->id);
         }
     }

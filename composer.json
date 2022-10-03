@@ -14,15 +14,15 @@
         "findologic/libflexport": "^2.9",
         "monolog/monolog": "^2.0",
         "vin-sw/shopware-sdk": "^1.5",
-        "symfony/http-foundation": "5.4.x",
-        "symfony/event-dispatcher": "5.4.x"
+        "symfony/http-foundation": "*",
+        "symfony/event-dispatcher": "*"
     },
     "require-dev": {
         "ext-json": "*",
         "phpunit/phpunit": "9.5.x",
-        "symfony/cache": "5.4.x",
-        "symfony/routing": "5.4.x",
-        "symfony/validator": "5.4.x",
+        "symfony/cache": "*",
+        "symfony/routing": "*",
+        "symfony/validator": "*",
         "doctrine/annotations": "^1.13",
         "friendsofphp/php-cs-fixer": "^3.11"
     },
