@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 use Vin\ShopwareSdk\Data\Entity\EntityCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
@@ -146,15 +147,15 @@ class ProductUrlService extends UrlBuilderService
 
     protected function getFallbackUrl(ProductEntity $product): string
     {
-        if (!$this->router) {
-            return '';
+        try {
+            return $this->router->generate(
+                'frontend.detail.page',
+                ['productId' => $product->id],
+                RouterInterface::ABSOLUTE_URL,
+            );
+        } catch (RouteNotFoundException) {
+            return sprintf('%s/detail/%s', $this->getSalesChannelDomain(), $product->id);
         }
-
-        return $this->router->generate(
-            'frontend.detail.page',
-            ['productId' => $product->id],
-            RouterInterface::ABSOLUTE_URL,
-        );
     }
 
     protected function buildSeoUrl(string $domain, string $seoPath): string
