@@ -73,7 +73,8 @@ class ProductImageService
             return $images;
         }
 
-        $images->remove($coverImageId);
+        /** @var ProductMediaCollection $images */
+        $images = $images->filter(static fn (ProductMediaEntity $productMedia) => $productMedia->id !== $coverImageId);
         $images->insert(0, $filteredCoverImage->first());
 
         return $images;
