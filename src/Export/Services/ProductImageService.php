@@ -64,16 +64,17 @@ class ProductImageService
 
     protected function getSortedProductImages(ProductEntity $product): ProductMediaCollection
     {
+        /** @var ProductMediaCollection $images */
         $images = $product->media;
         $coverImageId = $product->coverId;
-        $coverImage = $images->get($coverImageId);
+        $filteredCoverImage = $images->filterByProperty('id', $coverImageId);
 
-        if (!$coverImage || $images->count() === 1) {
+        if (!$filteredCoverImage->count() || $images->count() === 1) {
             return $images;
         }
 
         $images->remove($coverImageId);
-        $images->insert(0, $coverImage);
+        $images->insert(0, $filteredCoverImage->first());
 
         return $images;
     }
