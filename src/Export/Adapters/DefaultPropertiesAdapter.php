@@ -7,15 +7,21 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Property;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class DefaultPropertiesAdapter
 {
     protected ExportContext $exportContext;
 
-    public function __construct(ExportContext $exportContext)
-    {
+    protected TranslatorInterface $translator;
+
+    public function __construct(
+        ExportContext $exportContext,
+        TranslatorInterface $translator
+    ) {
         $this->exportContext = $exportContext;
+        $this->translator = $translator;
     }
 
     public function adapt(ProductEntity $product): array
@@ -107,7 +113,6 @@ class DefaultPropertiesAdapter
     {
         $translationKey = $value ? 'finSearch.general.yes' : 'finSearch.general.no';
 
-        // TODO: Translation
-        return $value ? 'Yes' : 'No';
+        return $this->translator->trans($translationKey);
     }
 }

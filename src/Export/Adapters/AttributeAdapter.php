@@ -12,6 +12,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
@@ -26,16 +27,20 @@ class AttributeAdapter
 
     protected PluginConfig $pluginConfig;
 
+    protected TranslatorInterface $translator;
+
     public function __construct(
         AbstractDynamicProductGroupService $dynamicProductGroupService,
         AbstractCatUrlBuilderService $catUrlBuilderService,
         ExportContext $exportContext,
-        PluginConfig $pluginConfig
+        PluginConfig $pluginConfig,
+        TranslatorInterface $translator
     ) {
         $this->dynamicProductGroupService = $dynamicProductGroupService;
         $this->catUrlBuilderService = $catUrlBuilderService;
         $this->exportContext = $exportContext;
         $this->pluginConfig = $pluginConfig;
+        $this->translator = $translator;
     }
 
     /**
@@ -303,9 +308,8 @@ class AttributeAdapter
 
     protected function translateBooleanValue(bool $value): string
     {
-        // TODO: Translations
-        //$translationKey = $value ? 'finSearch.general.yes' : 'finSearch.general.no';
+        $translationKey = $value ? 'finSearch.general.yes' : 'finSearch.general.no';
 
-        return $value ? 'Yes' : 'No';
+        return $this->translator->trans($translationKey);
     }
 }
