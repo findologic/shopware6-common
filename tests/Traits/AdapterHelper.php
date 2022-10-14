@@ -76,7 +76,7 @@ trait AdapterHelper
             $this->getCatUrlBuilderService(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig(),
-            $this->getTranslatorMock()
+            $this->getTranslatorMock(),
         );
     }
 
