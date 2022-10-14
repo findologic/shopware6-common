@@ -76,6 +76,7 @@ trait AdapterHelper
             $this->getCatUrlBuilderService(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig(),
+            $this->getTranslatorMock()
         );
     }
 
@@ -91,7 +92,7 @@ trait AdapterHelper
 
     public function getDefaultPropertiesAdapter(): DefaultPropertiesAdapter
     {
-        return new DefaultPropertiesAdapter($this->getExportContext());
+        return new DefaultPropertiesAdapter($this->getExportContext(), $this->getTranslatorMock());
     }
 
     public function getDescriptionAdapter(): DescriptionAdapter

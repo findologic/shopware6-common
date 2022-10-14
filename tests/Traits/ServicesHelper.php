@@ -19,6 +19,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\Translator;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
@@ -56,6 +57,24 @@ trait ServicesHelper
             ->getMock();
     }
 
+    /** @return Translator|MockObject */
+    public function getTranslatorMock(string $locale = 'en'): MockObject
+    {
+        $translator = $this->getMockBuilder(Translator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $returnMap = [
+            ['finSearch.general.yes', [], null, null, $locale === 'de' ? 'Ja' : 'Yes'],
+            ['finSearch.general.no', [], null, null, $locale === 'de' ? 'Nein' : 'No'],
+        ];
+        $translator->method('trans')
+            ->willReturnMap($returnMap);
+
+        return $translator;
+    }
+
+    /** @return AbstractDynamicProductGroupService|MockObject */
     public function getDynamicProductGroupServiceMock(): MockObject
     {
         return $this->getMockBuilder(AbstractDynamicProductGroupService::class)

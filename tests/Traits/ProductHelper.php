@@ -212,6 +212,7 @@ trait ProductHelper
     public function getDefaultMediaData(): array
     {
         return [
+            'id' => Uuid::randomHex(),
             'url' => 'https://via.placeholder.com/findologic.png',
             'private' => false,
             'mediaType' => ['name' => 'IMAGE'],
@@ -227,6 +228,7 @@ trait ProductHelper
                 ],
             ],
             'media' => [
+                'id' => Uuid::randomHex(),
                 'url' => 'https://via.placeholder.com/findologic.png',
                 'private' => false,
                 'mediaType' => ['name' => 'IMAGE'],
