@@ -83,7 +83,7 @@ class AttributeAdapter
         $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
 
         $attributes = [];
-        if (!$this->pluginConfig->isIntegrationTypeApi() && !Utils::isEmpty($catUrls)) {
+        if (!Utils::isEmpty($catUrls)) {
             $catUrlAttribute = new Attribute('cat_url');
             $catUrlAttribute->setValues($this->decodeHtmlEntities(Utils::flattenWithUnique($catUrls)));
             $attributes[] = $catUrlAttribute;
