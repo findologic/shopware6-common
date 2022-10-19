@@ -92,7 +92,11 @@ abstract class AbstractProductCriteriaBuilder
 
     abstract public function withProductAssociations(): self;
 
-    abstract public function withVariantAssociations(): self;
+    /**
+     * @param string[] $categoryIds
+     * @param string[] $propertyIds
+     */
+    abstract public function withVariantAssociations(array $categoryIds, array $propertyIds): self;
 
     abstract public function withPriceZeroFilter(): self;
 
