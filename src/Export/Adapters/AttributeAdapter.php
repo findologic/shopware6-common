@@ -71,7 +71,7 @@ class AttributeAdapter
     protected function getCategoryAndCatUrlAttributes(ProductEntity $product): array
     {
         $productCategories = $product->categories;
-        if ($productCategories === null || empty($productCategories->count())) {
+        if ($productCategories === null || !$productCategories->count()) {
             throw new ProductHasNoCategoriesException($product);
         }
 
