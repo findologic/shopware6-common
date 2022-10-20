@@ -98,6 +98,6 @@ class ExportContext
 
     public function isPluginExport(): bool
     {
-        return $this->implementationType === ImplementationType::APP;
+        return $this->implementationType === ImplementationType::PLUGIN;
     }
 }
