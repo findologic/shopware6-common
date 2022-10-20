@@ -126,10 +126,6 @@ class AttributeAdapter
                 $categories = array_merge($categories, [$categoryPath]);
             }
 
-            if (!$this->pluginConfig->isIntegrationTypesDirectIntegration()) {
-                continue;
-            }
-
             $catUrls = array_merge(
                 $catUrls,
                 $this->catUrlBuilderService->getCategoryUrls($categoryEntity),
