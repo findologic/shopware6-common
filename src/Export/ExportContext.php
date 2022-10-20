@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export;
 
+use FINDOLOGIC\Shopware6Common\Export\Config\ImplementationType;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
@@ -22,18 +23,22 @@ class ExportContext
 
     protected bool $shouldHideProductsOutOfStock;
 
+    protected string $implementationType;
+
     public function __construct(
         string $shopkey,
         SalesChannelEntity $salesChannel,
         CategoryEntity $navigationCategory,
         CustomerGroupCollection $customerGroups,
-        bool $shouldHideProductsOutOfStock
+        bool $shouldHideProductsOutOfStock,
+        string $implementationType,
     ) {
         $this->shopkey = $shopkey;
         $this->salesChannel = $salesChannel;
         $this->navigationCategory = $navigationCategory;
         $this->customerGroups = $customerGroups;
         $this->shouldHideProductsOutOfStock = $shouldHideProductsOutOfStock;
+        $this->implementationType = $implementationType;
     }
 
     public function getShopkey(): string
@@ -79,5 +84,20 @@ class ExportContext
     public function shouldHideProductsOutOfStock(): bool
     {
         return $this->shouldHideProductsOutOfStock;
+    }
+
+    public function getImplementationType(): string
+    {
+        return $this->implementationType;
+    }
+
+    public function isAppExport(): bool
+    {
+        return $this->implementationType === ImplementationType::APP;
+    }
+
+    public function isPluginExport(): bool
+    {
+        return $this->implementationType === ImplementationType::APP;
     }
 }

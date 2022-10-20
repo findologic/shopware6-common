@@ -74,7 +74,7 @@ class AttributeAdapter
         $categories = [];
 
         if ($product->categories && $product->categories->count()) {
-            $this->parseCategoryAttributes($productCategories, $catUrls, $categories);
+            $this->parseCategoryAttributes($product->categories, $catUrls, $categories);
         }
 
         $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($product->id);
@@ -82,7 +82,7 @@ class AttributeAdapter
 
         $attributes = [];
         if (!Utils::isEmpty($catUrls)) {
-            $catUrlAttribute = new Attribute('cat_url');
+            $catUrlAttribute = new Attribute($this->exportContext->isPluginExport() ? 'cat_url' : 'cat_id');
             $catUrlAttribute->setValues($this->decodeHtmlEntities(Utils::flattenWithUnique($catUrls)));
             $attributes[] = $catUrlAttribute;
         }
