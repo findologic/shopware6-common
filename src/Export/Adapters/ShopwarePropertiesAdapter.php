@@ -23,6 +23,10 @@ class ShopwarePropertiesAdapter
     {
         $properties = [];
 
+        if (!$product->properties) {
+            return $properties;
+        }
+
         foreach ($product->properties as $propertyGroupOptionEntity) {
             $group = $propertyGroupOptionEntity->group;
             if ($group && !$group->filterable) {

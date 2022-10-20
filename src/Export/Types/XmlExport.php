@@ -151,12 +151,14 @@ class XmlExport extends AbstractExport
         return intval(self::MAXIMUM_PROPERTIES_COUNT / max(1, $maxPropertiesCount));
     }
 
-    private function getConfiguredCrossSellingCategory(string $productId, CategoryCollection $productCategories): ?CategoryEntity
-    {
+    private function getConfiguredCrossSellingCategory(
+        string $productId,
+        ?CategoryCollection $productCategories = null
+    ): ?CategoryEntity {
         $crossSellingCategories = $this->pluginConfig->getCrossSellingCategories();
         if (count($crossSellingCategories)) {
             $categories = new CategoryCollection();
-            $categories->merge($productCategories);
+            $categories->merge($productCategories ?: new CategoryCollection());
             $categories->merge($this->dynamicProductGroupService->getCategories($productId));
 
             $categories = $categories->filter(static function (CategoryEntity $category) use ($crossSellingCategories) {

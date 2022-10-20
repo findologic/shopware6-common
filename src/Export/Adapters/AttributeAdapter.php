@@ -70,16 +70,14 @@ class AttributeAdapter
      */
     protected function getCategoryAndCatUrlAttributes(ProductEntity $product): array
     {
-        $productCategories = $product->categories;
-        if ($productCategories === null || !$productCategories->count()) {
-            throw new ProductHasNoCategoriesException($product);
-        }
-
         $catUrls = [];
         $categories = [];
 
+        if ($product->categories && $product->categories->count()) {
+            $this->parseCategoryAttributes($productCategories, $catUrls, $categories);
+        }
+
         $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($product->id);
-        $this->parseCategoryAttributes($productCategories, $catUrls, $categories);
         $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
 
         $attributes = [];
@@ -93,6 +91,10 @@ class AttributeAdapter
             $categoryAttribute = new Attribute('cat');
             $categoryAttribute->setValues($this->decodeHtmlEntities(array_unique($categories)));
             $attributes[] = $categoryAttribute;
+        }
+
+        if (!count($attributes)) {
+            throw new ProductHasNoCategoriesException($product);
         }
 
         return $attributes;
@@ -155,11 +157,15 @@ class AttributeAdapter
     /**
      * @return Attribute[]
      */
-    protected function getPropertyAttributes(ProductEntity $productEntity): array
+    protected function getPropertyAttributes(ProductEntity $product): array
     {
         $attributes = [];
 
-        foreach ($productEntity->properties as $propertyGroupOptionEntity) {
+        if (!$product->properties) {
+            return $attributes;
+        }
+
+        foreach ($product->properties as $propertyGroupOptionEntity) {
             $group = $propertyGroupOptionEntity->group;
             if ($group && !$group->filterable) {
                 continue;
