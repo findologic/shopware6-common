@@ -31,7 +31,7 @@ class ExportContext
         CategoryEntity $navigationCategory,
         CustomerGroupCollection $customerGroups,
         bool $shouldHideProductsOutOfStock,
-        string $implementationType,
+        string $implementationType
     ) {
         $this->shopkey = $shopkey;
         $this->salesChannel = $salesChannel;

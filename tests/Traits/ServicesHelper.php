@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
+use FINDOLOGIC\Shopware6Common\Export\Config\ImplementationType;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
@@ -134,6 +135,7 @@ trait ServicesHelper
             $this->buildNavigationCategory(),
             $customerGroupCollection ?? new CustomerGroupCollection(),
             true,
+            ImplementationType::PLUGIN,
         );
     }
 
