@@ -22,4 +22,6 @@ class Constants
         'properties',
         'properties.group',
     ];
+
+    public const PARENT_CATEGORY_EXTENSION = 'parentCategories';
 }

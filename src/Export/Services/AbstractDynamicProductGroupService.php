@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
+use FINDOLOGIC\Shopware6Common\Export\Constants;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Handlers\DynamicProductGroupCacheHandler;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractCategorySearcher;
 use Psr\Cache\CacheItemPoolInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 
 abstract class AbstractDynamicProductGroupService
 {
-    public const CONTAINER_ID = 'fin_search.dynamic_product_group';
-
     protected DynamicProductGroupCacheHandler $cacheHandler;
 
     protected CacheItemPoolInterface $cache;
 
     protected ExportContext $exportContext;
 
+    protected AbstractCategorySearcher $categorySearcher;
+
     public function __construct(
         CacheItemPoolInterface $cache,
-        ExportContext $exportContext
+        ExportContext $exportContext,
+        AbstractCategorySearcher $categorySearcher
     ) {
         $this->cache = $cache;
         $this->exportContext = $exportContext;
+        $this->categorySearcher = $categorySearcher;
 
         $this->setCacheHandler();
     }
@@ -33,12 +38,46 @@ abstract class AbstractDynamicProductGroupService
     {
         $this->cacheDynamicProductGroupsTotal();
 
-        $products = $this->parseProductGroups();
+        $productStreams = $this->parseProductGroups();
         if ($this->isLastPage()) {
             $this->cacheHandler->setWarmedUpCacheItem();
         }
 
-        $this->cacheDynamicProductPage($products);
+        $this->cacheDynamicProductStream($productStreams);
+    }
+
+    public function getCategories(string $streamId): CategoryCollection
+    {
+        /** @var CategoryCollection $categories */
+        $categories = $this->cacheHandler->getCachedCategoriesForProductStream($streamId);
+        if (count($categories)) {
+            return new CategoryCollection($categories);
+        }
+
+        return new CategoryCollection();
+    }
+
+    /**
+     * @return array<string, array<string, CategoryEntity>>
+     */
+    protected function parseProductGroups(): array {
+        $categories = $this->getProductStreamCategories();
+        $productStreams = [];
+
+        foreach ($categories as $categoryEntity) {
+            if (!$categoryEntity->productStream) {
+                continue;
+            }
+
+            $categoryEntity->addExtension(
+                Constants::PARENT_CATEGORY_EXTENSION,
+                $this->categorySearcher->fetchParentsFromCategoryPath($categoryEntity->path)
+            );
+
+            $productStreams[$categoryEntity->productStreamId][$categoryEntity->id] = $categoryEntity;
+        }
+
+        return $productStreams;
     }
 
     public function areDynamicProductGroupsCached(): bool
@@ -79,10 +118,10 @@ abstract class AbstractDynamicProductGroupService
     protected function getDynamicProductGroupsCount(): int
     {
         $total = 0;
-        $categories = $this->getProductStreamCategories();
+        $categories = $this->categorySearcher->getProductStreamCategories();
 
         foreach ($categories as $categoryEntity) {
-            if (!$this->hasProductStream($categoryEntity)) {
+            if (!$categoryEntity->productStream) {
                 continue;
             }
 
@@ -92,21 +131,12 @@ abstract class AbstractDynamicProductGroupService
         return $total;
     }
 
-    protected function cacheDynamicProductPage(array $products): void
+    protected function cacheDynamicProductStream(array $productStreams): void
     {
-        $this->cacheHandler->setDynamicProductGroupsPage($products, $this->getCurrentOffset());
+        $this->cacheHandler->cacheDynamicProductStreams($productStreams);
     }
 
-    abstract public function getCategories(string $productId): CategoryCollection;
-
-    /**
-     * @return array<string, array<string, string>>
-     */
-    abstract protected function parseProductGroups(): array;
-
-    abstract protected function getProductStreamCategories(): ?array;
-
-    abstract protected function hasProductStream($categoryEntity): bool;
+    abstract protected function getProductStreamCategories(): CategoryCollection;
 
     abstract protected function isFirstPage(): bool;
 
