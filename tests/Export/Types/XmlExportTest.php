@@ -69,6 +69,11 @@ class XmlExportTest extends TestCase
         $category = $product->categories->first();
         $this->crossSellCategories = [$category->id];
 
+        $this->dynamicProductGroupService
+            ->expects($this->once())
+            ->method('getCategories')
+            ->willReturn(new CategoryCollection());
+
         $this->buildItemsAndAssertError($product, $category);
     }
 
