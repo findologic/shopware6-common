@@ -60,7 +60,8 @@ abstract class AbstractDynamicProductGroupService
     /**
      * @return array<string, array<string, CategoryEntity>>
      */
-    protected function parseProductGroups(): array {
+    protected function parseProductGroups(): array
+    {
         $categories = $this->getProductStreamCategories();
         $productStreams = [];
 
@@ -71,7 +72,7 @@ abstract class AbstractDynamicProductGroupService
 
             $categoryEntity->addExtension(
                 Constants::PARENT_CATEGORY_EXTENSION,
-                $this->categorySearcher->fetchParentsFromCategoryPath($categoryEntity->path)
+                $this->categorySearcher->fetchParentsFromCategoryPath($categoryEntity->path),
             );
 
             $productStreams[$categoryEntity->productStreamId][$categoryEntity->id] = $categoryEntity;

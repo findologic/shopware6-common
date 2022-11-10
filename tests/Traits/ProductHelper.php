@@ -53,7 +53,7 @@ trait ProductHelper
             'translated' => [
                 'description' => 'FINDOLOGIC Description',
             ],
-            'streamIds' => []
+            'streamIds' => [],
         ]);
 
         $productData = array_merge_recursive(

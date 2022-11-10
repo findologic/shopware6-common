@@ -13,7 +13,7 @@
         "php": "^7.4 || ^8.0",
         "findologic/libflexport": "^2.9",
         "monolog/monolog": "^2.0",
-        "vin-sw/shopware-sdk": "^1.5",
+        "vin-sw/shopware-sdk": "^1.7",
         "symfony/http-foundation": "*",
         "symfony/event-dispatcher": "*"
     },
@@ -39,7 +39,6 @@
     },
     "scripts": {
         "test": "phpunit",
-        "analyse": "phpstan analyse -c ../shopware6-common/phpstan.neon",
         "lint": "./vendor/bin/php-cs-fixer fix src tests --path-mode=intersection --dry-run --allow-risky=yes --verbose --config=.php-cs-fixer.dist.php --using-cache=no",
         "lint-fix": "./vendor/bin/php-cs-fixer fix src tests --path-mode=intersection --allow-risky=yes --verbose --config=.php-cs-fixer.dist.php --using-cache=no"
     }

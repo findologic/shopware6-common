@@ -152,7 +152,6 @@ trait ServicesHelper
     public function getCategorySearcher(): AbstractCategorySearcher
     {
         return new class($this->getExportContext()) extends AbstractCategorySearcher {
-
             public function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection
             {
                 $categoryCollection = new CategoryCollection();
