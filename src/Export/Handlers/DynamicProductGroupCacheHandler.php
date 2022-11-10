@@ -83,7 +83,7 @@ class DynamicProductGroupCacheHandler
                 ? array_merge($productStreamCacheItem->get(), $productStreamCategories)
                 : $productStreamCategories;
 
-            $productStreamCacheItem->set(array_unique($categories));
+            $productStreamCacheItem->set($categories);
             $productStreamCacheItem->expiresAfter(self::CACHE_LIFETIME_PRODUCT_GROUP);
             $this->cache->save($productStreamCacheItem);
         }
