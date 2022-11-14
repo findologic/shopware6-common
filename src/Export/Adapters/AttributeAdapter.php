@@ -84,7 +84,7 @@ class AttributeAdapter
 
         $attributes = [];
         if (!Utils::isEmpty($catUrls)) {
-            $catUrlAttribute = new Attribute($this->exportContext->isPluginExport() ? 'cat_url' : 'cat_id');
+            $catUrlAttribute = new Attribute('cat_url');
             $catUrlAttribute->setValues($this->decodeHtmlEntities(Utils::flattenWithUnique($catUrls)));
             $attributes[] = $catUrlAttribute;
         }
