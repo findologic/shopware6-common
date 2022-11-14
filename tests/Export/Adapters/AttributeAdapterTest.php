@@ -315,7 +315,7 @@ class AttributeAdapterTest extends TestCase
 
         $attribute = current($attributes);
         $this->assertSame('cat_url', $attribute->getKey());
-        $this->assertContains($categoryId, $attribute->getValues());
+        $this->assertContains(sprintf('/navigation/%s', $categoryId), $attribute->getValues());
     }
 
     public function testEmptyCategoryNameShouldStillExportCategory(): void
@@ -350,7 +350,7 @@ class AttributeAdapterTest extends TestCase
 
         $catUrls = $attributes[0]->getValues();
         $this->assertCount(1, $catUrls);
-        $this->assertSame([$categoryId], $catUrls);
+        $this->assertSame([sprintf('/navigation/%s', $categoryId)], $catUrls);
     }
 
     public function testProductHasNoCategories(): void
@@ -399,7 +399,7 @@ class AttributeAdapterTest extends TestCase
 
         $expectedCategories = ['Category1'];
         $expectedCatUrls = [
-            'cce80a72bc3481d723c38cccf592d45a',
+            '/navigation/cce80a72bc3481d723c38cccf592d45a',
         ];
 
         $productEntity = $this->createTestProduct([
@@ -703,7 +703,7 @@ class AttributeAdapterTest extends TestCase
                     'Category1',
                 ],
                 'expectedCatUrls' => [
-                    'cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
                 ],
             ],
             'Integration type is API with nested categories' => [
@@ -713,9 +713,9 @@ class AttributeAdapterTest extends TestCase
                     'Category1_Category2_Category3',
                 ],
                 'expectedCatUrls' => [
-                    '6a753ffefab44667b87d9260fbcb9fac',
-                    'cce80a72bc3481d723c38cccf592d45a',
-                    'f03d845e0abf31e72409cf7c5c704a2e',
+                    '/navigation/6a753ffefab44667b87d9260fbcb9fac',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/f03d845e0abf31e72409cf7c5c704a2e',
                 ],
             ],
             'Integration type is DI and category is at first level' => [
@@ -725,7 +725,7 @@ class AttributeAdapterTest extends TestCase
                     'Category1',
                 ],
                 'expectedCatUrls' => [
-                    'cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
                 ],
             ],
             'Integration type is DI with nested categories' => [
@@ -735,9 +735,9 @@ class AttributeAdapterTest extends TestCase
                     'Category1_Category2_Category3',
                 ],
                 'expectedCatUrls' => [
-                    '6a753ffefab44667b87d9260fbcb9fac',
-                    'cce80a72bc3481d723c38cccf592d45a',
-                    'f03d845e0abf31e72409cf7c5c704a2e',
+                    '/navigation/6a753ffefab44667b87d9260fbcb9fac',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/f03d845e0abf31e72409cf7c5c704a2e',
                 ],
             ],
             'Integration type is unknown and category is at first level' => [
@@ -747,7 +747,7 @@ class AttributeAdapterTest extends TestCase
                     'Category1',
                 ],
                 'expectedCatUrls' => [
-                    'cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
                 ],
             ],
             'Integration type is unknown with nested categories' => [
@@ -757,9 +757,9 @@ class AttributeAdapterTest extends TestCase
                     'Category1_Category2_Category3',
                 ],
                 'expectedCatUrls' => [
-                    '6a753ffefab44667b87d9260fbcb9fac',
-                    'cce80a72bc3481d723c38cccf592d45a',
-                    'f03d845e0abf31e72409cf7c5c704a2e',
+                    '/navigation/6a753ffefab44667b87d9260fbcb9fac',
+                    '/navigation/cce80a72bc3481d723c38cccf592d45a',
+                    '/navigation/f03d845e0abf31e72409cf7c5c704a2e',
                 ],
             ],
         ];
