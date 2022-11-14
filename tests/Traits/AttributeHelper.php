@@ -20,7 +20,7 @@ trait AttributeHelper
 
         foreach ($productEntity->categories as $category) {
             if ($category->name === 'FINDOLOGIC Category') {
-                $defaultCatUrl = $category->id;
+                $defaultCatUrl = sprintf('/navigation/%s', $category->id);
             }
         }
 

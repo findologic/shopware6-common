@@ -98,7 +98,7 @@ trait ServicesHelper
 
             protected function buildCategoryUrls(CategoryEntity $category): array
             {
-                return [$category->id];
+                return ['/navigation/' . $category->id];
             }
         };
     }
