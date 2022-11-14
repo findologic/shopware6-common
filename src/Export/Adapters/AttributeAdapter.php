@@ -77,8 +77,10 @@ class AttributeAdapter
             $this->parseCategoryAttributes($product->categories, $catUrls, $categories);
         }
 
-        $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($product->id);
-        $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
+        foreach ($product->streamIds ?? [] as $streamId) {
+            $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($streamId);
+            $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
+        }
 
         $attributes = [];
         if (!Utils::isEmpty($catUrls)) {

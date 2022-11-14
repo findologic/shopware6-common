@@ -161,6 +161,7 @@ class XmlExport extends AbstractExport
             $categories->merge($productCategories ?: new CategoryCollection());
             $categories->merge($this->dynamicProductGroupService->getCategories($productId));
 
+            /** @var CategoryCollection $categories */
             $categories = $categories->filter(static function (CategoryEntity $category) use ($crossSellingCategories) {
                 return in_array($category->id, $crossSellingCategories);
             });

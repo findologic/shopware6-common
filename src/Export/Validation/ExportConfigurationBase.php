@@ -50,17 +50,12 @@ class ExportConfigurationBase
     {
         switch ($request->getPathInfo()) {
             case '/findologic':
+            case '/findologic/dynamic-product-groups':
                 return new OffsetExportConfiguration(
                     $request->query->get('shopkey', ''),
                     $request->query->getInt('start', OffsetExportConfiguration::DEFAULT_START_PARAM),
                     $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
                     $request->query->get('productId'),
-                );
-            case '/findologic/dynamic-product-groups':
-                return new OffsetExportConfiguration(
-                    $request->query->get('shopkey', ''),
-                    $request->query->getInt('start', OffsetExportConfiguration::DEFAULT_START_PARAM),
-                    self::DEFAULT_COUNT_PARAM,
                 );
             case '/findologic/debug':
                 return new OffsetDebugConfiguration(

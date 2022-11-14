@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
+use FINDOLOGIC\Shopware6Common\Export\Constants;
+use FINDOLOGIC\Shopware6Common\Export\ExportContext;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractCategorySearcher;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
-use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
+use Symfony\Component\Routing\RouterInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\SalesChannelDomain\SalesChannelDomainCollection;
 use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlCollection;
@@ -14,6 +17,18 @@ use const PHP_URL_PATH;
 
 abstract class AbstractCatUrlBuilderService extends UrlBuilderService
 {
+    protected AbstractCategorySearcher $categorySearcher;
+
+    public function __construct(
+        ExportContext $exportContext,
+        AbstractCategorySearcher $categorySearcher,
+        ?RouterInterface $router = null
+    ) {
+        $this->categorySearcher = $categorySearcher;
+
+        parent::__construct($exportContext, $router);
+    }
+
     /**
      * Builds `cat_url`s for Direct Integrations. Based on the given category, all
      * paths excluding the root category are generated.
@@ -50,7 +65,10 @@ abstract class AbstractCatUrlBuilderService extends UrlBuilderService
      */
     public function getParentCategories(CategoryEntity $category): array
     {
-        $parentCategories = $this->fetchParentsFromCategoryPath($category->path);
+        $parentCategories = $category->hasExtension(Constants::PARENT_CATEGORY_EXTENSION)
+            ? $category->getExtension(Constants::PARENT_CATEGORY_EXTENSION)
+            : $this->categorySearcher->fetchParentsFromCategoryPath($category->path);
+
         $categories = [];
 
         /** @var CategoryEntity $categoryInPath */
@@ -143,6 +161,4 @@ abstract class AbstractCatUrlBuilderService extends UrlBuilderService
      * @return string[]
      */
     abstract protected function buildCategoryUrls(CategoryEntity $category): array;
-
-    abstract protected function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection;
 }

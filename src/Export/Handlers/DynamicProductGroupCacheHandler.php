@@ -6,6 +6,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Handlers;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 
 class DynamicProductGroupCacheHandler
 {
@@ -39,19 +40,6 @@ class DynamicProductGroupCacheHandler
         return $totalCacheItem->isHit();
     }
 
-    public function isOffsetCacheWarmedUp(int $offset): bool
-    {
-        $cacheItem = $this->getDynamicProductGroupOffsetCacheItem($offset);
-        if ($cacheItem->isHit()) {
-            $cacheItem->expiresAfter(self::CACHE_LIFETIME_PRODUCT_GROUP);
-            $this->cache->save($cacheItem);
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function areDynamicProductGroupsCached(): bool
     {
         $cacheItem = $this->getDynamicProductGroupWarmedUpCacheItem();
@@ -66,10 +54,13 @@ class DynamicProductGroupCacheHandler
         return false;
     }
 
-    public function getCachedCategoriesForCurrentOffset(int $offset): array
+    /**
+     * @return CategoryEntity[]
+     */
+    public function getCachedCategoriesForProductStream(string $streamId): array
     {
         $categories = [];
-        $cacheItem = $this->getDynamicProductGroupOffsetCacheItem($offset);
+        $cacheItem = $this->getProductStreamCacheItem($streamId);
         if ($cacheItem->isHit()) {
             $categories = (array) $cacheItem->get();
         }
@@ -83,15 +74,19 @@ class DynamicProductGroupCacheHandler
         $this->setTotalInCache($totalCacheItem, $total);
     }
 
-    /**
-     * @param array<string, array<int, string>> $products
-     */
-    public function setDynamicProductGroupsPage(array $products, int $offset): void
+    public function cacheDynamicProductStreams(array $productStreams): void
     {
-        $cacheItem = $this->getDynamicProductGroupOffsetCacheItem($offset);
-        $cacheItem->set($products);
-        $cacheItem->expiresAfter(self::CACHE_LIFETIME_PRODUCT_GROUP);
-        $this->cache->save($cacheItem);
+        foreach ($productStreams as $productStreamId => $productStreamCategories) {
+            $productStreamCacheItem = $this->getProductStreamCacheItem($productStreamId);
+
+            $categories = $productStreamCacheItem->isHit()
+                ? array_merge($productStreamCacheItem->get(), $productStreamCategories)
+                : $productStreamCategories;
+
+            $productStreamCacheItem->set($categories);
+            $productStreamCacheItem->expiresAfter(self::CACHE_LIFETIME_PRODUCT_GROUP);
+            $this->cache->save($productStreamCacheItem);
+        }
     }
 
     public function clearGeneralCache(): void
@@ -108,27 +103,6 @@ class DynamicProductGroupCacheHandler
     public function getDynamicProductGroupsCachedTotal(): int
     {
         return $this->getDynamicProductGroupTotalFromCache();
-    }
-
-    protected function getDynamicProductGroupWarmedUpCacheItem(): CacheItemInterface
-    {
-        $id = sprintf('%s_%s_dynamic_product_warmup', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey);
-
-        return $this->cache->getItem($id);
-    }
-
-    protected function getDynamicProductGroupOffsetCacheItem(int $offset): CacheItemInterface
-    {
-        $id = sprintf('%s_%s_%s', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey, $offset);
-
-        return $this->cache->getItem($id);
-    }
-
-    protected function getDynamicGroupsTotalCacheItem(): CacheItemInterface
-    {
-        $id = sprintf('%s_%s_total', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey);
-
-        return $this->cache->getItem($id);
     }
 
     protected function getDynamicProductGroupTotalFromCache(): int
@@ -149,5 +123,26 @@ class DynamicProductGroupCacheHandler
         $cacheItem->set($total);
         $cacheItem->expiresAfter(self::CACHE_LIFETIME_PRODUCT_GROUP);
         $this->cache->save($cacheItem);
+    }
+
+    protected function getProductStreamCacheItem(string $streamId): CacheItemInterface
+    {
+        $id = sprintf('%s_%s_%s', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey, $streamId);
+
+        return $this->cache->getItem($id);
+    }
+
+    protected function getDynamicProductGroupWarmedUpCacheItem(): CacheItemInterface
+    {
+        $id = sprintf('%s_%s_dynamic_product_warmup', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey);
+
+        return $this->cache->getItem($id);
+    }
+
+    protected function getDynamicGroupsTotalCacheItem(): CacheItemInterface
+    {
+        $id = sprintf('%s_%s_total', self::CACHE_ID_PRODUCT_GROUP, $this->shopkey);
+
+        return $this->cache->getItem($id);
     }
 }

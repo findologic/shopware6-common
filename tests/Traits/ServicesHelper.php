@@ -7,6 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 use FINDOLOGIC\Shopware6Common\Export\Config\ImplementationType;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractCategorySearcher;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
@@ -79,33 +80,20 @@ trait ServicesHelper
     public function getDynamicProductGroupServiceMock(): MockObject
     {
         return $this->getMockBuilder(AbstractDynamicProductGroupService::class)
+            ->onlyMethods(['getCategories'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
     }
 
     public function getCatUrlBuilderService(): AbstractCatUrlBuilderService
     {
-        return new class($this->getExportContext(), $this->getRouterMock()) extends AbstractCatUrlBuilderService {
+        return new class($this->getExportContext(), $this->getCategorySearcher(), $this->getRouterMock()) extends AbstractCatUrlBuilderService {
             public function __construct(
                 ExportContext $exportContext,
+                AbstractCategorySearcher $categorySearcher,
                 ?RouterInterface $router = null
             ) {
-                parent::__construct($exportContext, $router);
-            }
-
-            protected function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection
-            {
-                $categoryCollection = new CategoryCollection();
-                $parentIds = array_filter(explode('|', $categoryPath));
-
-                foreach ($parentIds as $id) {
-                    $category = new CategoryEntity();
-                    $category->id = $id;
-
-                    $categoryCollection->add($category);
-                }
-
-                return $categoryCollection;
+                parent::__construct($exportContext, $categorySearcher, $router);
             }
 
             protected function buildCategoryUrls(CategoryEntity $category): array
@@ -159,6 +147,31 @@ trait ServicesHelper
         return $this->getMockBuilder(AbstractProductSearcher::class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    public function getCategorySearcher(): AbstractCategorySearcher
+    {
+        return new class($this->getExportContext()) extends AbstractCategorySearcher {
+            public function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection
+            {
+                $categoryCollection = new CategoryCollection();
+                $parentIds = array_filter(explode('|', $categoryPath));
+
+                foreach ($parentIds as $id) {
+                    $category = new CategoryEntity();
+                    $category->id = $id;
+
+                    $categoryCollection->add($category);
+                }
+
+                return $categoryCollection;
+            }
+
+            public function getProductStreamCategories(?int $count = null, ?int $offset = null): CategoryCollection
+            {
+                return new CategoryCollection();
+            }
+        };
     }
 
     public function buildSalesChannel(?string $salesChannelId = CommonConstants::SALES_CHANNEL_ID): SalesChannelEntity
