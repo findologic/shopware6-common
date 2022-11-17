@@ -69,7 +69,6 @@ class AttributeAdapter
 
     /**
      * @return Attribute[]
-     * @throws ProductHasNoCategoriesException
      */
     protected function getCategoryAndCatUrlAttributes(ProductEntity $product): array
     {
@@ -96,10 +95,6 @@ class AttributeAdapter
             $categoryAttribute = new Attribute('cat');
             $categoryAttribute->setValues($this->decodeHtmlEntities(array_unique($categories)));
             $attributes[] = $categoryAttribute;
-        }
-
-        if (!count($attributes)) {
-            throw new ProductHasNoCategoriesException($product);
         }
 
         return $attributes;
