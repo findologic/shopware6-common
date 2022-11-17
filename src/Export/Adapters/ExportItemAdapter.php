@@ -9,6 +9,9 @@ use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterVariantAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\BeforeItemAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\BeforeVariantAdaptEvent;
+use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
+use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameException;
+use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
 use FINDOLOGIC\Shopware6Common\Export\Logger\ExportExceptionLogger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -55,10 +58,24 @@ class ExportItemAdapter
         return $item;
     }
 
+    /**
+     * @throws ProductHasNoPricesException
+     * @throws ProductHasNoNameException
+     * @throws ProductHasNoCategoriesException
+     */
     public function adaptProduct(Item $item, ProductEntity $product): ?Item
     {
+        $hasCategories = false;
         foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
+            if ($attribute->getKey() === 'cat') {
+                $hasCategories = true;
+            }
+
             $item->addMergedAttribute($attribute);
+        }
+
+        if (!$hasCategories) {
+            throw new ProductHasNoCategoriesException($product);
         }
 
         if ($bonus = $this->adapterFactory->getBonusAdapter()->adapt($product)) {

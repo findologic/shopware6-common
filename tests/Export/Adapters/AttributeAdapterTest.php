@@ -353,19 +353,6 @@ class AttributeAdapterTest extends TestCase
         $this->assertSame([sprintf('/navigation/%s', $categoryId)], $catUrls);
     }
 
-    public function testProductHasNoCategories(): void
-    {
-        $this->expectException(ProductHasNoCategoriesException::class);
-
-        $id = Uuid::randomHex();
-        $product = $this->createTestProduct([
-            'id' => $id,
-            'categories' => [],
-        ]);
-
-        $this->attributeAdapter->adapt($product);
-    }
-
     public function parentAndChildrenCategoryProvider(): array
     {
         return [

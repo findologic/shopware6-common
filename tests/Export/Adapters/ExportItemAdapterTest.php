@@ -8,7 +8,7 @@ use Exception;
 use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
-use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -40,6 +40,34 @@ class ExportItemAdapterTest extends TestCase
         $adapter = $this->getExportItemAdapter(null, null, null, $eventDispatcherMock);
         $adapter->adapt($xmlItem, $product);
         $adapter->adaptVariant($xmlItem, $product);
+    }
+
+    public function testExceptionIsThrownForProductWithNoCategories(): void
+    {
+        $this->expectException(ProductHasNoCategoriesException::class);
+
+        $id = Uuid::randomHex();
+        $product = $this->createTestProduct([
+            'id' => $id,
+            'categories' => [],
+        ]);
+
+        $adapter = $this->getExportItemAdapter();
+        $adapter->adaptProduct(new XMLItem($id), $product);
+    }
+
+    public function testExceptionIsNotThrownForVariantWithNoCategories(): void
+    {
+        $id = Uuid::randomHex();
+        $product = $this->createTestProduct([
+            'id' => $id,
+            'categories' => [],
+        ]);
+
+        $adapter = $this->getExportItemAdapter();
+        $item = $adapter->adaptVariant(new XMLItem($id), $product);
+
+        $this->assertEquals($id, $item->getId());
     }
 
     public function testProductInvalidExceptionIsLogged(): void
@@ -102,10 +130,10 @@ class ExportItemAdapterTest extends TestCase
 
     public function expectAdapterException(ProductEntity $productEntity, Throwable $throwable, string $message): void
     {
-        $nameAdapterMock = $this->getMockBuilder(NameAdapter::class)
+        $attributeAdapterMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $nameAdapterMock->expects($this->once())
+        $attributeAdapterMock->expects($this->once())
             ->method('adapt')
             ->willThrowException($throwable);
 
@@ -113,8 +141,8 @@ class ExportItemAdapterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $adapterFactoryMock->expects($this->once())
-            ->method('getNameAdapter')
-            ->willReturn($nameAdapterMock);
+            ->method('getAttributeAdapter')
+            ->willReturn($attributeAdapterMock);
 
         $loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()

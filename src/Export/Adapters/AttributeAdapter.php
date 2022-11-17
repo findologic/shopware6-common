@@ -7,7 +7,6 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Export\Helpers\DataHelper;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
-use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
@@ -46,7 +45,6 @@ class AttributeAdapter
 
     /**
      * @return Attribute[]
-     * @throws ProductHasNoCategoriesException
      */
     public function adapt(ProductEntity $product): array
     {
@@ -69,7 +67,6 @@ class AttributeAdapter
 
     /**
      * @return Attribute[]
-     * @throws ProductHasNoCategoriesException
      */
     protected function getCategoryAndCatUrlAttributes(ProductEntity $product): array
     {
@@ -96,10 +93,6 @@ class AttributeAdapter
             $categoryAttribute = new Attribute('cat');
             $categoryAttribute->setValues($this->decodeHtmlEntities(array_unique($categories)));
             $attributes[] = $categoryAttribute;
-        }
-
-        if (!count($attributes)) {
-            throw new ProductHasNoCategoriesException($product);
         }
 
         return $attributes;
