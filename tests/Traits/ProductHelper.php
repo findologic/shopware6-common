@@ -21,8 +21,6 @@ trait ProductHelper
         bool $withManufacturer = true
     ): ProductEntity {
         $id = Uuid::randomHex();
-        $redId = Uuid::randomHex();
-        $colorId = Uuid::randomHex();
 
         $productData = [];
 
@@ -61,7 +59,7 @@ trait ProductHelper
             $this->getNameValues($overrideData['name'] ?? 'FINDOLOGIC Product'),
         );
 
-        $productData = array_merge($productData, $this->getDefaultPropertySettingsData($redId, $colorId));
+        $productData = array_merge($productData, $this->getDefaultPropertySettingsData());
 
         if ($withManufacturer) {
             $productData = array_merge($productData, [
@@ -147,15 +145,19 @@ trait ProductHelper
         ];
     }
 
-    public function getDefaultPropertySettingsData(string $optionId, string $groupId): array
+    public function getDefaultPropertySettingsData(): array
     {
+        $redId = Uuid::randomHex();
+        $blueId = Uuid::randomHex();
+        $colorId = Uuid::randomHex();
+
         return [
             'properties' => [
                 [
-                    'id' => $optionId,
+                    'id' => $redId,
                     'name' => 'red',
                     'group' => [
-                        'id' => $groupId,
+                        'id' => $colorId,
                         'name' => 'color',
                         'filterable' => true,
                         'translated' => [
@@ -169,32 +171,48 @@ trait ProductHelper
             ],
             'options' => [
                 [
-                    'id' => $optionId,
+                    'id' => $redId,
                     'name' => 'red',
                     'group' => [
-                        'id' => $groupId,
-                        'name' => $groupId,
+                        'id' => $colorId,
+                        'name' => $colorId,
+                        'filterable' => true,
                         'translated' => [
-                            'name' => $groupId,
+                            'name' => $colorId,
                         ],
                     ],
                     'translated' => [
                         'name' => 'red',
                     ],
                 ],
+                [
+                    'id' => $blueId,
+                    'name' => 'blue',
+                    'group' => [
+                        'id' => $colorId,
+                        'name' => $colorId,
+                        'filterable' => true,
+                        'translated' => [
+                            'name' => $colorId,
+                        ],
+                    ],
+                    'translated' => [
+                        'name' => 'blue',
+                    ],
+                ],
             ],
             'configuratorSettings' => [
                 [
-                    'id' => $optionId,
+                    'id' => $redId,
                     'price' => ['currencyId' => CommonConstants::CURRENCY_ID, 'gross' => 50, 'net' => 25, 'linked' => false],
                     'option' => [
-                        'id' => $optionId,
+                        'id' => $redId,
                         'name' => 'red',
                         'group' => [
-                            'id' => $groupId,
-                            'name' => $groupId,
+                            'id' => $colorId,
+                            'name' => $colorId,
                             'translated' => [
-                                'name' => $groupId,
+                                'name' => $colorId,
                             ],
                         ],
                     ],

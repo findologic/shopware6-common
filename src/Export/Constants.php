@@ -19,6 +19,8 @@ class Constants
     public const VARIANT_ASSOCIATIONS = [
         'categories',
         'categories.seoUrls',
+        'options',
+        'options.group',
         'properties',
         'properties.group',
     ];

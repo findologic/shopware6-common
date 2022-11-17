@@ -15,6 +15,7 @@ use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
+use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class AttributeAdapter
@@ -52,6 +53,7 @@ class AttributeAdapter
         $categoryAttributes = $this->getCategoryAndCatUrlAttributes($product);
         $manufacturerAttributes = $this->getManufacturerAttributes($product);
         $propertyAttributes = $this->getPropertyAttributes($product);
+        $optionAttributes = $this->getOptionAttributes($product);
         $customFieldAttributes = $this->getCustomFieldAttributes($product);
         $additionalAttributes = $this->getAdditionalAttributes($product);
 
@@ -59,6 +61,7 @@ class AttributeAdapter
             $categoryAttributes,
             $manufacturerAttributes,
             $propertyAttributes,
+            $optionAttributes,
             $customFieldAttributes,
             $additionalAttributes,
         );
@@ -157,13 +160,33 @@ class AttributeAdapter
      */
     protected function getPropertyAttributes(ProductEntity $product): array
     {
-        $attributes = [];
-
-        if (!$product->properties) {
-            return $attributes;
+        if (!$product->properties || !$product->properties->count()) {
+            return [];
         }
 
-        foreach ($product->properties as $propertyGroupOptionEntity) {
+        return $this->getPropertyGroupOptionAttributes($product->properties);
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    protected function getOptionAttributes(ProductEntity $product): array
+    {
+        if (!$product->options || !$product->options->count()) {
+            return [];
+        }
+
+        return $this->getPropertyGroupOptionAttributes($product->options);
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    protected function getPropertyGroupOptionAttributes(PropertyGroupOptionCollection $collection): array
+    {
+        $attributes = [];
+
+        foreach ($collection as $propertyGroupOptionEntity) {
             $group = $propertyGroupOptionEntity->group;
             if ($group && !$group->filterable) {
                 continue;
