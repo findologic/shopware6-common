@@ -9,7 +9,6 @@ use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -131,10 +130,10 @@ class ExportItemAdapterTest extends TestCase
 
     public function expectAdapterException(ProductEntity $productEntity, Throwable $throwable, string $message): void
     {
-        $nameAdapterMock = $this->getMockBuilder(AttributeAdapter::class)
+        $attributeAdapterMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $nameAdapterMock->expects($this->once())
+        $attributeAdapterMock->expects($this->once())
             ->method('adapt')
             ->willThrowException($throwable);
 
@@ -143,7 +142,7 @@ class ExportItemAdapterTest extends TestCase
             ->getMock();
         $adapterFactoryMock->expects($this->once())
             ->method('getAttributeAdapter')
-            ->willReturn($nameAdapterMock);
+            ->willReturn($attributeAdapterMock);
 
         $loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
