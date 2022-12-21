@@ -37,9 +37,9 @@ trait PropertiesHelper
             $properties[] = $property;
         }
 
-        if ($product->packUnit) {
+        if ($product->getTranslation('packUnit')) {
             $property = new Property('packunit');
-            $property->addValue((string) $product->packUnit);
+            $property->addValue((string) $product->getTranslation('packUnit'));
             $properties[] = $property;
         }
 

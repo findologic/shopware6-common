@@ -41,7 +41,7 @@ class DefaultPropertiesAdapter
             $properties[] = $this->getProperty('referenceunit', (string) $referenceUnit);
         }
 
-        if ($packUnit = $product->packUnit) {
+        if ($packUnit = $product->getTranslation('packUnit')) {
             $properties[] = $this->getProperty('packunit', $packUnit);
         }
 
