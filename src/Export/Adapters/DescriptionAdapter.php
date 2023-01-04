@@ -24,7 +24,7 @@ class DescriptionAdapter
 
     protected function getDescription(ProductEntity $product): ?string
     {
-        $description = $product->getTranslation('description');
+        $description = preg_replace('/[\x00-\x1F\x7F]/u', '', $product->getTranslation('description'));
 
         if (Utils::isEmpty($description)) {
             return null;
