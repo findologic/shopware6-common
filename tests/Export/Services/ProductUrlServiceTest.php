@@ -45,7 +45,7 @@ class ProductUrlServiceTest extends TestCase
                     ['seoPathInfo' => '/failed seo url with spaces two'],
                 ],
                 'expectedUrlCount' => 8,
-            ]
+            ],
         ];
     }
 
