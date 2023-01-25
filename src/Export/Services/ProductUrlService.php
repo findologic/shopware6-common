@@ -81,7 +81,7 @@ class ProductUrlService extends UrlBuilderService
         $seoUrlCollection = $seoUrls->filter(function (SeoUrlEntity $seoUrl) {
             return filter_var(
                 sprintf('https://dummy.com%s/"', $seoUrl->seoPathInfo),
-                FILTER_VALIDATE_URL
+                FILTER_VALIDATE_URL,
             );
         });
 
