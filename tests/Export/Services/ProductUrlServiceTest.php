@@ -42,9 +42,9 @@ class ProductUrlServiceTest extends TestCase
                     ['seoPathInfo' => 'correctSeoUrl/seven'],
                     ['seoPathInfo' => 'correct-seo-url/eight'],
                     ['seoPathInfo' => 'failed seo url with spaces one'],
-                    ['seoPathInfo' => '/failed seo url with spaces two']
+                    ['seoPathInfo' => '/failed seo url with spaces two'],
                 ],
-                'expectedUrlCount' => 8
+                'expectedUrlCount' => 8,
             ]
         ];
     }
