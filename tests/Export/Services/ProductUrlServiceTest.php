@@ -31,31 +31,21 @@ class ProductUrlServiceTest extends TestCase
     public function removeInvalidUrlsProvider(): array
     {
         return [
-            'All valid urls' => [
+            'SeoPatInfo support slash, minus and big letters but not spaces' => [
                 'seoUrlArray' => [
-                    ['seoPathInfo' => '/correctSeoUrl-One'],
-                    ['seoPathInfo' => '/correctSeoUrlTwo'],
-                    ['seoPathInfo' => '/correctSeoUrl/Three'],
+                    ['seoPathInfo' => '/correctSeoUrlOne'],
+                    ['seoPathInfo' => '/correct-seo-url-two'],
+                    ['seoPathInfo' => '/correctSeoUrl/three'],
+                    ['seoPathInfo' => '/correct-seo-url/four'],
+                    ['seoPathInfo' => 'correctSeoUrlFive'],
+                    ['seoPathInfo' => 'correct-seo-url-six'],
+                    ['seoPathInfo' => 'correctSeoUrl/seven'],
+                    ['seoPathInfo' => 'correct-seo-url/eight'],
+                    ['seoPathInfo' => 'failed seo url with spaces one'],
+                    ['seoPathInfo' => '/failed seo url with spaces two']
                 ],
-                'expectedUrlCount' => 3,
-            ],
-            'Half valid urls' => [
-                'seoUrlArray' => [
-                    ['seoPathInfo' => '/failed seo url with spaces'],
-                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash'],
-                    ['seoPathInfo' => '/correctSeoUrl-One'],
-                    ['seoPathInfo' => '/correctSeoUrlTwo'],
-                ],
-                'expectedUrlCount' => 2,
-            ],
-            'All Invalid urls' => [
-                'seoUrlArray' => [
-                    ['seoPathInfo' => '/failed seo url with spaces'],
-                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash'],
-                    ['seoPathInfo' => 'failedSeoUrlWithoutSlash and with spaces'],
-                ],
-                'expectedUrlCount' => 0,
-            ],
+                'expectedUrlCount' => 8
+            ]
         ];
     }
 
