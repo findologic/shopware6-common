@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Errors\ProductError;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductInvalidException;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
+use Monolog\LogRecord;
 use Throwable;
 
 class ProductErrorHandler implements HandlerInterface
@@ -21,12 +22,12 @@ class ProductErrorHandler implements HandlerInterface
         $this->exportErrors = $exportErrors ?? new ExportErrors();
     }
 
-    public function isHandling(array $record): bool
+    public function isHandling(LogRecord $record): bool
     {
         return true;
     }
 
-    public function handle(array $record): bool
+    public function handle(LogRecord $record): bool
     {
         $this->handleGeneralError($record);
         $this->handleProductError($record);
@@ -34,6 +35,9 @@ class ProductErrorHandler implements HandlerInterface
         return true;
     }
 
+    /**
+     * @param LogRecord[] $records
+     */
     public function handleBatch(array $records): void
     {
         foreach ($records as $record) {
@@ -71,21 +75,18 @@ class ProductErrorHandler implements HandlerInterface
         return $this->exportErrors;
     }
 
-    protected function handleGeneralError(array $record): void
+    protected function handleGeneralError(LogRecord $record): void
     {
-        if (empty($record['context'])) {
-            $this->exportErrors->addGeneralError($record['message']);
+        if (empty($record->context)) {
+            $this->exportErrors->addGeneralError($record->message);
         }
     }
 
-    /**
-     * @param array $record
-     */
-    protected function handleProductError(array $record): void
+    protected function handleProductError(LogRecord $record): void
     {
-        if (isset($record['context']['exception'])) {
+        if (isset($record->context['exception'])) {
             /** @var ProductInvalidException $exception */
-            $exception = $record['context']['exception'];
+            $exception = $record->context['exception'];
             if (!$exception instanceof ProductInvalidException) {
                 $this->handleGeneralException($exception);
 
@@ -93,14 +94,14 @@ class ProductErrorHandler implements HandlerInterface
             }
 
             $product = $exception->getProduct();
-            $productError = new ProductError($product->id, [$record['message']]);
+            $productError = new ProductError($product->id, [$record->message]);
 
             $this->exportErrors->addProductError($productError);
         }
 
-        if (isset($record['context']['product'])) {
-            $product = $record['context']['product'];
-            $productError = new ProductError($product->id, [$record['message']]);
+        if (isset($record->context['product'])) {
+            $product = $record->context['product'];
+            $productError = new ProductError($product->id, [$record->message]);
 
             $this->exportErrors->addProductError($productError);
         }
