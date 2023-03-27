@@ -10,14 +10,12 @@ class OffsetExportConfiguration extends ExportConfigurationBase
 {
     public const DEFAULT_START_PARAM = 0;
 
-    /**
-     * @Assert\NotBlank
-     * @Assert\Type(
-     *     type="integer",
-     *     message="The value {{ value }} is not a valid {{ type }}."
-     * )
-     * @Assert\GreaterThanOrEqual(0)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Type(
+        type: 'integer',
+        message: 'The value {{ value }} is not a valid {{ type }}.'
+    )]
+    #[Assert\GreaterThanOrEqual(0)]
     protected int $start;
 
     public function __construct(string $shopkey, int $start, int $count, ?string $productId = null)

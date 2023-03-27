@@ -12,31 +12,23 @@ class ExportConfigurationBase
 {
     public const DEFAULT_COUNT_PARAM = 20;
 
-    /**
-     * @Assert\NotBlank
-     * @Assert\Regex(
-     *     pattern="/^[A-F0-9]{32}$/",
-     *     message="Invalid key provided."
-     * )
-     */
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: '/^[A-F0-9]{32}$/',
+        message: 'Invalid key provided.'
+    )]
     protected string $shopkey;
 
-    /**
-     * @Assert\NotBlank
-     * @Assert\Type(
-     *     type="integer",
-     *     message="The value {{ value }} is not a valid {{ type }}."
-     * )
-     * @Assert\GreaterThan(0)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Type(
+        type: 'integer',
+        message: 'The value {{ value }} is not a valid {{ type }}.'
+    )]
+    #[Assert\GreaterThan(0)]
     protected int $count;
 
-    /**
-     * @Assert\Type("string")
-     * @Assert\Uuid(
-     *     strict=false
-     * )
-     */
+    #[Assert\Type('string')]
+    #[Assert\Uuid(strict: false)]
     protected ?string $productId;
 
     public function __construct(string $shopkey, int $count, ?string $productId = null)

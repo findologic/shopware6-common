@@ -10,14 +10,12 @@ class PageExportConfiguration extends ExportConfigurationBase
 {
     public const DEFAULT_PAGE_PARAM = 1;
 
-    /**
-     * @Assert\NotBlank
-     * @Assert\Type(
-     *     type="integer",
-     *     message="The value {{ value }} is not a valid {{ type }}."
-     * )
-     * @Assert\GreaterThanOrEqual(1)
-     */
+    #[Assert\NotBlank]
+    #[Assert\Type(
+        type: 'integer',
+        message: 'The value {{ value }} is not a valid {{ type }}.'
+    )]
+    #[Assert\GreaterThanOrEqual(1)]
     protected int $page;
 
     public function __construct(string $shopkey, int $page, int $count, ?string $productId = null)
