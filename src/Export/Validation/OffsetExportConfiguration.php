@@ -13,7 +13,7 @@ class OffsetExportConfiguration extends ExportConfigurationBase
     #[Assert\NotBlank]
     #[Assert\Type(
         type: 'integer',
-        message: 'The value {{ value }} is not a valid {{ type }}.'
+        message: 'The value {{ value }} is not a valid {{ type }}.',
     )]
     #[Assert\GreaterThanOrEqual(0)]
     protected int $start;

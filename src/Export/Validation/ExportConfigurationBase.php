@@ -15,14 +15,14 @@ class ExportConfigurationBase
     #[Assert\NotBlank]
     #[Assert\Regex(
         pattern: '/^[A-F0-9]{32}$/',
-        message: 'Invalid key provided.'
+        message: 'Invalid key provided.',
     )]
     protected string $shopkey;
 
     #[Assert\NotBlank]
     #[Assert\Type(
         type: 'integer',
-        message: 'The value {{ value }} is not a valid {{ type }}.'
+        message: 'The value {{ value }} is not a valid {{ type }}.',
     )]
     #[Assert\GreaterThan(0)]
     protected int $count;
