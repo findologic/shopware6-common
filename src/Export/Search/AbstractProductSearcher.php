@@ -126,7 +126,8 @@ abstract class AbstractProductSearcher
         $realProductIds = [];
 
         foreach ($products as $product) {
-            if ($mainVariantId = $product->mainVariantId) {
+            $mainVariantId = $product->variantListingConfig ? $product->variantListingConfig['mainVariantId'] : null;
+            if ($mainVariantId) {
                 $realProductIds[] = $mainVariantId;
 
                 continue;
