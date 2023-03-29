@@ -4,40 +4,88 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fc21f44925ecb448dae273cb999e550",
+    "content-hash": "540c2a20ca4d81526f62a3732ff8b7f7",
     "packages": [
         {
             "name": "findologic/libflexport",
-            "version": "v2.9.1",
+            "version": "3.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/findologic/libflexport.git",
-                "reference": "aebac7abab35efa581bfb907288f3a0851ff249d"
+                "reference": "31ab87aa27b9b3ce44d21bbf382eab6d0df98fba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/findologic/libflexport/zipball/aebac7abab35efa581bfb907288f3a0851ff249d",
-                "reference": "aebac7abab35efa581bfb907288f3a0851ff249d",
+                "url": "https://api.github.com/repos/findologic/libflexport/zipball/31ab87aa27b9b3ce44d21bbf382eab6d0df98fba",
+                "reference": "31ab87aa27b9b3ce44d21bbf382eab6d0df98fba",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-mbstring": "*",
-                "findologic/xml-export-schema": "^1.4",
-                "php": "^7.1|^8.0"
+                "findologic/xml-export-schema": "^v2.1.1",
+                "php": "^8.1"
             },
             "require-dev": {
                 "nikic/php-parser": "^4.15",
-                "phpunit/phpunit": "^7.5|^8.6|^9.0",
-                "squizlabs/php_codesniffer": "^3.5"
+                "phpunit/phpunit": "^10.0",
+                "squizlabs/php_codesniffer": "^3.7"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "FINDOLOGIC\\Export\\": "src/"
+                "psr-4": {
+                    "FINDOLOGIC\\Export\\": "src",
+                    "FINDOLOGIC\\Export\\Examples\\": "examples"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "FINDOLOGIC\\Export\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "phpcs"
+                ],
+                "fix": [
+                    "phpcbf"
+                ],
+                "test": [
+                    "XDEBUG_MODE=coverage phpunit"
+                ],
+                "create-example-folder": [
+                    "mkdir -p resources/generated_examples"
+                ],
+                "test-examples": [
+                    "diff resources/baseline_examples/example.csv resources/generated_examples/example.csv",
+                    "diff resources/baseline_examples/example-variants.csv resources/generated_examples/example-variants.csv",
+                    "diff resources/baseline_examples/example.xml resources/generated_examples/example.xml",
+                    "diff resources/baseline_examples/example-variants.xml resources/generated_examples/example-variants.xml"
+                ],
+                "generate-csv": [
+                    "@create-example-folder",
+                    "php examples/CsvExample.php > resources/generated_examples/example.csv"
+                ],
+                "generate-csv-variants": [
+                    "@create-example-folder",
+                    "php examples/CsvVariantsExample.php > resources/generated_examples/example-variants.csv"
+                ],
+                "generate-xml": [
+                    "@create-example-folder",
+                    "php examples/XmlExample.php | xmlstarlet fo > resources/generated_examples/example.xml"
+                ],
+                "generate-xml-variants": [
+                    "@create-example-folder",
+                    "php examples/XmlVariantsExample.php | xmlstarlet fo > resources/generated_examples/example-variants.xml"
+                ],
+                "generate-examples": [
+                    "@create-example-folder",
+                    "@generate-csv",
+                    "@generate-csv-variants",
+                    "@generate-xml",
+                    "@generate-xml-variants"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -71,23 +119,23 @@
             "description": "FINDOLOGIC export toolkit for XML and CSV data export",
             "homepage": "https://github.com/findologic/libflexport",
             "support": {
-                "issues": "https://github.com/findologic/libflexport/issues",
-                "source": "https://github.com/findologic/libflexport/tree/v2.9.1"
+                "source": "https://github.com/findologic/libflexport/tree/3.0",
+                "issues": "https://github.com/findologic/libflexport/issues"
             },
-            "time": "2022-11-09T15:06:44+00:00"
+            "time": "2023-03-28T14:14:00+00:00"
         },
         {
             "name": "findologic/xml-export-schema",
-            "version": "v1.6.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/findologic/xml-export.git",
-                "reference": "b0078f4895dbb2953eb4d2d6b17f3d94e17a9c95"
+                "reference": "3774f29c5706994156f72071179887fbe4b48ca3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/findologic/xml-export/zipball/b0078f4895dbb2953eb4d2d6b17f3d94e17a9c95",
-                "reference": "b0078f4895dbb2953eb4d2d6b17f3d94e17a9c95",
+                "url": "https://api.github.com/repos/findologic/xml-export/zipball/3774f29c5706994156f72071179887fbe4b48ca3",
+                "reference": "3774f29c5706994156f72071179887fbe4b48ca3",
                 "shasum": ""
             },
             "type": "library",
@@ -109,9 +157,9 @@
             "description": "XML schema for the FINDOLOGIC XML export format.",
             "support": {
                 "issues": "https://github.com/findologic/xml-export/issues",
-                "source": "https://github.com/findologic/xml-export/tree/v1.6.0"
+                "source": "https://github.com/findologic/xml-export/tree/v2.1.1"
             },
-            "time": "2022-04-14T07:44:40+00:00"
+            "time": "2023-03-20T13:45:50+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2413,16 +2461,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.5",
+            "version": "9.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5"
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86e761949019ae83f49240b2f2123fb5ab3b2fc5",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b65d59a059d3004a040c16a82e07bbdf6cfdd115",
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115",
                 "shasum": ""
             },
             "require": {
@@ -2495,7 +2543,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.5"
+                "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.6"
             },
             "funding": [
                 {
@@ -2511,7 +2560,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T06:34:10+00:00"
+            "time": "2023-03-27T11:43:46+00:00"
         },
         {
             "name": "psr/cache",
@@ -5249,7 +5298,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "findologic/libflexport": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
