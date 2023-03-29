@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0267d9ee8feec370584bd046ceeb996d",
+    "content-hash": "6d0969c3de44db075d661afd75ed93f4",
     "packages": [
         {
             "name": "findologic/libflexport",
-            "version": "3.0.x-dev",
+            "version": "dev-FINDO-9791_fix_issues_with_plugin_usecase",
             "source": {
                 "type": "git",
                 "url": "https://github.com/findologic/libflexport.git",
-                "reference": "31ab87aa27b9b3ce44d21bbf382eab6d0df98fba"
+                "reference": "ad17cde7cc0a412c6933cb78b6cb15334007f3e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/findologic/libflexport/zipball/31ab87aa27b9b3ce44d21bbf382eab6d0df98fba",
-                "reference": "31ab87aa27b9b3ce44d21bbf382eab6d0df98fba",
+                "url": "https://api.github.com/repos/findologic/libflexport/zipball/ad17cde7cc0a412c6933cb78b6cb15334007f3e2",
+                "reference": "ad17cde7cc0a412c6933cb78b6cb15334007f3e2",
                 "shasum": ""
             },
             "require": {
@@ -73,9 +73,9 @@
             "homepage": "https://github.com/findologic/libflexport",
             "support": {
                 "issues": "https://github.com/findologic/libflexport/issues",
-                "source": "https://github.com/findologic/libflexport/tree/3.0"
+                "source": "https://github.com/findologic/libflexport/tree/FINDO-9791_fix_issues_with_plugin_usecase"
             },
-            "time": "2023-03-28T14:14:00+00:00"
+            "time": "2023-03-29T12:42:01+00:00"
         },
         {
             "name": "findologic/xml-export-schema",
