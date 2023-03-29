@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "540c2a20ca4d81526f62a3732ff8b7f7",
+    "content-hash": "0267d9ee8feec370584bd046ceeb996d",
     "packages": [
         {
             "name": "findologic/libflexport",
@@ -38,54 +38,7 @@
                     "FINDOLOGIC\\Export\\Examples\\": "examples"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "FINDOLOGIC\\Export\\Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "lint": [
-                    "phpcs"
-                ],
-                "fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "XDEBUG_MODE=coverage phpunit"
-                ],
-                "create-example-folder": [
-                    "mkdir -p resources/generated_examples"
-                ],
-                "test-examples": [
-                    "diff resources/baseline_examples/example.csv resources/generated_examples/example.csv",
-                    "diff resources/baseline_examples/example-variants.csv resources/generated_examples/example-variants.csv",
-                    "diff resources/baseline_examples/example.xml resources/generated_examples/example.xml",
-                    "diff resources/baseline_examples/example-variants.xml resources/generated_examples/example-variants.xml"
-                ],
-                "generate-csv": [
-                    "@create-example-folder",
-                    "php examples/CsvExample.php > resources/generated_examples/example.csv"
-                ],
-                "generate-csv-variants": [
-                    "@create-example-folder",
-                    "php examples/CsvVariantsExample.php > resources/generated_examples/example-variants.csv"
-                ],
-                "generate-xml": [
-                    "@create-example-folder",
-                    "php examples/XmlExample.php | xmlstarlet fo > resources/generated_examples/example.xml"
-                ],
-                "generate-xml-variants": [
-                    "@create-example-folder",
-                    "php examples/XmlVariantsExample.php | xmlstarlet fo > resources/generated_examples/example-variants.xml"
-                ],
-                "generate-examples": [
-                    "@create-example-folder",
-                    "@generate-csv",
-                    "@generate-csv-variants",
-                    "@generate-xml",
-                    "@generate-xml-variants"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -119,8 +72,8 @@
             "description": "FINDOLOGIC export toolkit for XML and CSV data export",
             "homepage": "https://github.com/findologic/libflexport",
             "support": {
-                "source": "https://github.com/findologic/libflexport/tree/3.0",
-                "issues": "https://github.com/findologic/libflexport/issues"
+                "issues": "https://github.com/findologic/libflexport/issues",
+                "source": "https://github.com/findologic/libflexport/tree/3.0"
             },
             "time": "2023-03-28T14:14:00+00:00"
         },

@@ -9,12 +9,6 @@
             "email": "dev@findologic.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/findologic/libflexport.git"
-        }
-    ],
     "require": {
         "php": "^8.1",
         "findologic/libflexport": "3.0.x-dev",
