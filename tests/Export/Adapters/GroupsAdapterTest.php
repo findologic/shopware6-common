@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
-use FINDOLOGIC\Export\Data\Usergroup;
+use FINDOLOGIC\Export\Data\Group;
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -12,26 +12,26 @@ use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
 
-class UserGroupsAdapterTest extends TestCase
+class GroupsAdapterTest extends TestCase
 {
     use AdapterHelper;
     use ProductHelper;
 
-    public function testUserGroupsContainsTheUserGroupsOfTheProduct(): void
+    public function testgroupsContainsTheGroupsOfTheProduct(): void
     {
         $customerGroup = new CustomerGroupEntity();
         $customerGroup->id = CommonConstants::NET_CUSTOMER_GROUP_ID;
 
-        $expectedUserGroup = new Usergroup($customerGroup->id);
+        $expectedGroup = new Group($customerGroup->id);
 
-        $adapter = $this->getUserGroupAdapter(
+        $adapter = $this->getGroupAdapter(
             new CustomerGroupCollection([$customerGroup]),
         );
         $product = $this->createTestProduct([]);
 
-        $userGroups = $adapter->adapt($product);
+        $groups = $adapter->adapt($product);
 
-        $this->assertCount(1, $userGroups);
-        $this->assertEquals($expectedUserGroup, $userGroups[0]);
+        $this->assertCount(1, $groups);
+        $this->assertEquals($expectedGroup, $groups[0]);
     }
 }

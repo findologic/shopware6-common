@@ -21,7 +21,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ShopwarePropertiesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SortAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SummaryAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Adapters\UserGroupsAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\GroupsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -52,7 +52,7 @@ trait AdapterHelper
             $this->getSummaryAdapter(),
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
-            $this->getUserGroupAdapter(),
+            $this->getGroupAdapter(),
         );
     }
 
@@ -166,8 +166,8 @@ trait AdapterHelper
         return new UrlAdapter($this->getProductUrlService());
     }
 
-    public function getUserGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): UserGroupsAdapter
+    public function getGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): GroupsAdapter
     {
-        return new UserGroupsAdapter($this->getExportContext($customerGroupCollection));
+        return new GroupsAdapter($this->getExportContext($customerGroupCollection));
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Export\Data\Image;
+use FINDOLOGIC\Export\Enums\ImageType;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
@@ -82,8 +83,10 @@ class ProductImageService
 
     /**
      * @param MediaThumbnailEntity|MediaEntity $mediaEntity
+     * @param ImageType $type
+     * @return Image
      */
-    protected function buildImage(Entity $mediaEntity, string $type = Image::TYPE_DEFAULT): Image
+    protected function buildImage(Entity $mediaEntity, ImageType $type = ImageType::DEFAULT): Image
     {
         $encodedUrl = $this->getEncodedUrl($mediaEntity->url);
 
@@ -125,13 +128,13 @@ class ProductImageService
     protected function addThumbnailImages(array &$images, MediaThumbnailCollection $thumbnails): void
     {
         $imageIds = [];
-        /** @var MediaThumbnailEntity $thumbnailEntity */
+
         foreach ($thumbnails as $thumbnailEntity) {
             if (in_array($thumbnailEntity->mediaId, $imageIds)) {
                 continue;
             }
 
-            $images[] = $this->buildImage($thumbnailEntity, Image::TYPE_THUMBNAIL);
+            $images[] = $this->buildImage($thumbnailEntity, ImageType::THUMBNAIL);
             $imageIds[] = $thumbnailEntity->mediaId;
         }
     }

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
-use FINDOLOGIC\Export\Data\Usergroup;
+use FINDOLOGIC\Export\Data\Group;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
-use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class UserGroupsAdapter
+class GroupsAdapter
 {
     protected ExportContext $exportContext;
 
@@ -19,17 +18,16 @@ class UserGroupsAdapter
     }
 
     /**
-     * @return Usergroup[]
+     * @return Group[]
      */
     public function adapt(ProductEntity $product): array
     {
-        $userGroups = [];
+        $groups = [];
 
-        /** @var CustomerGroupEntity $customerGroupEntity */
         foreach ($this->exportContext->getCustomerGroups() as $customerGroupEntity) {
-            $userGroups[] = new Usergroup($customerGroupEntity->id);
+            $groups[] = new Group($customerGroupEntity->id);
         }
 
-        return $userGroups;
+        return $groups;
     }
 }

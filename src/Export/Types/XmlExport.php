@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Types;
 
 use FINDOLOGIC\Export\Data\Item;
+use FINDOLOGIC\Export\Enums\ExporterType;
 use FINDOLOGIC\Export\Exporter;
 use FINDOLOGIC\Export\XML\XMLExporter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
@@ -53,7 +54,7 @@ class XmlExport extends AbstractExport
         $this->eventDispatcher = $eventDispatcher;
 
         /** @var XMLExporter $exporter */
-        $exporter = Exporter::create(Exporter::TYPE_XML);
+        $exporter = Exporter::create(ExporterType::XML);
         $this->xmlFileConverter = $exporter;
     }
 

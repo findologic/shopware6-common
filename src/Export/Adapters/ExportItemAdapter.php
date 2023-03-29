@@ -132,8 +132,8 @@ class ExportItemAdapter
             $item->setUrl($url);
         }
 
-        foreach ($this->adapterFactory->getUserGroupsAdapter()->adapt($product) as $userGroup) {
-            $item->addUsergroup($userGroup);
+        foreach ($this->adapterFactory->getGroupsAdapter()->adapt($product) as $group) {
+            $item->addGroup($group);
         }
 
         return $item;
