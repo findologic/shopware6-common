@@ -46,8 +46,8 @@ class AdapterFactory
         DateAddedAdapter $dateAddedAdapter,
         DescriptionAdapter $descriptionAdapter,
         DefaultPropertiesAdapter $defaultPropertiesAdapter,
-        ImagesAdapter $imagesAdapter,
         GroupsAdapter $groupsAdapter,
+        ImagesAdapter $imagesAdapter,
         KeywordsAdapter $keywordsAdapter,
         NameAdapter $itemNameAdapter,
         OrderNumberAdapter $orderNumberAdapter,
@@ -64,6 +64,7 @@ class AdapterFactory
         $this->dateAddedAdapter = $dateAddedAdapter;
         $this->descriptionAdapter = $descriptionAdapter;
         $this->defaultPropertiesAdapter = $defaultPropertiesAdapter;
+        $this->groupsAdapter = $groupsAdapter;
         $this->imagesAdapter = $imagesAdapter;
         $this->keywordsAdapter = $keywordsAdapter;
         $this->nameAdapter = $itemNameAdapter;
@@ -75,7 +76,6 @@ class AdapterFactory
         $this->summaryAdapter = $summaryAdapter;
         $this->shopwarePropertiesAdapter = $shopwarePropertiesAdapter;
         $this->urlAdapter = $urlAdapter;
-        $this->groupsAdapter = $groupsAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter
@@ -103,14 +103,14 @@ class AdapterFactory
         return $this->defaultPropertiesAdapter;
     }
 
-    public function getImagesAdapter(): ImagesAdapter
-    {
-        return $this->imagesAdapter;
-    }
-
     public function getGroupsAdapter(): GroupsAdapter
     {
         return $this->groupsAdapter;
+    }
+
+    public function getImagesAdapter(): ImagesAdapter
+    {
+        return $this->imagesAdapter;
     }
 
     public function getKeywordsAdapter(): KeywordsAdapter

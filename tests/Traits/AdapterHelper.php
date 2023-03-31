@@ -16,6 +16,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\OrderNumberAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\OverriddenPriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ShopwarePropertiesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SortAdapter;
@@ -42,17 +43,18 @@ trait AdapterHelper
             $this->getDateAddedAdapter(),
             $this->getDescriptionAdapter(),
             $this->getDefaultPropertiesAdapter(),
+            $this->getGroupAdapter(),
             $this->getImagesAdapter(),
             $this->getKeywordsAdapter(),
             $this->getNameAdapter(),
             $this->getOrderNumberAdapter(),
+            $this->getOverriddenPriceAdapter(),
             $this->getPriceAdapter(),
             $this->getSalesFrequencyAdapter(),
             $this->getSortAdapter(),
             $this->getSummaryAdapter(),
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
-            $this->getGroupAdapter(),
         );
     }
 
@@ -120,12 +122,23 @@ trait AdapterHelper
         return new OrderNumberAdapter();
     }
 
+    public function getOverriddenPriceAdapter(
+        ?CustomerGroupCollection $customerGroupCollection = null,
+        ?SalesChannelEntity $salesChannel = null
+    ): OverriddenPriceAdapter {
+        return new OverriddenPriceAdapter(
+            $this->getExportContext($customerGroupCollection, $salesChannel),
+            $this->getPluginConfig(),
+        );
+    }
+
     public function getPriceAdapter(
         ?CustomerGroupCollection $customerGroupCollection = null,
         ?SalesChannelEntity $salesChannel = null
     ): PriceAdapter {
         return new PriceAdapter(
             $this->getExportContext($customerGroupCollection, $salesChannel),
+            $this->getPluginConfig(),
         );
     }
 
