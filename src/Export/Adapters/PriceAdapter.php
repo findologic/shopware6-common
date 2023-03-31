@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Price;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
@@ -14,9 +15,12 @@ class PriceAdapter
 {
     protected ExportContext $exportContext;
 
-    public function __construct(ExportContext $exportContext)
+    protected PluginConfig $pluginConfig;
+
+    public function __construct(ExportContext $exportContext, PluginConfig $pluginConfig)
     {
         $this->exportContext = $exportContext;
+        $this->pluginConfig = $pluginConfig;
     }
 
     /**
@@ -51,22 +55,24 @@ class PriceAdapter
             $currencyPrice = $productPrices[0];
         }
 
-        foreach ($this->exportContext->getCustomerGroups() as $customerGroup) {
-            $userGroupHash = $customerGroup->id;
-            if (Utils::isEmpty($userGroupHash)) {
-                continue;
-            }
+        if (!$this->pluginConfig->useXmlVariants()) {
+            foreach ($this->exportContext->getCustomerGroups() as $customerGroup) {
+                $userGroupHash = $customerGroup->id;
+                if (Utils::isEmpty($userGroupHash)) {
+                    continue;
+                }
 
-            $netPrice = $currencyPrice['net'];
-            $grossPrice = $currencyPrice['gross'];
-            $price = new Price();
-            if ($customerGroup->displayGross) {
-                $price->setValue(round($grossPrice, 2), $userGroupHash);
-            } else {
-                $price->setValue(round($netPrice, 2), $userGroupHash);
-            }
+                $netPrice = $currencyPrice['net'];
+                $grossPrice = $currencyPrice['gross'];
+                $price = new Price();
+                if ($customerGroup->displayGross) {
+                    $price->setValue(round($grossPrice, 2), $userGroupHash);
+                } else {
+                    $price->setValue(round($netPrice, 2), $userGroupHash);
+                }
 
-            $prices[] = $price;
+                $prices[] = $price;
+            }
         }
 
         $price = new Price();

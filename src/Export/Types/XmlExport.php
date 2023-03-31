@@ -8,6 +8,7 @@ use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\Export\Enums\ExporterType;
 use FINDOLOGIC\Export\Exporter;
 use FINDOLOGIC\Export\XML\XMLExporter;
+use FINDOLOGIC\Export\XML\XmlVariant;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemBuildEvent;
@@ -123,14 +124,29 @@ class XmlExport extends AbstractExport
 
         while (($variants = $iterator->fetch()) !== null) {
             foreach ($variants as $variant) {
-                if ($item) {
-                    $adaptedItem = $this->exportItemAdapter->adaptVariant($item, $variant);
-                } elseif ($adaptedItem = $this->exportItemAdapter->adapt($initialItem, $variant)) {
-                    $adaptedItem->setId($variant->id);
-                }
+                if ($this->pluginConfig->useXmlVariants()) {
+                    if (!$item) {
+                        return null;
+                    }
 
-                if ($adaptedItem) {
-                    $item = $adaptedItem;
+                    $variantItem = $this->exportItemAdapter->adaptXmlVariant(
+                        $this->xmlFileConverter->createVariant($variant->id, $product->id),
+                        $variant
+                    );
+
+                    if ($variantItem) {
+                        $item->addVariant($variantItem);
+                    }
+                } else {
+                    if ($item) {
+                        $adaptedItem = $this->exportItemAdapter->adaptVariant($item, $variant);
+                    } elseif ($adaptedItem = $this->exportItemAdapter->adapt($initialItem, $variant)) {
+                        $adaptedItem->setId($variant->id);
+                    }
+
+                    if ($adaptedItem) {
+                        $item = $adaptedItem;
+                    }
                 }
             }
         }
