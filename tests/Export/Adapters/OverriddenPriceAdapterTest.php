@@ -38,7 +38,7 @@ class OverriddenPriceAdapterTest extends TestCase
                     'listPrice' => [
                         'gross' => $expectedPrice,
                         'net' => 10,
-                    ]
+                    ],
                 ],
             ],
         ]);
@@ -122,7 +122,7 @@ class OverriddenPriceAdapterTest extends TestCase
                     'listPrice' => [
                         'gross' => $grossPrice,
                         'net' => $netPrice,
-                    ]
+                    ],
                 ],
             ],
         ]);
@@ -167,7 +167,7 @@ class OverriddenPriceAdapterTest extends TestCase
                     'listPrice' => [
                         'gross' => 15,
                         'net' => 10,
-                    ]
+                    ],
                 ],
                 [
                     'currencyId' => CommonConstants::CURRENCY2_ID,
@@ -177,7 +177,7 @@ class OverriddenPriceAdapterTest extends TestCase
                     'listPrice' => [
                         'gross' => 7.5,
                         'net' => 5,
-                    ]
+                    ],
                 ],
             ],
         ]);
