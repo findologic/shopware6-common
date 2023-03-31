@@ -22,6 +22,7 @@ class PluginConfigTest extends TestCase
             'mainVariant' => MainVariant::CHEAPEST,
             'crossSellingCategories' => ['this-is-an-uuid'],
             'integrationType' => IntegrationType::API,
+            'useXmlVariants' => true,
         ]);
 
         $this->assertEquals('ABAB', $pluginConfig->getShopkey());
@@ -32,5 +33,6 @@ class PluginConfigTest extends TestCase
         $this->assertEquals(['this-is-an-uuid'], $pluginConfig->getCrossSellingCategories());
         $this->assertTrue($pluginConfig->isIntegrationTypeApi());
         $this->assertFalse($pluginConfig->isIntegrationTypesDirectIntegration());
+        $this->assertTrue($pluginConfig->useXmlVariants());
     }
 }
