@@ -6,7 +6,6 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\OverriddenPrice;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
-use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesException;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;

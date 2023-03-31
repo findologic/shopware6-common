@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Events;
 
-use FINDOLOGIC\Export\Data\Item;
 use FINDOLOGIC\Export\Data\Variant;
 use Symfony\Contracts\EventDispatcher\Event;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
