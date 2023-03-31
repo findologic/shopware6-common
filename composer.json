@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "findologic/libflexport": "dev-FINDO-9791_fix_issues_with_plugin_usecase",
+        "findologic/libflexport": "3.0.x-dev",
         "monolog/monolog": "^3.3.1",
         "vin-sw/shopware-sdk": "^1.7.3",
         "symfony/http-foundation": "*",
