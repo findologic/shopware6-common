@@ -107,6 +107,8 @@ class ExportItemAdapter
 
         $item->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
 
+        $item->setAllOverriddenPrices($this->adapterFactory->getOverriddenPriceAdapter()->adapt($product));
+
         foreach ($this->adapterFactory->getDefaultPropertiesAdapter()->adapt($product) as $property) {
             $item->addProperty($property);
         }
@@ -184,6 +186,8 @@ class ExportItemAdapter
             }
 
             $variant->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
+
+            $variant->setAllOverriddenPrices($this->adapterFactory->getOverriddenPriceAdapter()->adapt($product));
 
             foreach ($this->adapterFactory->getDefaultPropertiesAdapter()->adapt($product) as $property) {
                 $variant->addProperty($property);

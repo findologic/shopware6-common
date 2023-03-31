@@ -16,6 +16,8 @@ class AdapterFactory
 
     private DefaultPropertiesAdapter $defaultPropertiesAdapter;
 
+    private GroupsAdapter $groupsAdapter;
+
     private ImagesAdapter $imagesAdapter;
 
     private KeywordsAdapter $keywordsAdapter;
@@ -23,6 +25,8 @@ class AdapterFactory
     private NameAdapter $nameAdapter;
 
     private OrderNumberAdapter $orderNumberAdapter;
+
+    private OverriddenPriceAdapter $overriddenPriceAdapter;
 
     private PriceAdapter $priceAdapter;
 
@@ -36,8 +40,6 @@ class AdapterFactory
 
     private UrlAdapter $urlAdapter;
 
-    private GroupsAdapter $groupsAdapter;
-
     public function __construct(
         AttributeAdapter $attributeAdapter,
         BonusAdapter $bonusAdapter,
@@ -45,16 +47,17 @@ class AdapterFactory
         DescriptionAdapter $descriptionAdapter,
         DefaultPropertiesAdapter $defaultPropertiesAdapter,
         ImagesAdapter $imagesAdapter,
+        GroupsAdapter $groupsAdapter,
         KeywordsAdapter $keywordsAdapter,
         NameAdapter $itemNameAdapter,
         OrderNumberAdapter $orderNumberAdapter,
+        OverriddenPriceAdapter $overriddenPriceAdapter,
         PriceAdapter $priceAdapter,
         AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
         SortAdapter $sortAdapter,
         SummaryAdapter $summaryAdapter,
         ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         UrlAdapter $urlAdapter,
-        GroupsAdapter $groupsAdapter
     ) {
         $this->attributeAdapter = $attributeAdapter;
         $this->bonusAdapter = $bonusAdapter;
@@ -65,6 +68,7 @@ class AdapterFactory
         $this->keywordsAdapter = $keywordsAdapter;
         $this->nameAdapter = $itemNameAdapter;
         $this->orderNumberAdapter = $orderNumberAdapter;
+        $this->overriddenPriceAdapter = $overriddenPriceAdapter;
         $this->priceAdapter = $priceAdapter;
         $this->salesFrequencyAdapter = $salesFrequencyAdapter;
         $this->sortAdapter = $sortAdapter;
@@ -104,6 +108,11 @@ class AdapterFactory
         return $this->imagesAdapter;
     }
 
+    public function getGroupsAdapter(): GroupsAdapter
+    {
+        return $this->groupsAdapter;
+    }
+
     public function getKeywordsAdapter(): KeywordsAdapter
     {
         return $this->keywordsAdapter;
@@ -117,6 +126,11 @@ class AdapterFactory
     public function getOrderNumbersAdapter(): OrderNumberAdapter
     {
         return $this->orderNumberAdapter;
+    }
+
+    public function getOverriddenPriceAdapter(): OverriddenPriceAdapter
+    {
+        return $this->overriddenPriceAdapter;
     }
 
     public function getPriceAdapter(): PriceAdapter
@@ -147,10 +161,5 @@ class AdapterFactory
     public function getUrlAdapter(): UrlAdapter
     {
         return $this->urlAdapter;
-    }
-
-    public function getGroupsAdapter(): GroupsAdapter
-    {
-        return $this->groupsAdapter;
     }
 }
