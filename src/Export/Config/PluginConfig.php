@@ -23,6 +23,8 @@ class PluginConfig extends Struct
 
     protected string $integrationType = IntegrationType::DI;
 
+    protected bool $useXmlVariants = false;
+
     public static function createFromArray(array $values): self
     {
         $config = new self();
@@ -74,5 +76,10 @@ class PluginConfig extends Struct
     public function isIntegrationTypesDirectIntegration(): bool
     {
         return $this->integrationType === IntegrationType::DI;
+    }
+
+    public function useXmlVariants(): bool
+    {
+        return $this->useXmlVariants;
     }
 }
