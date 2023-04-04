@@ -12,14 +12,10 @@ class AfterXmlVariantAdaptEvent extends Event
 {
     public const NAME = 'fin_search.export.after_xml_variant_adapt';
 
-    protected ProductEntity $product;
-
-    protected Variant $variant;
-
-    public function __construct(ProductEntity $product, Variant $item)
-    {
-        $this->product = $product;
-        $this->variant = $item;
+    public function __construct(
+        private readonly ProductEntity $product,
+        private readonly Variant $variant,
+    ) {
     }
 
     public function getProduct(): ProductEntity

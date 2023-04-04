@@ -10,11 +10,9 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class GroupsAdapter
 {
-    protected ExportContext $exportContext;
-
-    public function __construct(ExportContext $exportContext)
-    {
-        $this->exportContext = $exportContext;
+    public function __construct(
+        protected readonly ExportContext $exportContext,
+    ) {
     }
 
     /**

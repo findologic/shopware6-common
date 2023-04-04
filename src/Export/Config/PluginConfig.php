@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Config;
 
+use FINDOLOGIC\Shopware6Common\Export\Enums\AdvancedPricing;
+use FINDOLOGIC\Shopware6Common\Export\Enums\IntegrationType;
+use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
 use Vin\ShopwareSdk\Data\Struct;
 
 class PluginConfig extends Struct
@@ -14,14 +17,14 @@ class PluginConfig extends Struct
 
     protected bool $exportZeroPricedProducts = false;
 
-    protected string $advancedPricing = AdvancedPricing::OFF;
+    protected AdvancedPricing $advancedPricing = AdvancedPricing::OFF;
 
-    protected string $mainVariant = MainVariant::SHOPWARE_DEFAULT;
+    protected MainVariant $mainVariant = MainVariant::SHOPWARE_DEFAULT;
 
     /** @var string[] */
     protected array $crossSellingCategories = [];
 
-    protected string $integrationType = IntegrationType::DI;
+    protected IntegrationType $integrationType = IntegrationType::DI;
 
     protected bool $useXmlVariants = false;
 
@@ -53,12 +56,12 @@ class PluginConfig extends Struct
         return $this->exportZeroPricedProducts;
     }
 
-    public function getAdvancedPricing(): string
+    public function getAdvancedPricing(): AdvancedPricing
     {
         return $this->advancedPricing;
     }
 
-    public function getMainVariant(): string
+    public function getMainVariant(): MainVariant
     {
         return $this->mainVariant;
     }

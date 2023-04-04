@@ -6,15 +6,10 @@ namespace FINDOLOGIC\Shopware6Common\Export\Errors;
 
 class ProductError
 {
-    private string $id;
-
-    /** @var string[] */
-    private array $errors;
-
-    public function __construct(string $id, array $errors)
-    {
-        $this->id = $id;
-        $this->errors = $errors;
+    public function __construct(
+        private readonly string $id,
+        private array $errors,
+    ) {
     }
 
     public function toArray(): array

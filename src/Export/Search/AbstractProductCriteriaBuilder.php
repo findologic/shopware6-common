@@ -8,12 +8,9 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 
 abstract class AbstractProductCriteriaBuilder
 {
-    protected ExportContext $exportContext;
-
-    public function __construct(ExportContext $exportContext)
-    {
-        $this->exportContext = $exportContext;
-
+    public function __construct(
+        protected readonly ExportContext $exportContext,
+    ) {
         $this->reset();
     }
 

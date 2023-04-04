@@ -10,12 +10,12 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class ProductInvalidException extends ExportException
 {
-    private ProductEntity $failedProduct;
-
-    public function __construct(ProductEntity $failedProduct, $message = '', $code = 0, Throwable $previous = null)
-    {
-        $this->failedProduct = $failedProduct;
-
+    public function __construct(
+        private readonly ProductEntity $failedProduct,
+        $message = '',
+        $code = 0,
+        Throwable $previous = null,
+    ) {
         parent::__construct($message, $code, $previous);
     }
 

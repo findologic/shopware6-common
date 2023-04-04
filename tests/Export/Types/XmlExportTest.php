@@ -27,11 +27,9 @@ class XmlExportTest extends TestCase
     use ProductHelper;
     use ServicesHelper;
 
-    /** @var AbstractDynamicProductGroupService|MockObject */
-    protected $dynamicProductGroupService;
+    protected AbstractDynamicProductGroupService|MockObject $dynamicProductGroupService;
 
-    /** @var AbstractProductSearcher|MockObject */
-    protected $productSearcher;
+    protected AbstractProductSearcher|MockObject $productSearcher;
 
     protected ProductErrorHandler $productErrorHandler;
 

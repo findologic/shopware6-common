@@ -62,7 +62,7 @@ trait AdapterHelper
         ?AdapterFactory $adapterFactory = null,
         ?PluginConfig $config = null,
         ?LoggerInterface $logger = null,
-        ?EventDispatcherInterface $eventDispatcher = null
+        ?EventDispatcherInterface $eventDispatcher = null,
     ): ExportItemAdapter {
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
@@ -124,7 +124,7 @@ trait AdapterHelper
 
     public function getOverriddenPriceAdapter(
         ?CustomerGroupCollection $customerGroupCollection = null,
-        ?SalesChannelEntity $salesChannel = null
+        ?SalesChannelEntity $salesChannel = null,
     ): OverriddenPriceAdapter {
         return new OverriddenPriceAdapter(
             $this->getExportContext($customerGroupCollection, $salesChannel),
@@ -134,7 +134,7 @@ trait AdapterHelper
 
     public function getPriceAdapter(
         ?CustomerGroupCollection $customerGroupCollection = null,
-        ?SalesChannelEntity $salesChannel = null
+        ?SalesChannelEntity $salesChannel = null,
     ): PriceAdapter {
         return new PriceAdapter(
             $this->getExportContext($customerGroupCollection, $salesChannel),

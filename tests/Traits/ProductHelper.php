@@ -18,7 +18,7 @@ trait ProductHelper
     public function createTestProduct(
         array $overrideData = [],
         bool $overrideRecursively = false,
-        bool $withManufacturer = true
+        bool $withManufacturer = true,
     ): ProductEntity {
         $id = Uuid::randomHex();
 

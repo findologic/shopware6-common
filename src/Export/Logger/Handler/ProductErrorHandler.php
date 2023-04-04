@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Logger\Handler;
 
-use BadMethodCallException;
 use FINDOLOGIC\Shopware6Common\Export\Errors\ExportErrors;
 use FINDOLOGIC\Shopware6Common\Export\Errors\ProductError;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductInvalidException;
-use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\HandlerInterface;
 use Monolog\LogRecord;
 use Throwable;
@@ -43,26 +41,6 @@ class ProductErrorHandler implements HandlerInterface
         foreach ($records as $record) {
             $this->handle($record);
         }
-    }
-
-    public function pushProcessor($callback)
-    {
-        throw new BadMethodCallException('Pushing processors is not supported by the ProductErrorHandler.');
-    }
-
-    public function popProcessor()
-    {
-        throw new BadMethodCallException('Popping processors is not supported by the ProductErrorHandler.');
-    }
-
-    public function setFormatter(FormatterInterface $formatter)
-    {
-        throw new BadMethodCallException('Formatting is not supported by the ProductErrorHandler.');
-    }
-
-    public function getFormatter()
-    {
-        throw new BadMethodCallException('Formatting is not supported by the ProductErrorHandler.');
     }
 
     public function close(): void

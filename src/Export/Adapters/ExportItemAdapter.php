@@ -23,20 +23,11 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class ExportItemAdapter
 {
-    private AdapterFactory $adapterFactory;
-
-    private LoggerInterface $logger;
-
-    private ?EventDispatcherInterface $eventDispatcher;
-
     public function __construct(
-        AdapterFactory $adapterFactory,
-        LoggerInterface $logger,
-        ?EventDispatcherInterface $eventDispatcher = null
+        private readonly AdapterFactory $adapterFactory,
+        private readonly LoggerInterface $logger,
+        private readonly ?EventDispatcherInterface $eventDispatcher = null,
     ) {
-        $this->adapterFactory = $adapterFactory;
-        $this->logger = $logger;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function adapt(Item $item, ProductEntity $product): ?Item
