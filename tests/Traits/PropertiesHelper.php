@@ -81,7 +81,7 @@ trait PropertiesHelper
 
         if ($product->releaseDate) {
             $property = new Property('releasedate');
-            $property->addValue((string) $product->releaseDate->format(DATE_ATOM));
+            $property->addValue($product->releaseDate->format(DATE_ATOM));
             $properties[] = $property;
         }
 

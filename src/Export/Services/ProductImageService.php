@@ -174,7 +174,7 @@ class ProductImageService
 
     protected function hasMediaUrl(MediaEntity $media): bool
     {
-        return (bool) $media?->url;
+        return (bool) $media->url;
     }
 
     protected function hasThumbnails(MediaEntity $media): bool

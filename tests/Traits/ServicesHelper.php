@@ -52,7 +52,7 @@ trait ServicesHelper
         return new Logger($name);
     }
 
-    public function getEventDispatcherMock(): MockObject
+    public function getEventDispatcherMock(): EventDispatcher|MockObject
     {
         return $this->getMockBuilder(EventDispatcher::class)
             ->disableOriginalConstructor()

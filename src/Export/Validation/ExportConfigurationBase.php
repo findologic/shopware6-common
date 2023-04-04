@@ -40,38 +40,31 @@ class ExportConfigurationBase
 
     public static function getInstance(Request $request): self
     {
-        switch ($request->getPathInfo()) {
-            case '/findologic':
-            case '/findologic/dynamic-product-groups':
-                return new OffsetExportConfiguration(
-                    $request->query->get('shopkey', ''),
-                    $request->query->getInt('start', OffsetExportConfiguration::DEFAULT_START_PARAM),
-                    $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
-                    $request->query->get('productId'),
-                );
-            case '/findologic/debug':
-                return new OffsetDebugConfiguration(
-                    $request->query->get('shopkey', ''),
-                    $request->query->get('productId', ''),
-                );
-            case '/export':
-            case '/export/dynamic-product-groups':
-                return new PageExportConfiguration(
-                    $request->query->get('shopkey', ''),
-                    $request->query->getInt('page', PageExportConfiguration::DEFAULT_PAGE_PARAM),
-                    $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
-                    $request->query->get('productId'),
-                );
-            case '/export/debug':
-                return new PageDebugConfiguration(
-                    $request->query->get('shopkey', ''),
-                    $request->query->get('productId', ''),
-                );
-            default:
-                throw new InvalidArgumentException(
-                    sprintf('Unknown export configuration type for path %d.', $request->getPathInfo()),
-                );
-        }
+        return match ($request->getPathInfo()) {
+            '/findologic', '/findologic/dynamic-product-groups' => new OffsetExportConfiguration(
+                $request->query->get('shopkey', ''),
+                $request->query->getInt('start', OffsetExportConfiguration::DEFAULT_START_PARAM),
+                $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
+                $request->query->get('productId'),
+            ),
+            '/findologic/debug' => new OffsetDebugConfiguration(
+                $request->query->get('shopkey', ''),
+                $request->query->get('productId', ''),
+            ),
+            '/export', '/export/dynamic-product-groups' => new PageExportConfiguration(
+                $request->query->get('shopkey', ''),
+                $request->query->getInt('page', PageExportConfiguration::DEFAULT_PAGE_PARAM),
+                $request->query->getInt('count', self::DEFAULT_COUNT_PARAM),
+                $request->query->get('productId'),
+            ),
+            '/export/debug' => new PageDebugConfiguration(
+                $request->query->get('shopkey', ''),
+                $request->query->get('productId', ''),
+            ),
+            default => throw new InvalidArgumentException(
+                sprintf('Unknown export configuration type for path %d.', $request->getPathInfo()),
+            ),
+        };
     }
 
     public function getShopkey(): string

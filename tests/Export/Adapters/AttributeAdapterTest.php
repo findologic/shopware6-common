@@ -417,7 +417,6 @@ class AttributeAdapterTest extends TestCase
         $exportItemAdapter->adaptVariant($item, $childEntity);
         $reflector = new ReflectionClass($item);
         $attributes = $reflector->getProperty('attributes');
-        $attributes->setAccessible(true);
         $value = $attributes->getValue($item);
 
         $this->assertArrayHasKey('cat_url', $value);
