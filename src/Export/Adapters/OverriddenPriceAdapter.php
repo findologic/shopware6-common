@@ -13,8 +13,8 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 class OverriddenPriceAdapter
 {
     public function __construct(
-        protected readonly ExportContext $exportContext,
-        protected readonly PluginConfig $pluginConfig,
+        protected ExportContext $exportContext,
+        protected PluginConfig $pluginConfig,
     ) {
     }
 
