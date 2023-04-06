@@ -13,14 +13,10 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class PriceAdapter
 {
-    protected ExportContext $exportContext;
-
-    protected PluginConfig $pluginConfig;
-
-    public function __construct(ExportContext $exportContext, PluginConfig $pluginConfig)
-    {
-        $this->exportContext = $exportContext;
-        $this->pluginConfig = $pluginConfig;
+    public function __construct(
+        protected ExportContext $exportContext,
+        protected PluginConfig $pluginConfig,
+    ) {
     }
 
     /**

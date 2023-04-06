@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Search;
 
-use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
+use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
-use InvalidArgumentException;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractProductSearcher
 {
-    protected PluginConfig $pluginConfig;
-
-    protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
-
     public function __construct(
-        PluginConfig $pluginConfig,
-        AbstractProductCriteriaBuilder $productCriteriaBuilder
+        protected readonly PluginConfig $pluginConfig,
+        protected readonly ExportContext $exportContext,
+        protected readonly AbstractProductCriteriaBuilder $productCriteriaBuilder,
     ) {
-        $this->pluginConfig = $pluginConfig;
-        $this->productCriteriaBuilder = $productCriteriaBuilder;
     }
 
     public function findVisibleProducts(
@@ -68,8 +63,6 @@ abstract class AbstractProductSearcher
             case MainVariant::CHEAPEST:
                 $this->adaptParentCriteriaByMainOrCheapestProduct();
                 break;
-            default:
-                throw new InvalidArgumentException($mainVariantConfig);
         }
     }
 
@@ -91,7 +84,6 @@ abstract class AbstractProductSearcher
     {
         $cheapestVariants = new ProductCollection();
 
-        /** @var ProductEntity $product */
         foreach ($products as $product) {
             $currencyId = $this->exportContext->getCurrencyId();
             $productPrice = Utils::getCurrencyPrice($product->price, $currencyId);

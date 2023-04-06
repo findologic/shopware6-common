@@ -7,7 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Config\IntegrationType;
+use FINDOLOGIC\Shopware6Common\Export\Enums\IntegrationType;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\AccessEmptyPropertyException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameException;
@@ -67,7 +67,7 @@ class AttributeAdapterTest extends TestCase
      * @dataProvider attributeProvider
      */
     public function testAttributesAreProperlyEscaped(
-        string $integrationType,
+        IntegrationType $integrationType,
         string $attributeName,
         string $expectedName
     ): void {
@@ -199,7 +199,7 @@ class AttributeAdapterTest extends TestCase
      * @dataProvider categoryAndCatUrlWithIntegrationTypeProvider
      */
     public function testCategoryAndCatUrlExportBasedOnIntegrationType(
-        string $integrationType,
+        ?IntegrationType $integrationType,
         array $categories,
         array $expectedCategories,
         array $expectedCatUrls
@@ -417,7 +417,6 @@ class AttributeAdapterTest extends TestCase
         $exportItemAdapter->adaptVariant($item, $childEntity);
         $reflector = new ReflectionClass($item);
         $attributes = $reflector->getProperty('attributes');
-        $attributes->setAccessible(true);
         $value = $attributes->getValue($item);
 
         $this->assertArrayHasKey('cat_url', $value);
@@ -507,52 +506,52 @@ class AttributeAdapterTest extends TestCase
     {
         return [
             'API Integration filter with some special characters' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'attributeName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
                 'expectedName' => 'SpecialCharacters',
             ],
             'API Integration filter with brackets' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'attributeName' => 'Farbwiedergabe (Ra/CRI)',
                 'expectedName' => 'FarbwiedergabeRaCRI',
             ],
             'API Integration filter with special UTF-8 characters' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'attributeName' => 'Ausschnitt D ø (mm)',
                 'expectedName' => 'AusschnittDmm',
             ],
             'API Integration filter dots and dashes' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'attributeName' => 'free_shipping.. Really Cool--__',
                 'expectedName' => 'free_shippingReallyCool--__',
             ],
             'API Integration filter with umlauts' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'attributeName' => 'Umläüts äre cööl',
                 'expectedName' => 'Umläütsärecööl',
             ],
             'Direct Integration filter with some special characters' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'attributeName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
                 'expectedName' => 'Special Characters /#+*()()=§(=\'\'!!"$.|',
             ],
             'Direct Integration filter with brackets' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'attributeName' => 'Farbwiedergabe (Ra/CRI)',
                 'expectedName' => 'Farbwiedergabe (Ra/CRI)',
             ],
             'Direct Integration filter with special UTF-8 characters' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'attributeName' => 'Ausschnitt D ø (mm)',
                 'expectedName' => 'Ausschnitt D ø (mm)',
             ],
             'Direct Integration filter dots and dashes' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'attributeName' => 'free_shipping.. Really Cool--__',
                 'expectedName' => 'free_shipping.. Really Cool--__',
             ],
             'Direct Integration filter with umlauts' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'attributeName' => 'Umläüts äre cööl',
                 'expectedName' => 'Umläüts äre cööl',
             ],
@@ -684,7 +683,7 @@ class AttributeAdapterTest extends TestCase
 
         return [
             'Integration type is API and category is at first level' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'categories' => $firstLevelCategories,
                 'expectedCategories' => [
                     'Category1',
@@ -694,7 +693,7 @@ class AttributeAdapterTest extends TestCase
                 ],
             ],
             'Integration type is API with nested categories' => [
-                'integrationType' => 'API',
+                'integrationType' => IntegrationType::API,
                 'categories' => $nestedCategories,
                 'expectedCategories' => [
                     'Category1_Category2_Category3',
@@ -706,7 +705,7 @@ class AttributeAdapterTest extends TestCase
                 ],
             ],
             'Integration type is DI and category is at first level' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'categories' => $firstLevelCategories,
                 'expectedCategories' => [
                     'Category1',
@@ -716,7 +715,7 @@ class AttributeAdapterTest extends TestCase
                 ],
             ],
             'Integration type is DI with nested categories' => [
-                'integrationType' => 'Direct Integration',
+                'integrationType' => IntegrationType::DI,
                 'categories' => $nestedCategories,
                 'expectedCategories' => [
                     'Category1_Category2_Category3',
@@ -728,7 +727,7 @@ class AttributeAdapterTest extends TestCase
                 ],
             ],
             'Integration type is unknown and category is at first level' => [
-                'integrationType' => 'Unknown',
+                'integrationType' => null,
                 'categories' => $firstLevelCategories,
                 'expectedCategories' => [
                     'Category1',
@@ -738,7 +737,7 @@ class AttributeAdapterTest extends TestCase
                 ],
             ],
             'Integration type is unknown with nested categories' => [
-                'integrationType' => 'Unknown',
+                'integrationType' => null,
                 'categories' => $nestedCategories,
                 'expectedCategories' => [
                     'Category1_Category2_Category3',

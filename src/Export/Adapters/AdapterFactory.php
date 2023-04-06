@@ -6,76 +6,25 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 class AdapterFactory
 {
-    private AttributeAdapter $attributeAdapter;
-
-    private BonusAdapter $bonusAdapter;
-
-    private DateAddedAdapter $dateAddedAdapter;
-
-    private DescriptionAdapter $descriptionAdapter;
-
-    private DefaultPropertiesAdapter $defaultPropertiesAdapter;
-
-    private GroupsAdapter $groupsAdapter;
-
-    private ImagesAdapter $imagesAdapter;
-
-    private KeywordsAdapter $keywordsAdapter;
-
-    private NameAdapter $nameAdapter;
-
-    private OrderNumberAdapter $orderNumberAdapter;
-
-    private OverriddenPriceAdapter $overriddenPriceAdapter;
-
-    private PriceAdapter $priceAdapter;
-
-    private AbstractSalesFrequencyAdapter $salesFrequencyAdapter;
-
-    private SortAdapter $sortAdapter;
-
-    private SummaryAdapter $summaryAdapter;
-
-    private ShopwarePropertiesAdapter $shopwarePropertiesAdapter;
-
-    private UrlAdapter $urlAdapter;
-
     public function __construct(
-        AttributeAdapter $attributeAdapter,
-        BonusAdapter $bonusAdapter,
-        DateAddedAdapter $dateAddedAdapter,
-        DescriptionAdapter $descriptionAdapter,
-        DefaultPropertiesAdapter $defaultPropertiesAdapter,
-        GroupsAdapter $groupsAdapter,
-        ImagesAdapter $imagesAdapter,
-        KeywordsAdapter $keywordsAdapter,
-        NameAdapter $itemNameAdapter,
-        OrderNumberAdapter $orderNumberAdapter,
-        OverriddenPriceAdapter $overriddenPriceAdapter,
-        PriceAdapter $priceAdapter,
-        AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
-        SortAdapter $sortAdapter,
-        SummaryAdapter $summaryAdapter,
-        ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
-        UrlAdapter $urlAdapter,
+        private readonly AttributeAdapter $attributeAdapter,
+        private readonly BonusAdapter $bonusAdapter,
+        private readonly DateAddedAdapter $dateAddedAdapter,
+        private readonly DescriptionAdapter $descriptionAdapter,
+        private readonly DefaultPropertiesAdapter $defaultPropertiesAdapter,
+        private readonly GroupsAdapter $groupsAdapter,
+        private readonly ImagesAdapter $imagesAdapter,
+        private readonly KeywordsAdapter $keywordsAdapter,
+        private readonly NameAdapter $nameAdapter,
+        private readonly OrderNumberAdapter $orderNumberAdapter,
+        private readonly OverriddenPriceAdapter $overriddenPriceAdapter,
+        private readonly PriceAdapter $priceAdapter,
+        private readonly AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
+        private readonly SortAdapter $sortAdapter,
+        private readonly SummaryAdapter $summaryAdapter,
+        private readonly ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
+        private readonly UrlAdapter $urlAdapter,
     ) {
-        $this->attributeAdapter = $attributeAdapter;
-        $this->bonusAdapter = $bonusAdapter;
-        $this->dateAddedAdapter = $dateAddedAdapter;
-        $this->descriptionAdapter = $descriptionAdapter;
-        $this->defaultPropertiesAdapter = $defaultPropertiesAdapter;
-        $this->groupsAdapter = $groupsAdapter;
-        $this->imagesAdapter = $imagesAdapter;
-        $this->keywordsAdapter = $keywordsAdapter;
-        $this->nameAdapter = $itemNameAdapter;
-        $this->orderNumberAdapter = $orderNumberAdapter;
-        $this->overriddenPriceAdapter = $overriddenPriceAdapter;
-        $this->priceAdapter = $priceAdapter;
-        $this->salesFrequencyAdapter = $salesFrequencyAdapter;
-        $this->sortAdapter = $sortAdapter;
-        $this->summaryAdapter = $summaryAdapter;
-        $this->shopwarePropertiesAdapter = $shopwarePropertiesAdapter;
-        $this->urlAdapter = $urlAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter

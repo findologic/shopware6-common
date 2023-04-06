@@ -16,21 +16,11 @@ abstract class AbstractDynamicProductGroupService
 {
     protected DynamicProductGroupCacheHandler $cacheHandler;
 
-    protected CacheItemPoolInterface $cache;
-
-    protected ExportContext $exportContext;
-
-    protected AbstractCategorySearcher $categorySearcher;
-
     public function __construct(
-        CacheItemPoolInterface $cache,
-        ExportContext $exportContext,
-        AbstractCategorySearcher $categorySearcher
+        protected readonly CacheItemPoolInterface $cache,
+        protected readonly ExportContext $exportContext,
+        protected readonly AbstractCategorySearcher $categorySearcher,
     ) {
-        $this->cache = $cache;
-        $this->exportContext = $exportContext;
-        $this->categorySearcher = $categorySearcher;
-
         $this->setCacheHandler();
     }
 

@@ -10,16 +10,10 @@ use Vin\ShopwareSdk\Data\Entity\EntityCollection;
 
 class UrlBuilderService
 {
-    protected ExportContext $exportContext;
-
-    protected ?RouterInterface $router;
-
     public function __construct(
-        ExportContext $exportContext,
-        ?RouterInterface $router = null
+        protected readonly ExportContext $exportContext,
+        protected readonly ?RouterInterface $router = null,
     ) {
-        $this->router = $router;
-        $this->exportContext = $exportContext;
     }
 
     /**

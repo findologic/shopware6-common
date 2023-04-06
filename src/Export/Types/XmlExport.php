@@ -24,35 +24,16 @@ class XmlExport extends AbstractExport
 {
     private const MAXIMUM_PROPERTIES_COUNT = 500;
 
-    protected AbstractDynamicProductGroupService $dynamicProductGroupService;
-
-    protected AbstractProductSearcher $productSearcher;
-
-    protected PluginConfig $pluginConfig;
-
-    protected ExportItemAdapter $exportItemAdapter;
-
-    protected LoggerInterface $logger;
-
-    protected ?EventDispatcherInterface $eventDispatcher;
-
     protected XMLExporter $xmlFileConverter;
 
     public function __construct(
-        AbstractDynamicProductGroupService $dynamicProductGroupService,
-        AbstractProductSearcher $productSearcher,
-        PluginConfig $pluginConfig,
-        ExportItemAdapter $exportItemAdapter,
-        LoggerInterface $logger,
-        ?EventDispatcherInterface $eventDispatcher = null
+        protected readonly AbstractDynamicProductGroupService $dynamicProductGroupService,
+        protected readonly AbstractProductSearcher $productSearcher,
+        protected readonly PluginConfig $pluginConfig,
+        protected readonly ExportItemAdapter $exportItemAdapter,
+        protected readonly LoggerInterface $logger,
+        protected readonly ?EventDispatcherInterface $eventDispatcher = null
     ) {
-        $this->dynamicProductGroupService = $dynamicProductGroupService;
-        $this->productSearcher = $productSearcher;
-        $this->pluginConfig = $pluginConfig;
-        $this->exportItemAdapter = $exportItemAdapter;
-        $this->logger = $logger;
-        $this->eventDispatcher = $eventDispatcher;
-
         /** @var XMLExporter $exporter */
         $exporter = Exporter::create(ExporterType::XML);
         $this->xmlFileConverter = $exporter;
@@ -79,14 +60,11 @@ class XmlExport extends AbstractExport
     {
         $items = [];
         foreach ($products as $productEntity) {
-            $item = $this->exportSingleItem($productEntity);
-            if (!$item) {
+            if (!$item = $this->exportSingleItem($productEntity)) {
                 continue;
             }
 
-            if ($this->eventDispatcher) {
-                $this->eventDispatcher->dispatch(new AfterItemBuildEvent($item), AfterItemBuildEvent::NAME);
-            }
+            $this->eventDispatcher?->dispatch(new AfterItemBuildEvent($item), AfterItemBuildEvent::NAME);
 
             $items[] = $item;
         }

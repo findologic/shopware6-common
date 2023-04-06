@@ -16,14 +16,6 @@ class ProductDebugService
 {
     protected const NO_PRODUCT_EXPORTED = 'No product is exported';
 
-    protected ExportContext $exportContext;
-
-    protected ProductDebugSearcherInterface $productDebugSearcher;
-
-    protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
-
-    protected string $basePath;
-
     protected string $productId;
 
     protected ExportErrors $exportErrors;
@@ -37,15 +29,11 @@ class ProductDebugService
     protected DebugUrlBuilderService $debugUrlBuilderService;
 
     public function __construct(
-        ExportContext $exportContext,
-        ProductDebugSearcherInterface $productDebugSearcher,
-        AbstractProductCriteriaBuilder $productCriteriaBuilder,
-        string $basePath
+        protected readonly ExportContext $exportContext,
+        protected readonly ProductDebugSearcherInterface $productDebugSearcher,
+        protected readonly AbstractProductCriteriaBuilder $productCriteriaBuilder,
+        protected readonly string $basePath,
     ) {
-        $this->exportContext = $exportContext;
-        $this->productDebugSearcher = $productDebugSearcher;
-        $this->productCriteriaBuilder = $productCriteriaBuilder;
-        $this->basePath = $basePath;
     }
 
     public function getDebugInformation(
@@ -68,18 +56,14 @@ class ProductDebugService
             );
         }
 
-        $isExported = $this->isExported() && !$exportErrors->hasErrors();
-
-        if (!$isExported) {
+        if (!$isExported = $this->isExported() && !$exportErrors->hasErrors()) {
             $this->checkExportCriteria();
         }
 
         return new JsonResponse([
             'export' => [
                 'productId' => $this->requestedProduct->id,
-                'exportedMainProductId' => $this->exportedMainProduct
-                    ? $this->exportedMainProduct->id
-                    : self::NO_PRODUCT_EXPORTED,
+                'exportedMainProductId' => $this->exportedMainProduct?->id ?? self::NO_PRODUCT_EXPORTED,
                 'isExported' => $isExported,
                 'reasons' => $this->parseExportErrors(),
             ],
@@ -92,8 +76,7 @@ class ProductDebugService
                     : self::NO_PRODUCT_EXPORTED,
             ],
             'data' => [
-                'isExportedMainVariant' => $this->exportedMainProduct &&
-                    $this->exportedMainProduct->id === $this->requestedProduct->id,
+                'isExportedMainVariant' => $this->exportedMainProduct?->id === $this->requestedProduct->id,
                 'product' => $this->requestedProduct,
                 'siblings' => $this->requestedProduct->parentId
                     ? $this->productDebugSearcher->getSiblings($this->requestedProduct->parentId, 100)
@@ -132,8 +115,7 @@ class ProductDebugService
 
     private function isVisible(): bool
     {
-        $isVisible = isset($this->xmlItem) && $this->requestedProduct->active;
-        if (!$isVisible) {
+        if (!$isVisible = isset($this->xmlItem) && $this->requestedProduct->active) {
             $this->exportErrors->addGeneralError('Product could not be found or is not available for search.');
         }
 

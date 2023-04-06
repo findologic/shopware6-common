@@ -11,17 +11,11 @@ class DebugUrlBuilderService
     private const PATH_STRUCTURE = '%s/%s%s?shopkey=%s&productId=%s';
     private const DEBUG_PATH = '/debug';
 
-    private ExportContext $exportContext;
-
-    private string $shopkey;
-
-    private string $basePath;
-
-    public function __construct(ExportContext $exportContext, string $shopkey, string $basePath)
-    {
-        $this->exportContext = $exportContext;
-        $this->shopkey = $shopkey;
-        $this->basePath = $basePath;
+    public function __construct(
+        private readonly ExportContext $exportContext,
+        private readonly string $shopkey,
+        private readonly string $basePath,
+    ) {
     }
 
     public function buildExportUrl(string $productId): string
