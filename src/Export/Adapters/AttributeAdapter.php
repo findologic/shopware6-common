@@ -8,7 +8,6 @@ use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Export\Helpers\DataHelper;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
-use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductStreamSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
@@ -23,7 +22,6 @@ class AttributeAdapter
     public function __construct(
         protected readonly AbstractDynamicProductGroupService $dynamicProductGroupService,
         protected readonly AbstractCatUrlBuilderService $catUrlBuilderService,
-        protected readonly AbstractProductStreamSearcher $productStreamSearcher,
         protected readonly ExportContext $exportContext,
         protected readonly PluginConfig $pluginConfig,
         protected readonly TranslatorInterface $translator,
@@ -65,10 +63,8 @@ class AttributeAdapter
         }
 
         foreach ($product->streamIds ?? [] as $streamId) {
-            if ($this->productStreamSearcher->isProductInDynamicProductGroup($product->id, $streamId)) {
-                $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($streamId);
-                $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
-            }
+            $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($streamId);
+            $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
         }
 
         $attributes = [];

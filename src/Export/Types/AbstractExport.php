@@ -27,7 +27,7 @@ abstract class AbstractExport
         ExportItemAdapter $exportItemAdapter,
         LoggerInterface $logger,
         ?EventDispatcherInterface $eventDispatcher = null
-    ): XmlExport | ProductIdExport {
+    ): self {
         return match ($type) {
             ExportType::XML => new XmlExport(
                 $dynamicProductGroupService,
