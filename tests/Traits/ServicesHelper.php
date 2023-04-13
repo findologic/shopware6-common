@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractCategorySearcher;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductStreamSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
@@ -143,6 +144,13 @@ trait ServicesHelper
     public function getProductSearcherMock(): AbstractProductSearcher
     {
         return $this->getMockBuilder(AbstractProductSearcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    public function getProductStreamSearcherMock(): AbstractProductStreamSearcher
+    {
+        return $this->getMockBuilder(AbstractProductStreamSearcher::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
