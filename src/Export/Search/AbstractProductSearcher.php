@@ -59,6 +59,7 @@ abstract class AbstractProductSearcher
     {
         if ($this->pluginConfig->useXmlVariants()) {
             $this->adaptParentCriteriaByMainOrCheapestProduct();
+
             return;
         }
 
