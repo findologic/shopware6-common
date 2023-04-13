@@ -27,6 +27,10 @@ abstract class AbstractProductSearcher
     ): ProductCollection {
         $products = $this->fetchProducts($limit, $offset, $productId);
 
+        if ($this->pluginConfig->useXmlVariants()) {
+            return $products;
+        }
+
         $mainVariantConfig = $this->pluginConfig->getMainVariant();
         if ($mainVariantConfig === MainVariant::CHEAPEST) {
             return $this->getCheapestProducts($products);
@@ -53,6 +57,11 @@ abstract class AbstractProductSearcher
 
     protected function adaptCriteriaBasedOnConfiguration(): void
     {
+        if ($this->pluginConfig->useXmlVariants()) {
+            $this->adaptParentCriteriaByMainOrCheapestProduct();
+            return;
+        }
+
         $mainVariantConfig = $this->pluginConfig->getMainVariant();
 
         switch ($mainVariantConfig) {
