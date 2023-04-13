@@ -76,6 +76,7 @@ trait AdapterHelper
         return new AttributeAdapter(
             $this->getDynamicProductGroupServiceMock(),
             $this->getCatUrlBuilderService(),
+            $this->getProductStreamSearcherMock(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig(),
             $this->getTranslatorMock(),
