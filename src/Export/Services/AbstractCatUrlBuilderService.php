@@ -17,15 +17,11 @@ use const PHP_URL_PATH;
 
 abstract class AbstractCatUrlBuilderService extends UrlBuilderService
 {
-    protected AbstractCategorySearcher $categorySearcher;
-
     public function __construct(
+        protected readonly AbstractCategorySearcher $categorySearcher,
         ExportContext $exportContext,
-        AbstractCategorySearcher $categorySearcher,
-        ?RouterInterface $router = null
+        ?RouterInterface $router = null,
     ) {
-        $this->categorySearcher = $categorySearcher;
-
         parent::__construct($exportContext, $router);
     }
 

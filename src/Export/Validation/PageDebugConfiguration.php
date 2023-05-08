@@ -8,10 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PageDebugConfiguration extends PageExportConfiguration
 {
-    /**
-     * @Assert\NotBlank
-     * @var ?string
-     */
+    #[Assert\NotBlank]
     protected ?string $productId;
 
     public function __construct(string $shopkey, ?string $productId = null)

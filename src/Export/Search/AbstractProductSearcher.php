@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Search;
 
-use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
+use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
-use InvalidArgumentException;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractProductSearcher
 {
-    protected PluginConfig $pluginConfig;
-
-    protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
-
     public function __construct(
-        PluginConfig $pluginConfig,
-        AbstractProductCriteriaBuilder $productCriteriaBuilder
+        protected readonly PluginConfig $pluginConfig,
+        protected readonly ExportContext $exportContext,
+        protected readonly AbstractProductCriteriaBuilder $productCriteriaBuilder,
     ) {
-        $this->pluginConfig = $pluginConfig;
-        $this->productCriteriaBuilder = $productCriteriaBuilder;
     }
 
     public function findVisibleProducts(
@@ -31,6 +26,10 @@ abstract class AbstractProductSearcher
         ?string $productId = null
     ): ProductCollection {
         $products = $this->fetchProducts($limit, $offset, $productId);
+
+        if ($this->pluginConfig->useXmlVariants()) {
+            return $products;
+        }
 
         $mainVariantConfig = $this->pluginConfig->getMainVariant();
         if ($mainVariantConfig === MainVariant::CHEAPEST) {
@@ -58,6 +57,12 @@ abstract class AbstractProductSearcher
 
     protected function adaptCriteriaBasedOnConfiguration(): void
     {
+        if ($this->pluginConfig->useXmlVariants()) {
+            $this->adaptParentCriteriaByMainOrCheapestProduct();
+
+            return;
+        }
+
         $mainVariantConfig = $this->pluginConfig->getMainVariant();
 
         switch ($mainVariantConfig) {
@@ -68,8 +73,6 @@ abstract class AbstractProductSearcher
             case MainVariant::CHEAPEST:
                 $this->adaptParentCriteriaByMainOrCheapestProduct();
                 break;
-            default:
-                throw new InvalidArgumentException($mainVariantConfig);
         }
     }
 
@@ -91,7 +94,6 @@ abstract class AbstractProductSearcher
     {
         $cheapestVariants = new ProductCollection();
 
-        /** @var ProductEntity $product */
         foreach ($products as $product) {
             $currencyId = $this->exportContext->getCurrencyId();
             $productPrice = Utils::getCurrencyPrice($product->price, $currencyId);
@@ -126,7 +128,8 @@ abstract class AbstractProductSearcher
         $realProductIds = [];
 
         foreach ($products as $product) {
-            if ($mainVariantId = $product->mainVariantId) {
+            $mainVariantId = $product->variantListingConfig ? $product->variantListingConfig['mainVariantId'] : null;
+            if ($mainVariantId) {
                 $realProductIds[] = $mainVariantId;
 
                 continue;

@@ -7,6 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 use Exception;
 use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
+use FINDOLOGIC\Export\XML\XmlVariant;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
@@ -29,10 +30,11 @@ class ExportItemAdapterTest extends TestCase
     public function testEventsAreDispatched(): void
     {
         $xmlItem = new XMLItem(Uuid::randomHex());
+        $xmlVariant = new XmlVariant(Uuid::randomHex(), Uuid::randomHex());
         $product = $this->createTestProduct();
 
         $eventDispatcherMock = $this->getEventDispatcherMock();
-        $eventDispatcherMock->expects($this->exactly(4))
+        $eventDispatcherMock->expects($this->exactly(6))
             ->method('dispatch')
             ->with();
 
@@ -40,6 +42,7 @@ class ExportItemAdapterTest extends TestCase
         $adapter = $this->getExportItemAdapter(null, null, null, $eventDispatcherMock);
         $adapter->adapt($xmlItem, $product);
         $adapter->adaptVariant($xmlItem, $product);
+        $adapter->adaptXmlVariant($xmlVariant, $product);
     }
 
     public function testExceptionIsThrownForProductWithNoCategories(): void
@@ -66,6 +69,21 @@ class ExportItemAdapterTest extends TestCase
 
         $adapter = $this->getExportItemAdapter();
         $item = $adapter->adaptVariant(new XMLItem($id), $product);
+
+        $this->assertEquals($id, $item->getId());
+    }
+
+    public function testExceptionIsNotThrownForXmlVariantWithNoCategories(): void
+    {
+        $id = Uuid::randomHex();
+        $parentId = Uuid::randomHex();
+        $product = $this->createTestProduct([
+            'id' => $id,
+            'categories' => [],
+        ]);
+
+        $adapter = $this->getExportItemAdapter();
+        $item = $adapter->adaptXmlVariant(new XmlVariant($id, $parentId), $product);
 
         $this->assertEquals($id, $item->getId());
     }

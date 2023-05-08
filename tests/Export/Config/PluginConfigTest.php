@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Config;
 
-use FINDOLOGIC\Shopware6Common\Export\Config\AdvancedPricing;
-use FINDOLOGIC\Shopware6Common\Export\Config\IntegrationType;
-use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Enums\AdvancedPricing;
+use FINDOLOGIC\Shopware6Common\Export\Enums\IntegrationType;
+use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
 use PHPUnit\Framework\TestCase;
 
 class PluginConfigTest extends TestCase
@@ -22,6 +22,7 @@ class PluginConfigTest extends TestCase
             'mainVariant' => MainVariant::CHEAPEST,
             'crossSellingCategories' => ['this-is-an-uuid'],
             'integrationType' => IntegrationType::API,
+            'useXmlVariants' => true,
         ]);
 
         $this->assertEquals('ABAB', $pluginConfig->getShopkey());
@@ -32,5 +33,6 @@ class PluginConfigTest extends TestCase
         $this->assertEquals(['this-is-an-uuid'], $pluginConfig->getCrossSellingCategories());
         $this->assertTrue($pluginConfig->isIntegrationTypeApi());
         $this->assertFalse($pluginConfig->isIntegrationTypesDirectIntegration());
+        $this->assertTrue($pluginConfig->useXmlVariants());
     }
 }

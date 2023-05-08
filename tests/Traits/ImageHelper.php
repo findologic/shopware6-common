@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Export\Data\Image;
+use FINDOLOGIC\Export\Enums\ImageType;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Media\MediaCollection;
 use Vin\ShopwareSdk\Data\Entity\MediaThumbnail\MediaThumbnailCollection;
@@ -28,7 +29,7 @@ trait ImageHelper
             );
 
             $images[] = new Image($fallbackImage);
-            $images[] = new Image($fallbackImage, Image::TYPE_THUMBNAIL);
+            $images[] = new Image($fallbackImage, ImageType::THUMBNAIL);
 
             return $images;
         }
@@ -55,7 +56,7 @@ trait ImageHelper
             }
 
             $url = $this->getEncodedUrl($thumbnail->url);
-            $images[] = new Image($url, Image::TYPE_THUMBNAIL);
+            $images[] = new Image($url, ImageType::THUMBNAIL);
             $imageIds[] = $thumbnail->mediaId;
         }
 

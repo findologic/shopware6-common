@@ -10,11 +10,9 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class UrlAdapter
 {
-    protected ProductUrlService $productUrlService;
-
-    public function __construct(ProductUrlService $productUrlService)
-    {
-        $this->productUrlService = $productUrlService;
+    public function __construct(
+        protected readonly ProductUrlService $productUrlService,
+    ) {
     }
 
     public function adapt(ProductEntity $product): ?Url

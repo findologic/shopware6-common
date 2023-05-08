@@ -6,72 +6,25 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 class AdapterFactory
 {
-    private AttributeAdapter $attributeAdapter;
-
-    private BonusAdapter $bonusAdapter;
-
-    private DateAddedAdapter $dateAddedAdapter;
-
-    private DescriptionAdapter $descriptionAdapter;
-
-    private DefaultPropertiesAdapter $defaultPropertiesAdapter;
-
-    private ImagesAdapter $imagesAdapter;
-
-    private KeywordsAdapter $keywordsAdapter;
-
-    private NameAdapter $nameAdapter;
-
-    private OrderNumberAdapter $orderNumberAdapter;
-
-    private PriceAdapter $priceAdapter;
-
-    private AbstractSalesFrequencyAdapter $salesFrequencyAdapter;
-
-    private SortAdapter $sortAdapter;
-
-    private SummaryAdapter $summaryAdapter;
-
-    private ShopwarePropertiesAdapter $shopwarePropertiesAdapter;
-
-    private UrlAdapter $urlAdapter;
-
-    private UserGroupsAdapter $userGroupsAdapter;
-
     public function __construct(
-        AttributeAdapter $attributeAdapter,
-        BonusAdapter $bonusAdapter,
-        DateAddedAdapter $dateAddedAdapter,
-        DescriptionAdapter $descriptionAdapter,
-        DefaultPropertiesAdapter $defaultPropertiesAdapter,
-        ImagesAdapter $imagesAdapter,
-        KeywordsAdapter $keywordsAdapter,
-        NameAdapter $itemNameAdapter,
-        OrderNumberAdapter $orderNumberAdapter,
-        PriceAdapter $priceAdapter,
-        AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
-        SortAdapter $sortAdapter,
-        SummaryAdapter $summaryAdapter,
-        ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
-        UrlAdapter $urlAdapter,
-        UserGroupsAdapter $userGroupsAdapter
+        private readonly AttributeAdapter $attributeAdapter,
+        private readonly BonusAdapter $bonusAdapter,
+        private readonly DateAddedAdapter $dateAddedAdapter,
+        private readonly DescriptionAdapter $descriptionAdapter,
+        private readonly DefaultPropertiesAdapter $defaultPropertiesAdapter,
+        private readonly GroupsAdapter $groupsAdapter,
+        private readonly ImagesAdapter $imagesAdapter,
+        private readonly KeywordsAdapter $keywordsAdapter,
+        private readonly NameAdapter $nameAdapter,
+        private readonly OrderNumberAdapter $orderNumberAdapter,
+        private readonly OverriddenPriceAdapter $overriddenPriceAdapter,
+        private readonly PriceAdapter $priceAdapter,
+        private readonly AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
+        private readonly SortAdapter $sortAdapter,
+        private readonly SummaryAdapter $summaryAdapter,
+        private readonly ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
+        private readonly UrlAdapter $urlAdapter,
     ) {
-        $this->attributeAdapter = $attributeAdapter;
-        $this->bonusAdapter = $bonusAdapter;
-        $this->dateAddedAdapter = $dateAddedAdapter;
-        $this->descriptionAdapter = $descriptionAdapter;
-        $this->defaultPropertiesAdapter = $defaultPropertiesAdapter;
-        $this->imagesAdapter = $imagesAdapter;
-        $this->keywordsAdapter = $keywordsAdapter;
-        $this->nameAdapter = $itemNameAdapter;
-        $this->orderNumberAdapter = $orderNumberAdapter;
-        $this->priceAdapter = $priceAdapter;
-        $this->salesFrequencyAdapter = $salesFrequencyAdapter;
-        $this->sortAdapter = $sortAdapter;
-        $this->summaryAdapter = $summaryAdapter;
-        $this->shopwarePropertiesAdapter = $shopwarePropertiesAdapter;
-        $this->urlAdapter = $urlAdapter;
-        $this->userGroupsAdapter = $userGroupsAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter
@@ -99,6 +52,11 @@ class AdapterFactory
         return $this->defaultPropertiesAdapter;
     }
 
+    public function getGroupsAdapter(): GroupsAdapter
+    {
+        return $this->groupsAdapter;
+    }
+
     public function getImagesAdapter(): ImagesAdapter
     {
         return $this->imagesAdapter;
@@ -117,6 +75,11 @@ class AdapterFactory
     public function getOrderNumbersAdapter(): OrderNumberAdapter
     {
         return $this->orderNumberAdapter;
+    }
+
+    public function getOverriddenPriceAdapter(): OverriddenPriceAdapter
+    {
+        return $this->overriddenPriceAdapter;
     }
 
     public function getPriceAdapter(): PriceAdapter
@@ -147,10 +110,5 @@ class AdapterFactory
     public function getUrlAdapter(): UrlAdapter
     {
         return $this->urlAdapter;
-    }
-
-    public function getUserGroupsAdapter(): UserGroupsAdapter
-    {
-        return $this->userGroupsAdapter;
     }
 }

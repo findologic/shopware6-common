@@ -11,11 +11,9 @@ class AfterItemBuildEvent extends Event
 {
     public const NAME = 'fin_search.export.after_item_builb';
 
-    protected Item $item;
-
-    public function __construct(Item $item)
-    {
-        $this->item = $item;
+    public function __construct(
+        private readonly Item $item,
+    ) {
     }
 
     public function getItem(): Item

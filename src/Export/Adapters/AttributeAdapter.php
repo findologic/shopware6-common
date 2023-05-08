@@ -8,6 +8,7 @@ use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Export\Helpers\DataHelper;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductStreamSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
@@ -19,28 +20,14 @@ use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class AttributeAdapter
 {
-    protected AbstractDynamicProductGroupService $dynamicProductGroupService;
-
-    protected AbstractCatUrlBuilderService $catUrlBuilderService;
-
-    protected ExportContext $exportContext;
-
-    protected PluginConfig $pluginConfig;
-
-    protected TranslatorInterface $translator;
-
     public function __construct(
-        AbstractDynamicProductGroupService $dynamicProductGroupService,
-        AbstractCatUrlBuilderService $catUrlBuilderService,
-        ExportContext $exportContext,
-        PluginConfig $pluginConfig,
-        TranslatorInterface $translator
+        protected readonly AbstractDynamicProductGroupService $dynamicProductGroupService,
+        protected readonly AbstractCatUrlBuilderService $catUrlBuilderService,
+        protected readonly AbstractProductStreamSearcher $productStreamSearcher,
+        protected readonly ExportContext $exportContext,
+        protected readonly PluginConfig $pluginConfig,
+        protected readonly TranslatorInterface $translator,
     ) {
-        $this->dynamicProductGroupService = $dynamicProductGroupService;
-        $this->catUrlBuilderService = $catUrlBuilderService;
-        $this->exportContext = $exportContext;
-        $this->pluginConfig = $pluginConfig;
-        $this->translator = $translator;
     }
 
     /**
@@ -73,13 +60,15 @@ class AttributeAdapter
         $catUrls = [];
         $categories = [];
 
-        if ($product->categories && $product->categories->count()) {
+        if ($product->categories?->count()) {
             $this->parseCategoryAttributes($product->categories, $catUrls, $categories);
         }
 
         foreach ($product->streamIds ?? [] as $streamId) {
-            $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($streamId);
-            $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
+            if ($this->productStreamSearcher->isProductInDynamicProductGroup($product->id, $streamId)) {
+                $dynamicGroupCategories = $this->dynamicProductGroupService->getCategories($streamId);
+                $this->parseCategoryAttributes($dynamicGroupCategories, $catUrls, $categories);
+            }
         }
 
         $attributes = [];
@@ -153,7 +142,7 @@ class AttributeAdapter
      */
     protected function getPropertyAttributes(ProductEntity $product): array
     {
-        if (!$product->properties || !$product->properties->count()) {
+        if (!$product->properties?->count()) {
             return [];
         }
 
@@ -165,7 +154,7 @@ class AttributeAdapter
      */
     protected function getOptionAttributes(ProductEntity $product): array
     {
-        if (!$product->options || !$product->options->count()) {
+        if (!$product->options?->count()) {
             return [];
         }
 
@@ -180,8 +169,7 @@ class AttributeAdapter
         $attributes = [];
 
         foreach ($collection as $propertyGroupOptionEntity) {
-            $group = $propertyGroupOptionEntity->group;
-            if ($group && !$group->filterable) {
+            if (!$propertyGroupOptionEntity->group?->filterable) {
                 continue;
             }
 
@@ -199,9 +187,10 @@ class AttributeAdapter
         $attributes = [];
 
         $group = $propertyGroupOptionEntity->group;
-        if ($group && $propertyGroupOptionEntity->getTranslation('name') && $group->getTranslation('name')) {
+        if ($propertyGroupOptionEntity->getTranslation('name') && $group?->getTranslation('name')) {
             $groupName = $this->getAttributeKey($group->getTranslation('name'));
             $propertyGroupOptionName = $propertyGroupOptionEntity->getTranslation('name');
+
             if (!Utils::isEmpty($groupName) && !Utils::isEmpty($propertyGroupOptionName)) {
                 $propertyGroupAttrib = new Attribute($groupName);
                 $propertyGroupAttrib->addValue(Utils::removeControlCharacters($propertyGroupOptionName));
@@ -254,11 +243,7 @@ class AttributeAdapter
         return $values;
     }
 
-    /**
-     * @param mixed $value
-     * @return string|mixed
-     */
-    protected function decodeHtmlEntity($value)
+    protected function decodeHtmlEntity(mixed $value): mixed
     {
         if (!is_string($value)) {
             return $value;
@@ -300,7 +285,7 @@ class AttributeAdapter
      *
      * @return array<string, int, bool>|string|int|bool
      */
-    protected function getCleanedAttributeValue($value)
+    protected function getCleanedAttributeValue(mixed $value): mixed
     {
         if (is_array($value)) {
             $values = [];

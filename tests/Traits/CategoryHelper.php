@@ -40,7 +40,7 @@ trait CategoryHelper
     }
     public function generateProductCategoriesWithRelations(
         CategoryCollection $categories,
-        ?array $productCatIds = null
+        ?array $productCatIds = null,
     ): CategoryCollection {
         $productCategories = new CategoryCollection();
 
@@ -62,7 +62,7 @@ trait CategoryHelper
         ?CategoryEntity $parentCategory,
         CategoryEntity $category,
         CategoryCollection $productCategories,
-        ?array $productCatIds = null
+        ?array $productCatIds = null,
     ): CategoryCollection {
         foreach ($category->children ?? [] as $child) {
             $productCategories = $this->handleCategory($category, $child, $productCategories, $productCatIds);
