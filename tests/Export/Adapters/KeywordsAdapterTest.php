@@ -17,10 +17,14 @@ class KeywordsAdapterTest extends TestCase
     use AdapterHelper;
     use ProductHelper;
 
-    public function testKeywordsContainsTheKeywordsOfTheProduct(): void
+    public function testKeywordsContainsTheKeywordsOfTheProductForSelectedLanguage(): void
     {
         $expectedKeywords = [new Keyword('keyword1'), new Keyword('keyword2')];
-        $keywordsEntities = [$this->getKeywordEntity('keyword1'), $this->getKeywordEntity('keyword2')];
+        $keywordsEntities = [
+            $this->getKeywordEntity('keyword1', 'de-DE'),
+            $this->getKeywordEntity('keyword2', 'de-DE')
+        ];
+
         $productSearchKeywordCollection = new ProductSearchKeywordCollection($keywordsEntities);
 
         $product = $this->createTestProduct();
@@ -32,11 +36,12 @@ class KeywordsAdapterTest extends TestCase
         $this->assertEquals($expectedKeywords, $keywords);
     }
 
-    private function getKeywordEntity(string $keyword): ProductSearchKeywordEntity
+    private function getKeywordEntity(string $keyword, string $languageId): ProductSearchKeywordEntity
     {
         $productSearchKeywordEntity = new ProductSearchKeywordEntity();
         $productSearchKeywordEntity->id = Uuid::randomHex();
         $productSearchKeywordEntity->keyword = $keyword;
+        $productSearchKeywordEntity->languageId = $languageId;
 
         return $productSearchKeywordEntity;
     }
