@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Keyword;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
@@ -21,8 +22,9 @@ class KeywordsAdapterTest extends TestCase
     {
         $expectedKeywords = [new Keyword('keyword1'), new Keyword('keyword2')];
         $keywordsEntities = [
-            $this->getKeywordEntity('keyword1', 'de-DE'),
-            $this->getKeywordEntity('keyword2', 'de-DE')
+            $this->getKeywordEntity('keyword1', '2fbb5fe2e29a4d70aa5854ce7ce3e20b'),
+            $this->getKeywordEntity('keyword2', '2fbb5fe2e29a4d70aa5854ce7ce3e20b'),
+            $this->getKeywordEntity('keyword3', '2fbb5fe2e29a4d15432e7ce3e20b')
         ];
 
         $productSearchKeywordCollection = new ProductSearchKeywordCollection($keywordsEntities);
@@ -30,7 +32,9 @@ class KeywordsAdapterTest extends TestCase
         $product = $this->createTestProduct();
         $product->searchKeywords = $productSearchKeywordCollection;
 
-        $keywords = $this->getKeywordsAdapter()->adapt($product);
+        $keywordsAdapter = new KeywordsAdapter($this->getExportContext());
+
+        $keywords = $keywordsAdapter->adapt($product);
 
         $this->assertCount(2, $keywords);
         $this->assertEquals($expectedKeywords, $keywords);
