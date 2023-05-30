@@ -24,6 +24,7 @@ class KeywordsAdapterTest extends TestCase
         $keywordsEntities = [
             $this->getKeywordEntity('keyword1', '2fbb5fe2e29a4d70aa5854ce7ce3e20b'),
             $this->getKeywordEntity('keyword2', '2fbb5fe2e29a4d70aa5854ce7ce3e20b'),
+            $this->getKeywordEntity('keyword3', '3fbb5fe2e29a12345asddfa22334fgfs'),
         ];
 
         $productSearchKeywordCollection = new ProductSearchKeywordCollection($keywordsEntities);
