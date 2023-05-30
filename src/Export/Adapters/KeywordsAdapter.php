@@ -7,9 +7,17 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Keyword;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
+use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 
 class KeywordsAdapter
 {
+    protected ExportContext $exportContext;
+
+    public function __construct(ExportContext $exportContext)
+    {
+        $this->exportContext = $exportContext;
+    }
+
     /**
      * @return Keyword[]
      */
@@ -42,6 +50,10 @@ class KeywordsAdapter
             }
 
             if ($isBlackListedKeyword = in_array($keywordValue, $blackListedKeywords)) {
+                continue;
+            }
+
+            if ($this->exportContext->getLanguageId() != $keyword->languageId) {
                 continue;
             }
 

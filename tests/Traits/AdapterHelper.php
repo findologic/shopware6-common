@@ -110,7 +110,7 @@ trait AdapterHelper
 
     public function getKeywordsAdapter(): KeywordsAdapter
     {
-        return new KeywordsAdapter();
+        return new KeywordsAdapter($this->getExportContext());
     }
 
     public function getNameAdapter(): NameAdapter
