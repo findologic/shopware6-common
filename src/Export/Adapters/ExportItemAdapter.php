@@ -139,9 +139,10 @@ class ExportItemAdapter
             foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
                 $item->addOrdernumber($orderNumber);
             }
-            /**Only in case the export is set to "Main/Parent product"
-             * we merge all the variants specifications"*
-             */
+
+        /**Only in case the export is set to "Main/Parent product"
+         * we merge all the variants specifications"*
+         */
 	    if ($item->getId() == $product->parentId) {
                 foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
                     $item->addMergedAttribute($attribute);
@@ -177,6 +178,7 @@ class ExportItemAdapter
                     }
                 }
             }
+
             foreach ($this->adapterFactory->getShopwarePropertiesAdapter()->adapt($product) as $property) {
                 $item->addProperty($property);
             }
