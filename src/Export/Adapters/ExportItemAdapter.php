@@ -139,11 +139,40 @@ class ExportItemAdapter
             foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
                 $item->addOrdernumber($orderNumber);
             }
+            /**Only in case the export is set to "Main/Parent product"
+             * we merge all the variants specifications"*
+             */
+	    if ($item->getId() == $product->parentId) {
+                foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
+                    $item->addMergedAttribute($attribute);
+                }
+	    }
+	    else {
+                // Include $optionAttributes when export is not set to "Main/Parent product"
+                foreach ($product->configuratorGroupConfig as $attribute) {
+                    if (!$attribute['expressionForListings']) {
+                        $optionAttributes = $product->options->getElements();
 
-            foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
-                $item->addMergedAttribute($attribute);
+                        $matchingOptionAttributes = array_filter($optionAttributes, function ($optionAttribute) use ($attribute) {
+                            return $attribute['id'] == $optionAttribute->groupId;
+                        });
+
+                        $originalAttributes = $this->adapterFactory->getAttributeAdapter()->adapt($product);
+
+                        $matchingOriginalAttributes = array_filter($originalAttributes, function ($originalAttribute) use ($matchingOptionAttributes) {
+                            $optionAttributeNames = array_map(function ($optionAttribute) {
+                                return $optionAttribute->name;
+                            }, $matchingOptionAttributes);
+
+                            return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
+                        });
+
+                        foreach ($matchingOriginalAttributes as $originalAttribute) {
+                            $item->addMergedAttribute($originalAttribute);
+                        }
+                    }
+                }
             }
-
             foreach ($this->adapterFactory->getShopwarePropertiesAdapter()->adapt($product) as $property) {
                 $item->addProperty($property);
             }
