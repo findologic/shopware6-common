@@ -153,13 +153,17 @@ class ExportItemAdapter
                     if (!$attribute['expressionForListings']) {
                         $optionAttributes = $product->options->getElements();
 
-                        $matchingOptionAttributes = array_filter($optionAttributes, function ($optionAttribute) use ($attribute) {
+                        $matchingOptionAttributes = array_filter(
+                            $optionAttributes,
+                            function ($optionAttribute) use ($attribute) {
                             return $attribute['id'] == $optionAttribute->groupId;
                         });
 
                         $originalAttributes = $this->adapterFactory->getAttributeAdapter()->adapt($product);
 
-                        $matchingOriginalAttributes = array_filter($originalAttributes, function ($originalAttribute) use ($matchingOptionAttributes) {
+                        $matchingOriginalAttributes = array_filter(
+                            $originalAttributes,
+                            function ($originalAttribute) use ($matchingOptionAttributes) {
                             $optionAttributeNames = array_map(function ($optionAttribute) {
                                 return $optionAttribute->name;
                             }, $matchingOptionAttributes);
