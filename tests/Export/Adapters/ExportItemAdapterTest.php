@@ -43,7 +43,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
-            'parentId' => $id
+            'parentId' => $id,
         ]);
         $xmlItem = new XMLItem($id);
         $adapter->adaptVariant($xmlItem, $product);
@@ -69,7 +69,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
-            'parentId' => $id
+            'parentId' => $id,
         ]);
 
         $adapter = $this->getExportItemAdapter();

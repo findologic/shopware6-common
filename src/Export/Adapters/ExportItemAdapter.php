@@ -170,7 +170,7 @@ class ExportItemAdapter
                             $optionAttributes,
                             function ($optionAttribute) use ($attribute) {
                                 return $attribute['id'] == $optionAttribute->groupId;
-                            }
+                            },
                         );
 
                         $originalAttributes = $this->adapterFactory->getAttributeAdapter()->adapt($product);
@@ -183,7 +183,7 @@ class ExportItemAdapter
                                 }, $matchingOptionAttributes);
 
                                 return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
-                            }
+                            },
                         );
 
                         foreach ($matchingOriginalAttributes as $originalAttribute) {
