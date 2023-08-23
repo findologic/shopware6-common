@@ -39,6 +39,13 @@ class ExportItemAdapterTest extends TestCase
         /** @var EventDispatcher $eventDispatcherMock */
         $adapter = $this->getExportItemAdapter(null, null, null, $eventDispatcherMock);
         $adapter->adapt($xmlItem, $product);
+        $id = Uuid::randomHex();
+        $product = $this->createTestProduct([
+            'id' => $id,
+            'categories' => [],
+            'parentId' => $id
+        ]);
+        $xmlItem = new XMLItem($id);
         $adapter->adaptVariant($xmlItem, $product);
     }
 
@@ -62,6 +69,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
+            'parentId' => $id
         ]);
 
         $adapter = $this->getExportItemAdapter();

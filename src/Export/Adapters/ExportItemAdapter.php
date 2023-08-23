@@ -142,7 +142,10 @@ class ExportItemAdapter
     public function adaptVariant(Item $item, ProductEntity $product): ?Item
     {
         if ($this->eventDispatcher) {
-            $this->eventDispatcher->dispatch(new BeforeVariantAdaptEvent($product, $item), BeforeVariantAdaptEvent::NAME);
+            $this->eventDispatcher->dispatch(
+                new BeforeVariantAdaptEvent($product, $item),
+                BeforeVariantAdaptEvent::NAME
+            );
         }
 
         try {
@@ -157,8 +160,7 @@ class ExportItemAdapter
                 foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
                     $item->addMergedAttribute($attribute);
                 }
-            }
-            else {
+            } else {
                 // Include $optionAttributes when export is not set to "Main/Parent product"
                 foreach ($product->configuratorGroupConfig as $attribute) {
                     if (!$attribute['expressionForListings']) {
@@ -168,7 +170,8 @@ class ExportItemAdapter
                             $optionAttributes,
                             function ($optionAttribute) use ($attribute) {
                                 return $attribute['id'] == $optionAttribute->groupId;
-                            });
+                            }
+                        );
 
                         $originalAttributes = $this->adapterFactory->getAttributeAdapter()->adapt($product);
 
@@ -180,7 +183,8 @@ class ExportItemAdapter
                                 }, $matchingOptionAttributes);
 
                                 return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
-                            });
+                            }
+                        );
 
                         foreach ($matchingOriginalAttributes as $originalAttribute) {
                             $item->addMergedAttribute($originalAttribute);
