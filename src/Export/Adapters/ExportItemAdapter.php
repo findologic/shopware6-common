@@ -144,7 +144,7 @@ class ExportItemAdapter
         if ($this->eventDispatcher) {
             $this->eventDispatcher->dispatch(
                 new BeforeVariantAdaptEvent($product, $item),
-                BeforeVariantAdaptEvent::NAME
+                BeforeVariantAdaptEvent::NAME,
             );
         }
 
