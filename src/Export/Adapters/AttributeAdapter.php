@@ -234,10 +234,9 @@ class AttributeAdapter
                     continue;
                 }
 
+                // Filter null, false and empty strings, but not "0". See: https://stackoverflow.com/a/27501297/6281648
                 if ($cleanedValue instanceof PriceCollection) {
                     $price = current($cleanedValue->getElements());
-                    // Filter null, false and empty strings, but not "0".
-                    // See: https://stackoverflow.com/a/27501297/6281648
                     $attributes[] = new Attribute(
                         $key . '_net',
                         array_filter((array)$price->getNet(), 'strlen')
