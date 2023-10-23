@@ -236,17 +236,21 @@ class AttributeAdapter
 
                 if ($cleanedValue instanceof PriceCollection) {
                     $price = current($cleanedValue->getElements());
+                    // Filter null, false and empty strings, but not "0".
+                    // See: https://stackoverflow.com/a/27501297/6281648
                     $attributes[] = new Attribute(
                         $key . '_net',
-                        $this->decodeHtmlEntities(array_filter((array) $price->getNet(), 'strlen')),
+                        array_filter((array)$price->getNet(), 'strlen')
                     );
                     $attributes[] = new Attribute(
                         $key . '_gross',
-                        $this->decodeHtmlEntities(array_filter((array) $price->getGross(), 'strlen')),
+                        array_filter((array)$price->getGross(), 'strlen')
                     );
-                    //todo add currencyID
+                    $attributes[] = new Attribute(
+                        $key . '_curency_id',
+                        array_filter((array)$price->getCurrencyId(), 'strlen')
+                    );
                 } else {
-                    // Filter null, false and empty strings, but not "0". See: https://stackoverflow.com/a/27501297/6281648
                     $attributes[] = new Attribute(
                         $key,
                         $this->decodeHtmlEntities(array_filter((array) $cleanedValue, 'strlen')),
