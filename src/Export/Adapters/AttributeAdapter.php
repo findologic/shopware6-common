@@ -239,15 +239,15 @@ class AttributeAdapter
                     $price = current($cleanedValue->getElements());
                     $attributes[] = new Attribute(
                         $key . '_net',
-                        array_filter((array)$price->getNet(), 'strlen'),
+                        array_filter((array) $price->getNet(), 'strlen'),
                     );
                     $attributes[] = new Attribute(
                         $key . '_gross',
-                        array_filter((array)$price->getGross(), 'strlen'),
+                        array_filter((array) $price->getGross(), 'strlen'),
                     );
                     $attributes[] = new Attribute(
                         $key . '_curency_id',
-                        array_filter((array)$price->getCurrencyId(), 'strlen'),
+                        array_filter((array) $price->getCurrencyId(), 'strlen'),
                     );
                 } else {
                     $attributes[] = new Attribute(
