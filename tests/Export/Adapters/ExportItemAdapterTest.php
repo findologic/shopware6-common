@@ -9,6 +9,7 @@ use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -26,6 +27,12 @@ class ExportItemAdapterTest extends TestCase
     use ProductHelper;
     use ServicesHelper;
 
+    public PluginConfig $pluginConfig;
+
+    public function setUp(): void
+    {
+        $this->pluginConfig = $this->getPluginConfig();
+    }
     public function testEventsAreDispatched(): void
     {
         $xmlItem = new XMLItem(Uuid::randomHex());
@@ -43,7 +50,6 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
-            'parentId' => $id,
         ]);
         $xmlItem = new XMLItem($id);
         $adapter->adaptVariant($xmlItem, $product);
@@ -69,10 +75,9 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
-            'parentId' => $id,
         ]);
 
-        $adapter = $this->getExportItemAdapter();
+        $adapter = $this->getExportItemAdapter(null, $this->pluginConfig, null, null);
         $item = $adapter->adaptVariant(new XMLItem($id), $product);
 
         $this->assertEquals($id, $item->getId());

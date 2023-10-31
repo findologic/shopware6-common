@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Item;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterVariantAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\BeforeItemAdaptEvent;
@@ -24,15 +25,18 @@ class ExportItemAdapter
 
     private LoggerInterface $logger;
 
+    protected PluginConfig $pluginConfig;
     private ?EventDispatcherInterface $eventDispatcher;
 
     public function __construct(
         AdapterFactory $adapterFactory,
         LoggerInterface $logger,
+        PluginConfig $pluginConfig,
         ?EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->adapterFactory = $adapterFactory;
         $this->logger = $logger;
+        $this->pluginConfig = $pluginConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -153,43 +157,15 @@ class ExportItemAdapter
                 $item->addOrdernumber($orderNumber);
             }
 
-            /**Only in case the export is set to "Main/Parent product"
-             * we merge all the variants specifications"*
-             */
-            if ($item->getId() == $product->parentId) {
+            if ($this->pluginConfig->getMainVariant() != 'default') {
                 foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
                     $item->addMergedAttribute($attribute);
                 }
             } else {
-                // Include $optionAttributes when export is not set to "Main/Parent product"
-                foreach ($product->configuratorGroupConfig as $attribute) {
-                    if (!$attribute['expressionForListings']) {
-                        $optionAttributes = $product->options->getElements();
-
-                        $matchingOptionAttributes = array_filter(
-                            $optionAttributes,
-                            function ($optionAttribute) use ($attribute) {
-                                return $attribute['id'] == $optionAttribute->groupId;
-                            },
-                        );
-
-                        $originalAttributes = $this->adapterFactory->getAttributeAdapter()->adapt($product);
-
-                        $matchingOriginalAttributes = array_filter(
-                            $originalAttributes,
-                            function ($originalAttribute) use ($matchingOptionAttributes) {
-                                $optionAttributeNames = array_map(function ($optionAttribute) {
-                                    return $optionAttribute->name;
-                                }, $matchingOptionAttributes);
-
-                                return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
-                            },
-                        );
-
-                        foreach ($matchingOriginalAttributes as $originalAttribute) {
-                            $item->addMergedAttribute($originalAttribute);
-                        }
-                    }
+                $attributes = $this->adapterFactory->getVariantConfigurationAdapter()
+                    ->adapt($product, $this->adapterFactory);
+                foreach ($attributes as $attribute) {
+                    $item->addMergedAttribute($attribute);
                 }
             }
 

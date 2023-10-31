@@ -22,6 +22,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\SortAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SummaryAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UserGroupsAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\VariantConfigurationAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -53,6 +54,7 @@ trait AdapterHelper
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
             $this->getUserGroupAdapter(),
+            $this->getVariantConfigurationAdapter(),
         );
     }
 
@@ -65,6 +67,7 @@ trait AdapterHelper
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
             $logger ?? new Logger('test_logger'),
+            $this->getPluginConfig(),
             $eventDispatcher,
         );
     }
@@ -131,7 +134,7 @@ trait AdapterHelper
 
     public function getSalesFrequencyAdapter(?int $orderCount = 1337): AbstractSalesFrequencyAdapter
     {
-        return new class($orderCount) extends AbstractSalesFrequencyAdapter {
+        return new class ($orderCount) extends AbstractSalesFrequencyAdapter {
             private int $orderCount;
 
             public function __construct($orderCount)
@@ -169,5 +172,10 @@ trait AdapterHelper
     public function getUserGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): UserGroupsAdapter
     {
         return new UserGroupsAdapter($this->getExportContext($customerGroupCollection));
+    }
+
+    public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
+    {
+        return new VariantConfigurationAdapter();
     }
 }

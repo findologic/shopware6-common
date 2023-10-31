@@ -38,6 +38,8 @@ class AdapterFactory
 
     private UserGroupsAdapter $userGroupsAdapter;
 
+    private VariantConfigurationAdapter $variantConfigurationAdapter;
+
     public function __construct(
         AttributeAdapter $attributeAdapter,
         BonusAdapter $bonusAdapter,
@@ -54,7 +56,8 @@ class AdapterFactory
         SummaryAdapter $summaryAdapter,
         ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         UrlAdapter $urlAdapter,
-        UserGroupsAdapter $userGroupsAdapter
+        UserGroupsAdapter $userGroupsAdapter,
+        VariantConfigurationAdapter $variantConfigurationAdapter
     ) {
         $this->attributeAdapter = $attributeAdapter;
         $this->bonusAdapter = $bonusAdapter;
@@ -72,6 +75,7 @@ class AdapterFactory
         $this->shopwarePropertiesAdapter = $shopwarePropertiesAdapter;
         $this->urlAdapter = $urlAdapter;
         $this->userGroupsAdapter = $userGroupsAdapter;
+        $this->variantConfigurationAdapter = $variantConfigurationAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter
@@ -152,5 +156,10 @@ class AdapterFactory
     public function getUserGroupsAdapter(): UserGroupsAdapter
     {
         return $this->userGroupsAdapter;
+    }
+
+    public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
+    {
+        return $this->variantConfigurationAdapter;
     }
 }
