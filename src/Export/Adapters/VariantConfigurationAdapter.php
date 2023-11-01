@@ -24,7 +24,7 @@ class VariantConfigurationAdapter
     private function processConfigurationAttribute(
         ProductEntity $product,
         array $attribute,
-        AdapterFactory $adapterFactory,
+        AdapterFactory $adapterFactory
     ): void {
         $optionAttributes = $product->options->getElements();
         $matchingOptionAttributes = $this->filterOptionAttributes($optionAttributes, $attribute);
