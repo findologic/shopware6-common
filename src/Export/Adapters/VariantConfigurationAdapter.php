@@ -33,7 +33,7 @@ class VariantConfigurationAdapter
 
         $this->matchingOriginalAttributes += $this->filterOriginalAttributes(
             $originalAttributes,
-            $matchingOptionAttributes
+            $matchingOptionAttributes,
         );
     }
 
@@ -41,22 +41,22 @@ class VariantConfigurationAdapter
     {
         return array_filter(
             $optionAttributes,
-            fn($optionAttribute) => $attribute['id'] == $optionAttribute->groupId
+            fn ($optionAttribute) => $attribute['id'] == $optionAttribute->groupId,
         );
     }
 
     private function filterOriginalAttributes(array $originalAttributes, array $matchingOptionAttributes): array
     {
         $optionAttributeNames = array_map(
-            fn($optionAttribute) => $optionAttribute->name,
-            $matchingOptionAttributes
+            fn ($optionAttribute) => $optionAttribute->name,
+            $matchingOptionAttributes,
         );
 
         return array_filter(
             $originalAttributes,
             function ($originalAttribute) use ($optionAttributeNames) {
                 return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
-            }
+            },
         );
     }
 }
