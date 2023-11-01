@@ -26,6 +26,7 @@ class ExportItemAdapter
     private LoggerInterface $logger;
 
     protected PluginConfig $pluginConfig;
+
     private ?EventDispatcherInterface $eventDispatcher;
 
     public function __construct(

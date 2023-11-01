@@ -405,7 +405,7 @@ class AttributeAdapterTest extends TestCase
             'integrationType' => IntegrationType::DI,
         ]);
 
-        $initialItem = new XMLItem($id);
+        $initialItem = new XMLItem('123');
         $exportItemAdapter = $this->getExportItemAdapter(null, $config);
 
         $item = $exportItemAdapter->adapt($initialItem, $productEntity);

@@ -33,6 +33,7 @@ class ExportItemAdapterTest extends TestCase
     {
         $this->pluginConfig = $this->getPluginConfig();
     }
+
     public function testEventsAreDispatched(): void
     {
         $xmlItem = new XMLItem(Uuid::randomHex());
