@@ -134,7 +134,7 @@ trait AdapterHelper
 
     public function getSalesFrequencyAdapter(?int $orderCount = 1337): AbstractSalesFrequencyAdapter
     {
-        return new class ($orderCount) extends AbstractSalesFrequencyAdapter {
+        return new class($orderCount) extends AbstractSalesFrequencyAdapter {
             private int $orderCount;
 
             public function __construct($orderCount)
