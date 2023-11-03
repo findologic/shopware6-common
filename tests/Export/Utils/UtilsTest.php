@@ -163,4 +163,39 @@ class UtilsTest extends TestCase
         $categoryPath = Utils::buildCategoryPath($breadCrumbs, ['Main', 'Food']);
         $this->assertSame($expectedCategoryPath, $categoryPath);
     }
+
+    public function specialCharacterProvider(): array
+    {
+        return [
+            'String with umlauts a' => [
+                'Findologic-ä',
+                'Findologic-ä',
+                'Expected umlauts to be left unaltered.',
+            ],
+            'String with umlauts o' => [
+                'Findologic-ö',
+                'Findologic-ö',
+                'Expected umlauts to be left unaltered.',
+            ],
+            'String with umlauts u' => [
+                'Findologic-ü',
+                'Findologic-ü',
+                'Expected umlauts to be left unaltered.',
+            ],
+            'String with Eszett' => [
+                'Findologic-ß',
+                'Findologic-ß',
+                'Expected Eszett to be left unaltered.',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider specialCharacterProvider
+     */
+    public function testSpecialCharacterMethod(string $text, string $expected, string $errorMessage): void
+    {
+        $result = Utils::removeSpecialChars($text);
+        $this->assertEquals($expected, $result, $errorMessage);
+    }
 }
