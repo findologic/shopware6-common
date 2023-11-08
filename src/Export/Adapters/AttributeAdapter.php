@@ -51,7 +51,6 @@ class AttributeAdapter
         $categoryAttributes = $this->getCategoryAndCatUrlAttributes($product);
         $manufacturerAttributes = $this->getManufacturerAttributes($product);
         $propertyAttributes = $this->getPropertyAttributes($product);
-        $optionAttributes = $this->getOptionAttributes($product);
         $customFieldAttributes = $this->getCustomFieldAttributes($product);
         $additionalAttributes = $this->getAdditionalAttributes($product);
 
@@ -59,7 +58,6 @@ class AttributeAdapter
             $categoryAttributes,
             $manufacturerAttributes,
             $propertyAttributes,
-            $optionAttributes,
             $customFieldAttributes,
             $additionalAttributes,
         );
@@ -158,18 +156,6 @@ class AttributeAdapter
         }
 
         return $this->getPropertyGroupOptionAttributes($product->properties);
-    }
-
-    /**
-     * @return Attribute[]
-     */
-    protected function getOptionAttributes(ProductEntity $product): array
-    {
-        if (!$product->options || !$product->options->count()) {
-            return [];
-        }
-
-        return $this->getPropertyGroupOptionAttributes($product->options);
     }
 
     /**

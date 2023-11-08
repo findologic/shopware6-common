@@ -40,6 +40,8 @@ class AdapterFactory
 
     private VariantConfigurationAdapter $variantConfigurationAdapter;
 
+    private OptionsAdapter $optionsAdapter;
+
     public function __construct(
         AttributeAdapter $attributeAdapter,
         BonusAdapter $bonusAdapter,
@@ -161,5 +163,10 @@ class AdapterFactory
     public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
     {
         return $this->variantConfigurationAdapter;
+    }
+
+    public function getOptionsAdapter(): OptionsAdapter
+    {
+        return $this->optionsAdapter;
     }
 }

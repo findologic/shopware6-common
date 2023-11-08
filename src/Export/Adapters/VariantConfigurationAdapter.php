@@ -4,59 +4,56 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
+use FINDOLOGIC\Export\Data\Attribute;
+use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
+use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
+use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class VariantConfigurationAdapter
 {
-    private array $matchingOriginalAttributes = [];
+    protected PluginConfig $pluginConfig;
 
-    public function adapt(ProductEntity $product, AdapterFactory $adapterFactory): array
+    public function __construct(
+        PluginConfig $pluginConfig
+    ) {
+        $this->pluginConfig = $pluginConfig;
+    }
+
+    /**
+     * @return Attribute[]
+     */
+    public function getOptionAttributes(ProductEntity $product): array
     {
-        foreach ($product->configuratorGroupConfig as $attribute) {
-            if (!$attribute['expressionForListings']) {
-                $this->processConfigurationAttribute($product, $attribute, $adapterFactory);
+        $options = $product->options;
+
+        $isVariant = !is_null($product->parentId);
+
+        if (!$options->count()) {
+            return [];
+        }
+        
+        if ($isVariant) {
+            $variantlisting = array_filter(
+                $product->variantListingConfig['configuratorGroupConfig'] ?? [],
+                function (array $listing) {
+                    return $listing['expressionForListings'];
+                }
+            );
+            $variantListingGroupId = array_map(fn($listing) => $listing['id'], $variantlisting);
+
+            if (
+                $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
+                count($variantlisting) &&
+                !$product->variantListingConfig['displayParent']
+            ) {
+                $options = $options->filter(function (PropertyGroupOptionEntity $option) use ($variantListingGroupId) {
+                    return !in_array($option->groupId, $variantListingGroupId);
+                });
             }
         }
 
-        return $this->matchingOriginalAttributes;
-    }
-
-    private function processConfigurationAttribute(
-        ProductEntity $product,
-        array $attribute,
-        AdapterFactory $adapterFactory
-    ): void {
-        $optionAttributes = $product->options->getElements();
-        $matchingOptionAttributes = $this->filterOptionAttributes($optionAttributes, $attribute);
-
-        $originalAttributes = $adapterFactory->getAttributeAdapter()->adapt($product);
-
-        $this->matchingOriginalAttributes += $this->filterOriginalAttributes(
-            $originalAttributes,
-            $matchingOptionAttributes,
-        );
-    }
-
-    private function filterOptionAttributes(array $optionAttributes, array $attribute): array
-    {
-        return array_filter(
-            $optionAttributes,
-            fn ($optionAttribute) => $attribute['id'] == $optionAttribute->groupId,
-        );
-    }
-
-    private function filterOriginalAttributes(array $originalAttributes, array $matchingOptionAttributes): array
-    {
-        $optionAttributeNames = array_map(
-            fn ($optionAttribute) => $optionAttribute->name,
-            $matchingOptionAttributes,
-        );
-
-        return array_filter(
-            $originalAttributes,
-            function ($originalAttribute) use ($optionAttributeNames) {
-                return in_array($originalAttribute->getValues()[0], $optionAttributeNames);
-            },
-        );
+        return Utils::getPropertyGroupOptionAttributes($options, $this->pluginConfig);
     }
 }

@@ -15,6 +15,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\OptionsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\OrderNumberAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ShopwarePropertiesAdapter;
@@ -54,7 +55,7 @@ trait AdapterHelper
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
             $this->getUserGroupAdapter(),
-            $this->getVariantConfigurationAdapter(),
+            $this->getVariantConfigurationAdapter($config),
         );
     }
 
@@ -174,8 +175,13 @@ trait AdapterHelper
         return new UserGroupsAdapter($this->getExportContext($customerGroupCollection));
     }
 
-    public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
+    public function getVariantConfigurationAdapter($config): VariantConfigurationAdapter
     {
-        return new VariantConfigurationAdapter();
+        return new VariantConfigurationAdapter($config ?? $this->getPluginConfig());
+    }
+
+    public function getOptionsAdapter($config): OptionsAdapter
+    {
+        return new OptionsAdapter($config ?? $this->getPluginConfig());
     }
 }

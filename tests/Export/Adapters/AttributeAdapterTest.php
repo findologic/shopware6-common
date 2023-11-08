@@ -345,7 +345,7 @@ class AttributeAdapterTest extends TestCase
 
         $attributes = $this->attributeAdapter->adapt($productEntity);
 
-        $this->assertCount(7, $attributes);
+        $this->assertCount(5, $attributes);
         $this->assertSame('cat_url', $attributes[0]->getKey());
 
         $catUrls = $attributes[0]->getValues();
@@ -409,7 +409,6 @@ class AttributeAdapterTest extends TestCase
         $exportItemAdapter = $this->getExportItemAdapter(null, $config);
 
         $item = $exportItemAdapter->adapt($initialItem, $productEntity);
-
         if ($item === null) {
             $item = $initialItem;
         }
@@ -419,7 +418,6 @@ class AttributeAdapterTest extends TestCase
         $attributes = $reflector->getProperty('attributes');
         $attributes->setAccessible(true);
         $value = $attributes->getValue($item);
-
         $this->assertArrayHasKey('cat_url', $value);
         $categoryUrlAttributeValues = $value['cat_url']->getValues();
         $this->assertSame($expectedCatUrls, $categoryUrlAttributeValues);

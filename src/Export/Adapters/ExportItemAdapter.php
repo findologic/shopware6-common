@@ -159,12 +159,12 @@ class ExportItemAdapter
             }
 
             if ($this->pluginConfig->getMainVariant() != 'default') {
-                foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
+                foreach ($this->adapterFactory->getOptionsAdapter()->getOptionAttributes($product) as $attribute) {
                     $item->addMergedAttribute($attribute);
                 }
             } else {
                 $attributes = $this->adapterFactory->getVariantConfigurationAdapter()
-                    ->adapt($product, $this->adapterFactory);
+                    ->getOptionAttributes($product);
                 foreach ($attributes as $attribute) {
                     $item->addMergedAttribute($attribute);
                 }
