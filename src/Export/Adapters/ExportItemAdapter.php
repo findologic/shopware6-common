@@ -141,6 +141,10 @@ class ExportItemAdapter
             $item->addUsergroup($userGroup);
         }
 
+        foreach ($this->adapterFactory->getOptionsAdapter()->getOptionAttributes($product) as $attribute) {
+            $item->addMergedAttribute($attribute);
+        }
+
         return $item;
     }
 
@@ -158,21 +162,17 @@ class ExportItemAdapter
                 $item->addOrdernumber($orderNumber);
             }
 
-            if ($this->pluginConfig->getMainVariant() != 'default') {
-                foreach ($this->adapterFactory->getOptionsAdapter()->getOptionAttributes($product) as $attribute) {
-                    $item->addMergedAttribute($attribute);
-                }
-            } else {
-                $attributes = $this->adapterFactory->getVariantConfigurationAdapter()
-                    ->getOptionAttributes($product);
-                foreach ($attributes as $attribute) {
-                    $item->addMergedAttribute($attribute);
-                }
-            }
-
             foreach ($this->adapterFactory->getShopwarePropertiesAdapter()->adapt($product) as $property) {
                 $item->addProperty($property);
             }
+
+            $attributes = $this->adapterFactory->getVariantConfigurationAdapter()
+                ->getOptionAttributes($product);
+
+            foreach ($attributes as $attribute) {
+                $item->addMergedAttribute($attribute);
+            }
+
         } catch (Throwable $exception) {
             $exceptionLogger = new ExportExceptionLogger($this->logger);
             $exceptionLogger->log($product, $exception);

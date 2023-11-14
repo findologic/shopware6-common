@@ -409,6 +409,7 @@ class AttributeAdapterTest extends TestCase
         $exportItemAdapter = $this->getExportItemAdapter(null, $config);
 
         $item = $exportItemAdapter->adapt($initialItem, $productEntity);
+
         if ($item === null) {
             $item = $initialItem;
         }

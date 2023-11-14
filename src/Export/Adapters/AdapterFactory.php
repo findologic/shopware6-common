@@ -59,7 +59,8 @@ class AdapterFactory
         ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         UrlAdapter $urlAdapter,
         UserGroupsAdapter $userGroupsAdapter,
-        VariantConfigurationAdapter $variantConfigurationAdapter
+        VariantConfigurationAdapter $variantConfigurationAdapter,
+        OptionsAdapter $optionsAdapter,
     ) {
         $this->attributeAdapter = $attributeAdapter;
         $this->bonusAdapter = $bonusAdapter;
@@ -78,6 +79,7 @@ class AdapterFactory
         $this->urlAdapter = $urlAdapter;
         $this->userGroupsAdapter = $userGroupsAdapter;
         $this->variantConfigurationAdapter = $variantConfigurationAdapter;
+        $this->optionsAdapter = $optionsAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter

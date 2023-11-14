@@ -56,6 +56,7 @@ trait AdapterHelper
             $this->getUrlAdapter(),
             $this->getUserGroupAdapter(),
             $this->getVariantConfigurationAdapter($config),
+            $this->getOptionsAdapter($config),
         );
     }
 

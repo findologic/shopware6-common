@@ -7,12 +7,14 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
-use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use FINDOLOGIC\Shopware6Common\Traits\AdapterHelper;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class VariantConfigurationAdapter
 {
+    use AdapterHelper;
+
     protected PluginConfig $pluginConfig;
 
     public function __construct(
@@ -54,6 +56,6 @@ class VariantConfigurationAdapter
             }
         }
 
-        return Utils::getPropertyGroupOptionAttributes($options, $this->pluginConfig);
+        return $this->getPropertyGroupOptionAttributes($options, $this->pluginConfig);
     }
 }
