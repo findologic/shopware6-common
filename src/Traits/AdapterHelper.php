@@ -17,7 +17,7 @@ trait AdapterHelper
      */
     public static function getPropertyGroupOptionAttributes(
         PropertyGroupOptionCollection $collection,
-        PluginConfig $pluginConfig
+        PluginConfig $pluginConfig,
     ): array {
         $attributes = [];
 
@@ -29,7 +29,7 @@ trait AdapterHelper
 
             $attributes = array_merge($attributes, static::getAttributePropertyAsAttribute(
                 $propertyGroupOptionEntity,
-                $pluginConfig
+                $pluginConfig,
             ));
         }
 
@@ -41,7 +41,7 @@ trait AdapterHelper
      */
     protected static function getAttributePropertyAsAttribute(
         PropertyGroupOptionEntity $propertyGroupOptionEntity,
-        PluginConfig $pluginConfig
+        PluginConfig $pluginConfig,
     ): array {
         $attributes = [];
 

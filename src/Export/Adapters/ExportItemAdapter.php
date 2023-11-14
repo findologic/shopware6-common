@@ -172,7 +172,6 @@ class ExportItemAdapter
             foreach ($attributes as $attribute) {
                 $item->addMergedAttribute($attribute);
             }
-
         } catch (Throwable $exception) {
             $exceptionLogger = new ExportExceptionLogger($this->logger);
             $exceptionLogger->log($product, $exception);

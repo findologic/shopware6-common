@@ -17,9 +17,8 @@ class VariantConfigurationAdapter
 
     protected PluginConfig $pluginConfig;
 
-    public function __construct(
-        PluginConfig $pluginConfig
-    ) {
+    public function __construct(PluginConfig $pluginConfig)
+    {
         $this->pluginConfig = $pluginConfig;
     }
 
@@ -35,15 +34,15 @@ class VariantConfigurationAdapter
         if (!$options->count()) {
             return [];
         }
-        
+
         if ($isVariant) {
             $variantlisting = array_filter(
                 $product->variantListingConfig['configuratorGroupConfig'] ?? [],
                 function (array $listing) {
                     return $listing['expressionForListings'];
-                }
+                },
             );
-            $variantListingGroupId = array_map(fn($listing) => $listing['id'], $variantlisting);
+            $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
 
             if (
                 $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
