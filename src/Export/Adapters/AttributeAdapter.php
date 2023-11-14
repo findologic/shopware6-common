@@ -17,6 +17,7 @@ use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 
 class AttributeAdapter
 {
@@ -223,11 +224,26 @@ class AttributeAdapter
                 }
 
                 // Filter null, false and empty strings, but not "0". See: https://stackoverflow.com/a/27501297/6281648
-                $customFieldAttribute = new Attribute(
-                    $key,
-                    $this->decodeHtmlEntities(array_filter((array) $cleanedValue, 'strlen')),
-                );
-                $attributes[] = $customFieldAttribute;
+                if ($cleanedValue instanceof PriceCollection) {
+                    $price = current($cleanedValue->getElements());
+                    $attributes[] = new Attribute(
+                        $key . '_net',
+                        array_filter((array) $price->getNet(), 'strlen'),
+                    );
+                    $attributes[] = new Attribute(
+                        $key . '_gross',
+                        array_filter((array) $price->getGross(), 'strlen'),
+                    );
+                    $attributes[] = new Attribute(
+                        $key . '_curency_id',
+                        array_filter((array) $price->getCurrencyId(), 'strlen'),
+                    );
+                } else {
+                    $attributes[] = new Attribute(
+                        $key,
+                        $this->decodeHtmlEntities(array_filter((array) $cleanedValue, 'strlen')),
+                    );
+                }
             }
         }
 
