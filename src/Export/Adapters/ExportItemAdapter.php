@@ -162,14 +162,16 @@ class ExportItemAdapter
                 $item->addOrdernumber($orderNumber);
             }
 
+            foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
+                $item->addMergedAttribute($attribute);
+            }
+
             foreach ($this->adapterFactory->getShopwarePropertiesAdapter()->adapt($product) as $property) {
                 $item->addProperty($property);
             }
 
-            $attributes = $this->adapterFactory->getVariantConfigurationAdapter()
-                ->getOptionAttributes($product);
-
-            foreach ($attributes as $attribute) {
+            foreach ($this->adapterFactory->getVariantConfigurationAdapter()
+                         ->getOptionAttributes($product) as $attribute) {
                 $item->addMergedAttribute($attribute);
             }
         } catch (Throwable $exception) {

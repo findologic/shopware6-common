@@ -47,6 +47,7 @@ trait AdapterHelper
             $this->getImagesAdapter(),
             $this->getKeywordsAdapter(),
             $this->getNameAdapter(),
+            $this->getOptionsAdapter($config),
             $this->getOrderNumberAdapter(),
             $this->getPriceAdapter(),
             $this->getSalesFrequencyAdapter(),
@@ -56,7 +57,6 @@ trait AdapterHelper
             $this->getUrlAdapter(),
             $this->getUserGroupAdapter(),
             $this->getVariantConfigurationAdapter($config),
-            $this->getOptionsAdapter($config),
         );
     }
 

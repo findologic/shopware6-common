@@ -13,10 +13,8 @@ class OptionsAdapter
 {
     use AdapterHelper;
 
-    protected PluginConfig $pluginConfig;
-
     public function __construct(
-        PluginConfig $pluginConfig,
+        PluginConfig $pluginConfig
     ) {
         $this->pluginConfig = $pluginConfig;
     }

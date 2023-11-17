@@ -149,8 +149,8 @@ class AttributeAdapter
         return $attributes;
     }
 
-    //@deprecated tag:6.0.0 - Logic was moved to the OptionsAdapter
     /**
+     * @deprecated tag:6.0.0 - Logic was moved to the OptionsAdapter
      * @return Attribute[]
      */
     public function getOptionAttributes(ProductEntity $product): array

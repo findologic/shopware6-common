@@ -51,6 +51,7 @@ class AdapterFactory
         ImagesAdapter $imagesAdapter,
         KeywordsAdapter $keywordsAdapter,
         NameAdapter $itemNameAdapter,
+        OptionsAdapter $optionsAdapter,
         OrderNumberAdapter $orderNumberAdapter,
         PriceAdapter $priceAdapter,
         AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
@@ -59,8 +60,7 @@ class AdapterFactory
         ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         UrlAdapter $urlAdapter,
         UserGroupsAdapter $userGroupsAdapter,
-        VariantConfigurationAdapter $variantConfigurationAdapter,
-        OptionsAdapter $optionsAdapter,
+        VariantConfigurationAdapter $variantConfigurationAdapter
     ) {
         $this->attributeAdapter = $attributeAdapter;
         $this->bonusAdapter = $bonusAdapter;
@@ -70,6 +70,7 @@ class AdapterFactory
         $this->imagesAdapter = $imagesAdapter;
         $this->keywordsAdapter = $keywordsAdapter;
         $this->nameAdapter = $itemNameAdapter;
+        $this->optionsAdapter = $optionsAdapter;
         $this->orderNumberAdapter = $orderNumberAdapter;
         $this->priceAdapter = $priceAdapter;
         $this->salesFrequencyAdapter = $salesFrequencyAdapter;
@@ -79,7 +80,6 @@ class AdapterFactory
         $this->urlAdapter = $urlAdapter;
         $this->userGroupsAdapter = $userGroupsAdapter;
         $this->variantConfigurationAdapter = $variantConfigurationAdapter;
-        $this->optionsAdapter = $optionsAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter
