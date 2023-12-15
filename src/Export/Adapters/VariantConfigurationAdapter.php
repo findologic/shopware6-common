@@ -29,30 +29,26 @@ class VariantConfigurationAdapter
     {
         $options = $product->options;
 
-        $isVariant = !is_null($product->parentId);
-
         if (!$options->count()) {
             return [];
         }
 
-        if ($isVariant) {
-            $variantlisting = array_filter(
-                $product->variantListingConfig['configuratorGroupConfig'] ?? [],
-                function (array $listing) {
-                    return $listing['expressionForListings'];
-                },
-            );
-            $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
+        $variantlisting = array_filter(
+            $product->variantListingConfig['configuratorGroupConfig'] ?? [],
+            function (array $listing) {
+                return $listing['expressionForListings'];
+            },
+        );
+        $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
 
-            if (
-                $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
-                count($variantlisting) &&
-                !$product->variantListingConfig['displayParent']
-            ) {
-                $options = $options->filter(function (PropertyGroupOptionEntity $option) use ($variantListingGroupId) {
-                    return !in_array($option->groupId, $variantListingGroupId);
-                });
-            }
+        if (
+            $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
+            count($variantlisting) &&
+            !$product->variantListingConfig['displayParent']
+        ) {
+            $options = $options->filter(function (PropertyGroupOptionEntity $option) use ($variantListingGroupId) {
+                return !in_array($option->groupId, $variantListingGroupId);
+            });
         }
 
         return $this->getPropertyGroupOptionAttributes($options, $this->pluginConfig);
