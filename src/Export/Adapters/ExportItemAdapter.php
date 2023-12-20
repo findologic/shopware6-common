@@ -170,8 +170,9 @@ class ExportItemAdapter
                 $item->addProperty($property);
             }
 
-            foreach ($this->adapterFactory->getVariantConfigurationAdapter()
-                         ->getOptionAttributes($product) as $attribute) {
+            $optionAttributes = $this->adapterFactory->getVariantConfigurationAdapter()->getOptionAttributes($product);
+
+            foreach ($optionAttributes as $attribute) {
                 $item->addMergedAttribute($attribute);
             }
         } catch (Throwable $exception) {

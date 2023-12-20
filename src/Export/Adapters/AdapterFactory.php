@@ -122,6 +122,11 @@ class AdapterFactory
         return $this->nameAdapter;
     }
 
+    public function getOptionsAdapter(): OptionsAdapter
+    {
+        return $this->optionsAdapter;
+    }
+
     public function getOrderNumbersAdapter(): OrderNumberAdapter
     {
         return $this->orderNumberAdapter;
@@ -165,10 +170,5 @@ class AdapterFactory
     public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
     {
         return $this->variantConfigurationAdapter;
-    }
-
-    public function getOptionsAdapter(): OptionsAdapter
-    {
-        return $this->optionsAdapter;
     }
 }

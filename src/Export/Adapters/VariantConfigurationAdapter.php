@@ -15,8 +15,6 @@ class VariantConfigurationAdapter
 {
     use AdapterHelper;
 
-    protected PluginConfig $pluginConfig;
-
     public function __construct(PluginConfig $pluginConfig)
     {
         $this->pluginConfig = $pluginConfig;
@@ -43,14 +41,13 @@ class VariantConfigurationAdapter
 
         if (
             $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
-            count($variantlisting) &&
-            !$product->variantListingConfig['displayParent']
+            count($variantlisting)
         ) {
             $options = $options->filter(function (PropertyGroupOptionEntity $option) use ($variantListingGroupId) {
                 return !in_array($option->groupId, $variantListingGroupId);
             });
         }
 
-        return $this->getPropertyGroupOptionAttributes($options, $this->pluginConfig);
+        return $this->getPropertyGroupOptionAttributes($options);
     }
 }

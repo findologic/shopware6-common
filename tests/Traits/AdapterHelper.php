@@ -64,7 +64,7 @@ trait AdapterHelper
         ?AdapterFactory $adapterFactory = null,
         ?PluginConfig $config = null,
         ?LoggerInterface $logger = null,
-        ?EventDispatcherInterface $eventDispatcher = null,
+        ?EventDispatcherInterface $eventDispatcher = null
     ): ExportItemAdapter {
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
@@ -120,6 +120,11 @@ trait AdapterHelper
         return new NameAdapter();
     }
 
+    public function getOptionsAdapter($config): OptionsAdapter
+    {
+        return new OptionsAdapter($config ?? $this->getPluginConfig());
+    }
+
     public function getOrderNumberAdapter(): OrderNumberAdapter
     {
         return new OrderNumberAdapter();
@@ -127,7 +132,7 @@ trait AdapterHelper
 
     public function getPriceAdapter(
         ?CustomerGroupCollection $customerGroupCollection = null,
-        ?SalesChannelEntity $salesChannel = null,
+        ?SalesChannelEntity $salesChannel = null
     ): PriceAdapter {
         return new PriceAdapter(
             $this->getExportContext($customerGroupCollection, $salesChannel),
@@ -179,10 +184,5 @@ trait AdapterHelper
     public function getVariantConfigurationAdapter($config): VariantConfigurationAdapter
     {
         return new VariantConfigurationAdapter($config ?? $this->getPluginConfig());
-    }
-
-    public function getOptionsAdapter($config): OptionsAdapter
-    {
-        return new OptionsAdapter($config ?? $this->getPluginConfig());
     }
 }

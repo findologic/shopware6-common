@@ -13,9 +13,8 @@ class OptionsAdapter
 {
     use AdapterHelper;
 
-    public function __construct(
-        PluginConfig $pluginConfig
-    ) {
+    public function __construct(PluginConfig $pluginConfig)
+    {
         $this->pluginConfig = $pluginConfig;
     }
 
@@ -28,6 +27,6 @@ class OptionsAdapter
             return [];
         }
 
-        return $this->getPropertyGroupOptionAttributes($product->options, $this->pluginConfig);
+        return $this->getPropertyGroupOptionAttributes($product->options);
     }
 }

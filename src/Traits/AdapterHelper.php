@@ -8,29 +8,28 @@ use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 trait AdapterHelper
 {
-    protected PropertyGroupOptionEntity $propertyGroupOptionEntity;
     protected PluginConfig $pluginConfig;
 
     /**
      * @return Attribute[]
      */
     protected function getPropertyGroupOptionAttributes(
-        PropertyGroupOptionCollection $collection,
-        PluginConfig $pluginConfig
+        PropertyGroupOptionCollection $collection
     ): array {
-        $this->pluginConfig = $pluginConfig;
         $attributes = [];
 
         foreach ($collection as $propertyGroupOptionEntity) {
-            if ($propertyGroupOptionEntity->group && !$propertyGroupOptionEntity->group->filterable) {
+            if (
+                $propertyGroupOptionEntity->group
+                &&
+                !$propertyGroupOptionEntity->group->filterable
+            ) {
                 continue;
             }
-            $this->propertyGroupOptionEntity = $propertyGroupOptionEntity;
-            $attributes = array_merge($attributes, $this->getAttributePropertyAsAttribute());
+            $attributes = array_merge($attributes, $this->getAttributePropertyAsAttribute($propertyGroupOptionEntity));
         }
 
         return $attributes;
@@ -39,14 +38,14 @@ trait AdapterHelper
     /**
      * @return Attribute[]
      */
-    protected function getAttributePropertyAsAttribute(): array
+    protected function getAttributePropertyAsAttribute($propertyGroupOptionEntity): array
     {
         $attributes = [];
 
-        $group = $this->propertyGroupOptionEntity->group;
-        if ($group && $this->propertyGroupOptionEntity->getTranslation('name') && $group->getTranslation('name')) {
+        $group = $propertyGroupOptionEntity->group;
+        if ($group && $propertyGroupOptionEntity->getTranslation('name') && $group->getTranslation('name')) {
             $groupName = static::getAttributeKey($group->getTranslation('name'), $this->pluginConfig);
-            $propertyGroupOptionName = $this->propertyGroupOptionEntity->getTranslation('name');
+            $propertyGroupOptionName = $propertyGroupOptionEntity->getTranslation('name');
             if (!Utils::isEmpty($groupName) && !Utils::isEmpty($propertyGroupOptionName)) {
                 $propertyGroupAttrib = new Attribute($groupName);
                 $propertyGroupAttrib->addValue(Utils::removeControlCharacters($propertyGroupOptionName));

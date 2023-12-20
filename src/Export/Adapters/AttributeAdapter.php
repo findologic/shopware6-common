@@ -26,8 +26,6 @@ class AttributeAdapter
 
     protected ExportContext $exportContext;
 
-    protected PluginConfig $pluginConfig;
-
     protected TranslatorInterface $translator;
 
     public function __construct(
@@ -153,7 +151,7 @@ class AttributeAdapter
      * @deprecated tag:6.0.0 - Logic was moved to the OptionsAdapter
      * @return Attribute[]
      */
-    public function getOptionAttributes(ProductEntity $product): array
+    protected function getOptionAttributes(ProductEntity $product): array
     {
         return [];
     }
@@ -167,7 +165,7 @@ class AttributeAdapter
             return [];
         }
 
-        return $this->getPropertyGroupOptionAttributes($product->properties, $this->pluginConfig);
+        return $this->getPropertyGroupOptionAttributes($product->properties);
     }
 
     protected function getCustomFieldAttributes(ProductEntity $product): array
