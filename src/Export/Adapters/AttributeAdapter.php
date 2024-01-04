@@ -178,7 +178,7 @@ class AttributeAdapter
         }
 
         foreach ($productFields as $key => $value) {
-            $key = $this->getAttributeKey($key, $this->pluginConfig);
+            $key = $this->getAttributeKey($key);
             $cleanedValue = $this->getCleanedAttributeValue($value);
 
             if (!Utils::isEmpty($key) && !Utils::isEmpty($cleanedValue)) {

@@ -44,7 +44,7 @@ trait AdapterHelper
 
         $group = $propertyGroupOptionEntity->group;
         if ($group && $propertyGroupOptionEntity->getTranslation('name') && $group->getTranslation('name')) {
-            $groupName = static::getAttributeKey($group->getTranslation('name'), $this->pluginConfig);
+            $groupName = $this->getAttributeKey($group->getTranslation('name'));
             $propertyGroupOptionName = $propertyGroupOptionEntity->getTranslation('name');
             if (!Utils::isEmpty($groupName) && !Utils::isEmpty($propertyGroupOptionName)) {
                 $propertyGroupAttrib = new Attribute($groupName);
@@ -61,9 +61,9 @@ trait AdapterHelper
      * For API Integrations, we have to remove special characters from the attribute key as a requirement for
      * sending data via API.
      */
-    protected static function getAttributeKey(?string $key, PluginConfig $pluginConfig): ?string
+    protected function getAttributeKey(?string $key): ?string
     {
-        if ($pluginConfig->isIntegrationTypeApi()) {
+        if ($this->pluginConfig->isIntegrationTypeApi()) {
             return Utils::removeSpecialChars($key);
         }
 
