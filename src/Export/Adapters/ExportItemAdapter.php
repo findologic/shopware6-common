@@ -106,9 +106,7 @@ class ExportItemAdapter
         }
 
         foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-            if ($product->id == $item->getId()) {
-                $item->addOrdernumber($orderNumber);
-            }
+            $item->addOrdernumber($orderNumber);
         }
 
         $item->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
