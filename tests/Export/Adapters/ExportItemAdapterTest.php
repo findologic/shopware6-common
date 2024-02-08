@@ -40,7 +40,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct();
 
         $eventDispatcherMock = $this->getEventDispatcherMock();
-        $eventDispatcherMock->expects($this->exactly(4))
+        $eventDispatcherMock->expects($this->exactly(3))
             ->method('dispatch')
             ->with();
 
@@ -70,6 +70,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
+            'variantListingConfig' => ['displayParent' => null],
         ]);
 
         $adapter = $this->getExportItemAdapter(null, $this->pluginConfig, null, null);

@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class AttributeAdapter
+class AttributeAdapter implements AdapterInterface
 {
     use AdapterHelper;
 

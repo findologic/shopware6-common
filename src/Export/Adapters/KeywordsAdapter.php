@@ -9,7 +9,7 @@ use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 
-class KeywordsAdapter
+class KeywordsAdapter implements AdapterInterface
 {
     protected ExportContext $exportContext;
 

@@ -22,11 +22,8 @@ trait AdapterHelper
         $attributes = [];
 
         foreach ($collection as $propertyGroupOptionEntity) {
-            if (
-                $propertyGroupOptionEntity->group
-                &&
-                !$propertyGroupOptionEntity->group->filterable
-            ) {
+            $group = $propertyGroupOptionEntity->group;
+            if ($group && !$group->filterable) {
                 continue;
             }
             $attributes = array_merge($attributes, $this->getAttributePropertyAsAttribute($propertyGroupOptionEntity));

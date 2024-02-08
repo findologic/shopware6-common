@@ -22,6 +22,8 @@ class AdapterFactory
 
     private NameAdapter $nameAdapter;
 
+    private OptionsAdapter $optionsAdapter;
+
     private OrderNumberAdapter $orderNumberAdapter;
 
     private PriceAdapter $priceAdapter;
@@ -39,8 +41,6 @@ class AdapterFactory
     private UserGroupsAdapter $userGroupsAdapter;
 
     private VariantConfigurationAdapter $variantConfigurationAdapter;
-
-    private OptionsAdapter $optionsAdapter;
 
     public function __construct(
         AttributeAdapter $attributeAdapter,

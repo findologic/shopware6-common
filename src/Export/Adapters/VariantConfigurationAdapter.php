@@ -11,7 +11,7 @@ use FINDOLOGIC\Shopware6Common\Traits\AdapterHelper;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
-class VariantConfigurationAdapter
+class VariantConfigurationAdapter implements AdapterInterface
 {
     use AdapterHelper;
 
@@ -23,7 +23,7 @@ class VariantConfigurationAdapter
     /**
      * @return Attribute[]
      */
-    public function getOptionAttributes(ProductEntity $product): array
+    public function adapt(ProductEntity $product): array
     {
         $options = $product->options;
 
@@ -41,6 +41,7 @@ class VariantConfigurationAdapter
 
         if (
             $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
+            !$product->variantListingConfig['displayParent'] &&
             count($variantlisting)
         ) {
             $options = $options->filter(function (PropertyGroupOptionEntity $option) use ($variantListingGroupId) {

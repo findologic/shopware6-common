@@ -69,7 +69,6 @@ trait AdapterHelper
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
             $logger ?? new Logger('test_logger'),
-            $this->getPluginConfig(),
             $eventDispatcher,
         );
     }

@@ -32,12 +32,10 @@ class ExportItemAdapter
     public function __construct(
         AdapterFactory $adapterFactory,
         LoggerInterface $logger,
-        PluginConfig $pluginConfig,
         ?EventDispatcherInterface $eventDispatcher = null
     ) {
         $this->adapterFactory = $adapterFactory;
         $this->logger = $logger;
-        $this->pluginConfig = $pluginConfig;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -108,7 +106,9 @@ class ExportItemAdapter
         }
 
         foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-            $item->addOrdernumber($orderNumber);
+            if ($product->id == $item->getId()) {
+                $item->addOrdernumber($orderNumber);
+            }
         }
 
         $item->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
@@ -141,7 +141,7 @@ class ExportItemAdapter
             $item->addUsergroup($userGroup);
         }
 
-        foreach ($this->adapterFactory->getOptionsAdapter()->getOptionAttributes($product) as $attribute) {
+        foreach ($this->adapterFactory->getOptionsAdapter()->adapt($product) as $attribute) {
             $item->addMergedAttribute($attribute);
         }
 
@@ -159,7 +159,9 @@ class ExportItemAdapter
 
         try {
             foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-                $item->addOrdernumber($orderNumber);
+                if ($product->id == $item->getId()) {
+                    $item->addOrdernumber($orderNumber);
+                }
             }
 
             foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
@@ -170,7 +172,7 @@ class ExportItemAdapter
                 $item->addProperty($property);
             }
 
-            $optionAttributes = $this->adapterFactory->getVariantConfigurationAdapter()->getOptionAttributes($product);
+            $optionAttributes = $this->adapterFactory->getVariantConfigurationAdapter()->adapt($product);
 
             foreach ($optionAttributes as $attribute) {
                 $item->addMergedAttribute($attribute);

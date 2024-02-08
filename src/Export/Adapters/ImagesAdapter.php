@@ -7,7 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Image;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 
-class ImagesAdapter
+class ImagesAdapter implements AdapterInterface
 {
     protected ProductImageService $productImageService;
 
