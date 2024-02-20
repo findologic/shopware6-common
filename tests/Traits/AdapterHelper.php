@@ -119,7 +119,7 @@ trait AdapterHelper
         return new NameAdapter();
     }
 
-    public function getOptionsAdapter($config): OptionsAdapter
+    public function getOptionsAdapter(?PluginConfig $config = null): OptionsAdapter
     {
         return new OptionsAdapter($config ?? $this->getPluginConfig());
     }
@@ -180,7 +180,7 @@ trait AdapterHelper
         return new UserGroupsAdapter($this->getExportContext($customerGroupCollection));
     }
 
-    public function getVariantConfigurationAdapter($config): VariantConfigurationAdapter
+    public function getVariantConfigurationAdapter(?PluginConfig $config = null): VariantConfigurationAdapter
     {
         return new VariantConfigurationAdapter($config ?? $this->getPluginConfig());
     }

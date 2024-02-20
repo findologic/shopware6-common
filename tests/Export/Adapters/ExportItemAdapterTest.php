@@ -9,7 +9,6 @@ use FINDOLOGIC\Export\Exceptions\EmptyValueNotAllowedException;
 use FINDOLOGIC\Export\XML\XMLItem;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AdapterFactory;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\AttributeAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoCategoriesException;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
@@ -27,8 +26,6 @@ class ExportItemAdapterTest extends TestCase
     use ProductHelper;
     use ServicesHelper;
 
-    public PluginConfig $pluginConfig;
-
     public function setUp(): void
     {
         $this->pluginConfig = $this->getPluginConfig();
@@ -40,7 +37,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct();
 
         $eventDispatcherMock = $this->getEventDispatcherMock();
-        $eventDispatcherMock->expects($this->exactly(3))
+        $eventDispatcherMock->expects($this->exactly(4))
             ->method('dispatch')
             ->with();
 
@@ -70,7 +67,6 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
-            'variantListingConfig' => ['displayParent' => null],
         ]);
 
         $adapter = $this->getExportItemAdapter(null, $this->pluginConfig, null, null);

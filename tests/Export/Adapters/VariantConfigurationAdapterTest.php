@@ -29,7 +29,6 @@ class VariantConfigurationAdapterTest extends TestCase
         $id = Uuid::randomHex();
         $product = $this->createTestProduct([
             'id' => $id,
-            'variantListingConfig' => ['displayParent' => null],
         ]);
         $attributes = $this->variantConfigurationAdapter->adapt($product);
         $this->assertCount(2, $attributes);

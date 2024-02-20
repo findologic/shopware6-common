@@ -52,6 +52,7 @@ trait ProductHelper
                 'description' => 'FINDOLOGIC Description',
             ],
             'streamIds' => [],
+            'variantListingConfig' => ['displayParent' => null],
         ]);
 
         $productData = array_merge_recursive(

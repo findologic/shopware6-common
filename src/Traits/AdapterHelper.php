@@ -7,6 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Traits;
 use FINDOLOGIC\Export\Data\Attribute;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
 
 trait AdapterHelper
@@ -16,9 +17,8 @@ trait AdapterHelper
     /**
      * @return Attribute[]
      */
-    protected function getPropertyGroupOptionAttributes(
-        PropertyGroupOptionCollection $collection
-    ): array {
+    protected function getPropertyGroupOptionAttributes(PropertyGroupOptionCollection $collection): array
+    {
         $attributes = [];
 
         foreach ($collection as $propertyGroupOptionEntity) {
@@ -35,7 +35,7 @@ trait AdapterHelper
     /**
      * @return Attribute[]
      */
-    protected function getAttributePropertyAsAttribute($propertyGroupOptionEntity): array
+    protected function getAttributePropertyAsAttribute(PropertyGroupOptionEntity $propertyGroupOptionEntity): array
     {
         $attributes = [];
 

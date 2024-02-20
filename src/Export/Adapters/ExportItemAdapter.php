@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Item;
-use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterItemAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\AfterVariantAdaptEvent;
 use FINDOLOGIC\Shopware6Common\Export\Events\BeforeItemAdaptEvent;
@@ -24,8 +23,6 @@ class ExportItemAdapter
     private AdapterFactory $adapterFactory;
 
     private LoggerInterface $logger;
-
-    protected PluginConfig $pluginConfig;
 
     private ?EventDispatcherInterface $eventDispatcher;
 
@@ -106,7 +103,9 @@ class ExportItemAdapter
         }
 
         foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-            $item->addOrdernumber($orderNumber);
+            if ($product->id == $item->getId()) {
+                $item->addOrdernumber($orderNumber);
+            }
         }
 
         $item->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
@@ -170,9 +169,7 @@ class ExportItemAdapter
                 $item->addProperty($property);
             }
 
-            $optionAttributes = $this->adapterFactory->getVariantConfigurationAdapter()->adapt($product);
-
-            foreach ($optionAttributes as $attribute) {
+            foreach ($this->adapterFactory->getVariantConfigurationAdapter()->adapt($product) as $attribute) {
                 $item->addMergedAttribute($attribute);
             }
         } catch (Throwable $exception) {
