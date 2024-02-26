@@ -103,7 +103,7 @@ class ExportItemAdapter
         }
 
         foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-                $item->addOrdernumber($orderNumber);
+            $item->addOrdernumber($orderNumber);
         }
 
         $item->setAllPrices($this->adapterFactory->getPriceAdapter()->adapt($product));
@@ -154,7 +154,7 @@ class ExportItemAdapter
 
         try {
             foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
-                    $item->addOrdernumber($orderNumber);
+                $item->addOrdernumber($orderNumber);
             }
 
             foreach ($this->adapterFactory->getAttributeAdapter()->adapt($product) as $attribute) {
