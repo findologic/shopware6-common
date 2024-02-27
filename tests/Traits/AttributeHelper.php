@@ -47,13 +47,6 @@ trait AttributeHelper
             ],
         );
 
-        foreach ($productEntity->options ?? [] as $option) {
-            $attributes[] = new Attribute(
-                $option->group->name,
-                [$option->name],
-            );
-        }
-
         $shippingFree = $this->translateBooleanValue((bool) $productEntity->shippingFree);
         $attributes[] = new Attribute('shipping_free', [$shippingFree]);
 

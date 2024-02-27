@@ -22,6 +22,8 @@ class AdapterFactory
 
     private NameAdapter $nameAdapter;
 
+    private OptionsAdapter $optionsAdapter;
+
     private OrderNumberAdapter $orderNumberAdapter;
 
     private PriceAdapter $priceAdapter;
@@ -38,6 +40,8 @@ class AdapterFactory
 
     private UserGroupsAdapter $userGroupsAdapter;
 
+    private VariantConfigurationAdapter $variantConfigurationAdapter;
+
     public function __construct(
         AttributeAdapter $attributeAdapter,
         BonusAdapter $bonusAdapter,
@@ -47,6 +51,7 @@ class AdapterFactory
         ImagesAdapter $imagesAdapter,
         KeywordsAdapter $keywordsAdapter,
         NameAdapter $itemNameAdapter,
+        OptionsAdapter $optionsAdapter,
         OrderNumberAdapter $orderNumberAdapter,
         PriceAdapter $priceAdapter,
         AbstractSalesFrequencyAdapter $salesFrequencyAdapter,
@@ -54,7 +59,8 @@ class AdapterFactory
         SummaryAdapter $summaryAdapter,
         ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         UrlAdapter $urlAdapter,
-        UserGroupsAdapter $userGroupsAdapter
+        UserGroupsAdapter $userGroupsAdapter,
+        VariantConfigurationAdapter $variantConfigurationAdapter
     ) {
         $this->attributeAdapter = $attributeAdapter;
         $this->bonusAdapter = $bonusAdapter;
@@ -64,6 +70,7 @@ class AdapterFactory
         $this->imagesAdapter = $imagesAdapter;
         $this->keywordsAdapter = $keywordsAdapter;
         $this->nameAdapter = $itemNameAdapter;
+        $this->optionsAdapter = $optionsAdapter;
         $this->orderNumberAdapter = $orderNumberAdapter;
         $this->priceAdapter = $priceAdapter;
         $this->salesFrequencyAdapter = $salesFrequencyAdapter;
@@ -72,6 +79,7 @@ class AdapterFactory
         $this->shopwarePropertiesAdapter = $shopwarePropertiesAdapter;
         $this->urlAdapter = $urlAdapter;
         $this->userGroupsAdapter = $userGroupsAdapter;
+        $this->variantConfigurationAdapter = $variantConfigurationAdapter;
     }
 
     public function getAttributeAdapter(): AttributeAdapter
@@ -114,6 +122,11 @@ class AdapterFactory
         return $this->nameAdapter;
     }
 
+    public function getOptionsAdapter(): OptionsAdapter
+    {
+        return $this->optionsAdapter;
+    }
+
     public function getOrderNumbersAdapter(): OrderNumberAdapter
     {
         return $this->orderNumberAdapter;
@@ -152,5 +165,10 @@ class AdapterFactory
     public function getUserGroupsAdapter(): UserGroupsAdapter
     {
         return $this->userGroupsAdapter;
+    }
+
+    public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
+    {
+        return $this->variantConfigurationAdapter;
     }
 }

@@ -10,7 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
-class ShopwarePropertiesAdapter
+class ShopwarePropertiesAdapter implements AdapterInterface
 {
     protected PluginConfig $pluginConfig;
 

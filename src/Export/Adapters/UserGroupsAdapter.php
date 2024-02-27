@@ -9,7 +9,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class UserGroupsAdapter
+class UserGroupsAdapter implements AdapterInterface
 {
     protected ExportContext $exportContext;
 
