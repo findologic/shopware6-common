@@ -26,11 +26,6 @@ class ExportItemAdapterTest extends TestCase
     use ProductHelper;
     use ServicesHelper;
 
-    public function setUp(): void
-    {
-        $this->pluginConfig = $this->getPluginConfig();
-    }
-
     public function testEventsAreDispatched(): void
     {
         $xmlItem = new XMLItem(Uuid::randomHex());
@@ -69,7 +64,7 @@ class ExportItemAdapterTest extends TestCase
             'categories' => [],
         ]);
 
-        $adapter = $this->getExportItemAdapter(null, $this->pluginConfig, null, null);
+        $adapter = $this->getExportItemAdapter();
         $item = $adapter->adaptVariant(new XMLItem($id), $product);
 
         $this->assertEquals($id, $item->getId());
