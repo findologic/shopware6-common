@@ -128,12 +128,19 @@ class ExportItemAdapter
             $item->addGroup($group);
         }
 
+        foreach ($this->adapterFactory->getOptionsAdapter()->adapt($product) as $attribute) {
+            $item->addMergedAttribute($attribute);
+        }
+
         return $item;
     }
 
     public function adaptVariant(Item $item, ProductEntity $product): ?Item
     {
-        $this->eventDispatcher?->dispatch(new BeforeVariantAdaptEvent($product, $item), BeforeVariantAdaptEvent::NAME);
+        $this->eventDispatcher->dispatch(
+            new BeforeVariantAdaptEvent($product, $item),
+            BeforeVariantAdaptEvent::NAME,
+        );
 
         try {
             foreach ($this->adapterFactory->getOrderNumbersAdapter()->adapt($product) as $orderNumber) {
@@ -146,6 +153,10 @@ class ExportItemAdapter
 
             foreach ($this->adapterFactory->getShopwarePropertiesAdapter()->adapt($product) as $property) {
                 $item->addProperty($property);
+            }
+
+            foreach ($this->adapterFactory->getVariantConfigurationAdapter()->adapt($product) as $attribute) {
+                $item->addMergedAttribute($attribute);
             }
         } catch (Throwable $exception) {
             $exceptionLogger = new ExportExceptionLogger($this->logger);
