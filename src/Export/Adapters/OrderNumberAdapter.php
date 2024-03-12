@@ -8,7 +8,7 @@ use FINDOLOGIC\Export\Data\Ordernumber;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class OrderNumberAdapter
+class OrderNumberAdapter implements AdapterInterface
 {
     public function adapt(ProductEntity $product): array
     {

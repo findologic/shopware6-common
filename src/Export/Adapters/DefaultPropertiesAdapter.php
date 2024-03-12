@@ -10,7 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class DefaultPropertiesAdapter
+class DefaultPropertiesAdapter implements AdapterInterface
 {
     public function __construct(
         protected readonly ExportContext $exportContext,
