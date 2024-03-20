@@ -18,6 +18,8 @@ class Constants
     ];
 
     public const VARIANT_ASSOCIATIONS = [
+        'seoUrls',
+        'media',
         'categories',
         'categories.seoUrls',
         'options',
