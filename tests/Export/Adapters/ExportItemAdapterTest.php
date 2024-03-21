@@ -80,6 +80,7 @@ class ExportItemAdapterTest extends TestCase
         $product = $this->createTestProduct([
             'id' => $id,
             'categories' => [],
+            'seoUrls' => [],
         ]);
 
         $adapter = $this->getExportItemAdapter();
