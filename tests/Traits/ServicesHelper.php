@@ -131,6 +131,7 @@ trait ServicesHelper
         return PluginConfig::createFromArray(array_merge([
             'shopkey' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
             'active' => true,
+            'mainVariant' => 'default',
         ], $overrides));
     }
 

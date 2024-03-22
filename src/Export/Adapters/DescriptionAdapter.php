@@ -8,7 +8,7 @@ use FINDOLOGIC\Export\Data\Description;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class DescriptionAdapter
+class DescriptionAdapter implements AdapterInterface
 {
     public function adapt(ProductEntity $product): ?Description
     {

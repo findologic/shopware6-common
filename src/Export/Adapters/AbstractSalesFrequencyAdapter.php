@@ -7,7 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\SalesFrequency;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-abstract class AbstractSalesFrequencyAdapter
+abstract class AbstractSalesFrequencyAdapter implements AdapterInterface
 {
     public function adapt(ProductEntity $product): ?SalesFrequency
     {

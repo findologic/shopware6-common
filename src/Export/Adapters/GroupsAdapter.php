@@ -8,7 +8,7 @@ use FINDOLOGIC\Export\Data\Group;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class GroupsAdapter
+class GroupsAdapter implements AdapterInterface
 {
     public function __construct(
         protected readonly ExportContext $exportContext,

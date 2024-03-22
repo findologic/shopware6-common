@@ -7,7 +7,7 @@ namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 use FINDOLOGIC\Export\Data\Sort;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class SortAdapter
+class SortAdapter implements AdapterInterface
 {
     public function adapt(ProductEntity $product): ?Sort
     {
