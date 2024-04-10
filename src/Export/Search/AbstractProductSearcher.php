@@ -111,8 +111,7 @@ abstract class AbstractProductSearcher
             /** @var string[] $productPrice */
             $cheapestVariantPrice = Utils::getCurrencyPrice($cheapestVariant->price, $currencyId);
 
-            if ($productPrice['gross'] === 0.0 || !$this->isProductVisible($product)
-            ) {
+            if ($productPrice['gross'] === 0.0 || !$this->isProductVisible($product)) {
                 $realCheapestProduct = $cheapestVariant;
             } else {
                 $realCheapestProduct = $productPrice['gross'] <= $cheapestVariantPrice['gross']
