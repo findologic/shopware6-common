@@ -15,6 +15,7 @@ class Constants
         'manufacturer.translations',
         'cover',
         'variantListingConfig',
+        'visibilities',
     ];
 
     public const VARIANT_ASSOCIATIONS = [
