@@ -8,7 +8,6 @@ use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
-use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
