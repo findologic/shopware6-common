@@ -14,6 +14,7 @@ class Constants
         'manufacturer',
         'manufacturer.translations',
         'cover',
+        'visibilities',
     ];
 
     public const VARIANT_ASSOCIATIONS = [

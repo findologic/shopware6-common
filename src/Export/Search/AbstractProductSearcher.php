@@ -8,12 +8,13 @@ use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use InvalidArgumentException;
-use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractProductSearcher
 {
+    protected const VISIBILITY_ALL = 30;
+
     protected PluginConfig $pluginConfig;
 
     protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
@@ -108,9 +109,7 @@ abstract class AbstractProductSearcher
             /** @var string[] $productPrice */
             $cheapestVariantPrice = Utils::getCurrencyPrice($cheapestVariant->price, $currencyId);
 
-            if ($productPrice['gross'] === 0.0
-                || !$this->isProductVisible($product)
-            ) {
+            if ($productPrice['gross'] === 0.0 || !$this->isProductVisible($product)) {
                 $realCheapestProduct = $cheapestVariant;
             } else {
                 $realCheapestProduct = $productPrice['gross'] <= $cheapestVariantPrice['gross']
@@ -163,18 +162,16 @@ abstract class AbstractProductSearcher
     {
         $salesChannelId = $this->exportContext->getSalesChannelId();
 
-        $isVisible = false;
         if ($product->active) {
             foreach ($product->visibilities->getElements() as $productVisibility) {
                 if ($productVisibility->salesChannelId === $salesChannelId
-                    && $productVisibility->visibility >= ProductVisibilityDefinition::VISIBILITY_ALL
+                    && $productVisibility->visibility >= self::VISIBILITY_ALL
                 ) {
-                    $isVisible = true;
-                    break;
+                    return true;
                 }
             }
         }
 
-        return $isVisible;
+        return false;
     }
 }
