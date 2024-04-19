@@ -10,10 +10,10 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "findologic/libflexport": "^3.0",
-        "monolog/monolog": "^3.3.1",
-        "vin-sw/shopware-sdk": "^1.7.3",
+        "php": "^8.2",
+        "findologic/libflexport": "^3.1",
+        "monolog/monolog": "^3.4",
+        "vin-sw/shopware-sdk": "^2.0",
         "symfony/http-foundation": "*",
         "symfony/event-dispatcher": "*"
     },
