@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Validation\OffsetExportConfiguration;
 use FINDOLOGIC\Shopware6Common\Export\Validation\PageDebugConfiguration;
 use FINDOLOGIC\Shopware6Common\Export\Validation\PageExportConfiguration;
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -105,7 +106,7 @@ class ExportConfigurationTest extends TestCase
         $this->assertSame($expectedProductId, $configExport->getProductId());
     }
 
-    public function invalidConfigurationProvider(): array
+    public static function invalidConfigurationProvider(): array
     {
         return [
             'No parameters given' => [
@@ -161,9 +162,7 @@ class ExportConfigurationTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigurationProvider
-     */
+    #[DataProvider('invalidConfigurationProvider')]
     public function testInvalidConfigurationIsDetected(
         array $queryParams,
         ?string $exportPath = null
@@ -179,8 +178,7 @@ class ExportConfigurationTest extends TestCase
         }
 
         $validator = Validation::createValidatorBuilder()
-            ->enableAnnotationMapping(true)
-            ->addDefaultDoctrineAnnotationReader()
+            ->enableAttributeMapping()
             ->getValidator();
 
         $validationsList = new ConstraintViolationList();
@@ -193,7 +191,7 @@ class ExportConfigurationTest extends TestCase
         $this->assertGreaterThan(0, $validationsList->count());
     }
 
-    public function pathProvider(): array
+    public static function pathProvider(): array
     {
         return [
             'Findologic: Export path' => [
@@ -223,9 +221,7 @@ class ExportConfigurationTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider pathProvider
-     */
+    #[DataProvider('pathProvider')]
     public function testGetInstanceReturnsCorrectConfiguration(string $path, $expectedClass): void
     {
         $request = $this->createFindologicRequest([], $path);

@@ -8,6 +8,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\OverriddenPriceAdapter;
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
@@ -50,7 +51,7 @@ class OverriddenPriceAdapterTest extends TestCase
         $this->assertEquals($expectedPrice, $overriddenPrices[0]->getValues()['']);
     }
 
-    public function customerGroupsProvider(): array
+    public static function customerGroupsProvider(): array
     {
         $grossCustomerGroup = new CustomerGroupEntity();
         $grossCustomerGroup->id = CommonConstants::GROSS_CUSTOMER_GROUP_ID;
@@ -98,10 +99,10 @@ class OverriddenPriceAdapterTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @dataProvider customerGroupsProvider
      * @param CustomerGroupEntity[] $customerGroups
      * @param array<string, float> $expectedOverriddenPrices
      */
+    #[DataProvider('customerGroupsProvider')]
     public function testOverriddenPriceIsExportedForCustomerGroups(
         float $grossPrice,
         float $netPrice,
