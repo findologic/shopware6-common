@@ -13,6 +13,8 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 abstract class AbstractProductSearcher
 {
+    protected const VISIBILITY_ALL = 30;
+
     protected PluginConfig $pluginConfig;
 
     protected AbstractProductCriteriaBuilder $productCriteriaBuilder;
@@ -107,7 +109,7 @@ abstract class AbstractProductSearcher
             /** @var string[] $productPrice */
             $cheapestVariantPrice = Utils::getCurrencyPrice($cheapestVariant->price, $currencyId);
 
-            if ($productPrice['gross'] === 0.0) {
+            if ($productPrice['gross'] === 0.0 || !$this->isProductVisible($product)) {
                 $realCheapestProduct = $cheapestVariant;
             } else {
                 $realCheapestProduct = $productPrice['gross'] <= $cheapestVariantPrice['gross']
@@ -155,4 +157,21 @@ abstract class AbstractProductSearcher
     abstract protected function getFirstVisibleChildId(string $productId): ?string;
 
     abstract protected function getRealMainVariants(array $productIds): ProductCollection;
+
+    protected function isProductVisible(ProductEntity $product): bool
+    {
+        $salesChannelId = $this->exportContext->getSalesChannelId();
+
+        if ($product->active) {
+            foreach ($product->visibilities->getElements() as $productVisibility) {
+                if ($productVisibility->salesChannelId === $salesChannelId
+                    && $productVisibility->visibility >= self::VISIBILITY_ALL
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
