@@ -6,6 +6,7 @@ namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DescriptionAdapterTest extends TestCase
@@ -24,9 +25,7 @@ class DescriptionAdapterTest extends TestCase
         $this->assertSame($expectedDescription, $description->getValues()['']);
     }
 
-    /**
-     * @dataProvider emptyValuesProvider
-     */
+    #[DataProvider('emptyValuesProvider')]
     public function testEmptyDescriptionValuesAreSkipped(?string $value): void
     {
         $data = [
@@ -42,7 +41,7 @@ class DescriptionAdapterTest extends TestCase
         $this->assertNull($description);
     }
 
-    public function emptyValuesProvider(): array
+    public static function emptyValuesProvider(): array
     {
         return [
             'null values provided' => ['value' => null],

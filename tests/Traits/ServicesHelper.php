@@ -16,6 +16,8 @@ use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupServic
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
+use Mockery;
+use Mockery\MockInterface;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -76,12 +78,9 @@ trait ServicesHelper
         return $translator;
     }
 
-    public function getDynamicProductGroupServiceMock(): AbstractDynamicProductGroupService|MockObject
+    public function getDynamicProductGroupServiceMock(): AbstractDynamicProductGroupService|MockInterface
     {
-        return $this->getMockBuilder(AbstractDynamicProductGroupService::class)
-            ->onlyMethods(['getCategories'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        return Mockery::mock(AbstractDynamicProductGroupService::class);
     }
 
     public function getCatUrlBuilderService(): AbstractCatUrlBuilderService

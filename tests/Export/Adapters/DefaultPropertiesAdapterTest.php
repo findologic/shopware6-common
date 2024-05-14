@@ -9,6 +9,7 @@ use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\PropertiesHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DefaultPropertiesAdapterTest extends TestCase
@@ -39,9 +40,7 @@ class DefaultPropertiesAdapterTest extends TestCase
         $this->assertEquals($expectedProperties, $actualProperties);
     }
 
-    /**
-     * @dataProvider productPromotionProvider
-     */
+    #[DataProvider('productPromotionProvider')]
     public function testProductPromotionIsExported(?bool $markAsTopSeller, string $expected): void
     {
         $productEntity = $this->createTestProduct(
@@ -60,9 +59,7 @@ class DefaultPropertiesAdapterTest extends TestCase
         $this->assertSame($expected, current($values));
     }
 
-    /**
-     * @dataProvider listPriceProvider
-     */
+    #[DataProvider('listPriceProvider')]
     public function testProductListPrice(?string $currencyId, bool $isPriceAvailable): void
     {
         $productEntity = $this->createTestProduct(
@@ -103,7 +100,7 @@ class DefaultPropertiesAdapterTest extends TestCase
         $this->assertSame($isPriceAvailable, $hasListPriceNet);
     }
 
-    public function listPriceProvider(): array
+    public static function listPriceProvider(): array
     {
         return [
             'List price is available for the sales channel currency' => [
@@ -117,7 +114,7 @@ class DefaultPropertiesAdapterTest extends TestCase
         ];
     }
 
-    public function productPromotionProvider(): array
+    public static function productPromotionProvider(): array
     {
         return [
             'Product has promotion set to false' => [false, 'No'],

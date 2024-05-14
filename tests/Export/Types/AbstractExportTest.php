@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Types\ProductIdExport;
 use FINDOLOGIC\Shopware6Common\Export\Types\XmlExport;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AbstractExportTest extends TestCase
@@ -17,7 +18,7 @@ class AbstractExportTest extends TestCase
     use AdapterHelper;
     use ServicesHelper;
 
-    public function exportProvider(): array
+    public static function exportProvider(): array
     {
         return [
             'XML export' => [
@@ -31,9 +32,7 @@ class AbstractExportTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider exportProvider
-     */
+    #[DataProvider('exportProvider')]
     public function testProperInstanceIsCreated(ExportType $type, string $expectedInstance): void
     {
         $export = AbstractExport::getInstance(

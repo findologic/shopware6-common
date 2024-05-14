@@ -9,6 +9,7 @@ use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\TestHelper\Helper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlCollection;
 use Vin\ShopwareSdk\Data\Entity\SeoUrl\SeoUrlEntity;
@@ -28,7 +29,7 @@ class ProductUrlServiceTest extends TestCase
         $this->productUrlService = $this->getProductUrlService();
     }
 
-    public function removeInvalidUrlsProvider(): array
+    public static function removeInvalidUrlsProvider(): array
     {
         return [
             'SeoPatInfo support slash, minus and big letters but not spaces' => [
@@ -49,9 +50,7 @@ class ProductUrlServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider removeInvalidUrlsProvider
-     */
+    #[DataProvider('removeInvalidUrlsProvider')]
     public function testRemoveInvalidUrls(array $seoUrlArray, int $expectedUrlCount): void
     {
         $seoUrlCollection = new SeoUrlCollection();
@@ -73,7 +72,7 @@ class ProductUrlServiceTest extends TestCase
         );
     }
 
-    public function productSeoPathProvider(): array
+    public static function productSeoPathProvider(): array
     {
         return [
             'Has valid url, canonical and not deleted' => [
@@ -114,9 +113,7 @@ class ProductUrlServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider productSeoPathProvider
-     */
+    #[DataProvider('productSeoPathProvider')]
     public function testGetProductSeoPath(array $seoUrlArray, ?string $expectedSeoUrl): void
     {
         $seoUrlCollection = new SeoUrlCollection();
