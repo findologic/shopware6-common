@@ -16,6 +16,7 @@ use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AttributeHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
@@ -63,9 +64,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertEquals($expected, $attributes);
     }
 
-    /**
-     * @dataProvider attributeProvider
-     */
+    #[DataProvider('attributeProvider')]
     public function testAttributesAreProperlyEscaped(
         IntegrationType $integrationType,
         string $attributeName,
@@ -117,9 +116,7 @@ class AttributeAdapterTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider multiSelectCustomFieldsProvider
-     */
+    #[DataProvider('multiSelectCustomFieldsProvider')]
     public function testProductWithMultiSelectCustomFields(
         array $customFields,
         array $expectedCustomFieldAttributes,
@@ -153,10 +150,9 @@ class AttributeAdapterTest extends TestCase
     }
 
     /**
-     * @dataProvider ratingProvider
-     *
      * @param float[] $ratings
      */
+    #[DataProvider('ratingProvider')]
     public function testProductRatings(array $ratings, float $expectedRating): void
     {
         $productEntity = $this->createTestProduct();
@@ -172,9 +168,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertEquals($expectedRating, current($ratingAttribute->getValues()));
     }
 
-    /**
-     * @dataProvider emptyAttributeNameProvider
-     */
+    #[DataProvider('emptyAttributeNameProvider')]
     public function testEmptyAttributeNamesAreSkipped(?string $value): void
     {
         $config = $this->getPluginConfig([
@@ -195,9 +189,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertEmpty($customFieldAttributes);
     }
 
-    /**
-     * @dataProvider categoryAndCatUrlWithIntegrationTypeProvider
-     */
+    #[DataProvider('categoryAndCatUrlWithIntegrationTypeProvider')]
     public function testCategoryAndCatUrlExportBasedOnIntegrationType(
         ?IntegrationType $integrationType,
         array $categories,
@@ -282,9 +274,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertSame(['0'], $customAttributes[0]->getValues());
     }
 
-    /**
-     * @dataProvider emptyValuesProvider
-     */
+    #[DataProvider('emptyValuesProvider')]
     public function testEmptyAttributeValuesAreSkipped(?string $value): void
     {
         $data = [
@@ -299,13 +289,12 @@ class AttributeAdapterTest extends TestCase
     }
 
     /**
-     * @dataProvider categorySeoProvider
-     *
      * @throws AccessEmptyPropertyException
      * @throws ProductHasNoCategoriesException
      * @throws ProductHasNoNameException
      * @throws ProductHasNoPricesException
      */
+    #[DataProvider('categorySeoProvider')]
     public function testProductCategoriesUrlWithoutSeoOrEmptyPath(array $data, string $categoryId): void
     {
         $categoryData['categories'] = $data;
@@ -353,7 +342,7 @@ class AttributeAdapterTest extends TestCase
         $this->assertSame([sprintf('/navigation/%s', $categoryId)], $catUrls);
     }
 
-    public function parentAndChildrenCategoryProvider(): array
+    public static function parentAndChildrenCategoryProvider(): array
     {
         return [
             'Parent and children have the same categories assigned' => [
@@ -371,9 +360,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider parentAndChildrenCategoryProvider
-     */
+    #[DataProvider('parentAndChildrenCategoryProvider')]
     public function testOnlyUniqueCategoriesAreExported(bool $isParentAssigned, bool $isVariantAssigned): void
     {
         $id = Uuid::randomHex();
@@ -446,7 +433,7 @@ class AttributeAdapterTest extends TestCase
         return $customFieldAttributes;
     }
 
-    public function categorySeoProvider(): array
+    public static function categorySeoProvider(): array
     {
         $categoryId = Uuid::randomHex();
 
@@ -502,7 +489,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             'API Integration filter with some special characters' => [
@@ -558,7 +545,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function multiSelectCustomFieldsProvider(): array
+    public static function multiSelectCustomFieldsProvider(): array
     {
         return [
             'multiple values' => [
@@ -617,7 +604,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function ratingProvider(): array
+    public static function ratingProvider(): array
     {
         $multipleRatings = [2.0, 4.0, 5.0, 1.0];
         $average = array_sum($multipleRatings) / count($multipleRatings);
@@ -629,7 +616,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function emptyAttributeNameProvider(): array
+    public static function emptyAttributeNameProvider(): array
     {
         return [
             'Attribute name is null' => ['value' => null],
@@ -639,7 +626,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function emptyValuesProvider(): array
+    public static function emptyValuesProvider(): array
     {
         return [
             'null values provided' => ['value' => null],
@@ -648,7 +635,7 @@ class AttributeAdapterTest extends TestCase
         ];
     }
 
-    public function categoryAndCatUrlWithIntegrationTypeProvider(): array
+    public static function categoryAndCatUrlWithIntegrationTypeProvider(): array
     {
         $firstLevelCategories = [
             [

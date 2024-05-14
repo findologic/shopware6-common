@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Utils;
 
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase
 {
-    public function controlCharacterProvider(): array
+    public static function controlCharacterProvider(): array
     {
         return [
             'Strings with only letters and numbers' => [
@@ -45,9 +46,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider controlCharacterProvider
-     */
+    #[DataProvider('controlCharacterProvider')]
     public function testControlCharacterMethod(string $text, string $expected, string $errorMessage): void
     {
         $result = Utils::removeControlCharacters($text);
@@ -110,16 +109,14 @@ class UtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider cleanStringProvider
-     */
+    #[DataProvider('cleanStringProvider')]
     public function testCleanStringMethod(string $text, string $expected, string $errorMessage): void
     {
         $result = Utils::cleanString($text);
         $this->assertEquals($expected, $result, $errorMessage);
     }
 
-    public function categoryProvider(): array
+    public static function categoryProvider(): array
     {
         return [
             'main category' => [
@@ -145,9 +142,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider categoryProvider
-     */
+    #[DataProvider('categoryProvider')]
     public function testCategoryPathIsProperlyBuilt(array $breadCrumbs, string $expectedCategoryPath): void
     {
         $categoryPath = Utils::buildCategoryPath($breadCrumbs, ['Main']);
@@ -164,7 +159,7 @@ class UtilsTest extends TestCase
         $this->assertSame($expectedCategoryPath, $categoryPath);
     }
 
-    public function specialCharacterProvider(): array
+    public static function specialCharacterProvider(): array
     {
         return [
             'String with umlauts a' => [
@@ -190,9 +185,7 @@ class UtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider specialCharacterProvider
-     */
+    #[DataProvider('specialCharacterProvider')]
     public function testSpecialCharacterMethod(string $text, string $expected, string $errorMessage): void
     {
         $result = Utils::removeSpecialChars($text);
