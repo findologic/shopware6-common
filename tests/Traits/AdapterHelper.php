@@ -15,6 +15,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ExportItemAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\OptionsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\OrderNumberAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\OverriddenPriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
@@ -23,6 +24,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\SortAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SummaryAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\GroupsAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\VariantConfigurationAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -47,6 +49,7 @@ trait AdapterHelper
             $this->getImagesAdapter(),
             $this->getKeywordsAdapter(),
             $this->getNameAdapter(),
+            $this->getOptionsAdapter($config),
             $this->getOrderNumberAdapter(),
             $this->getOverriddenPriceAdapter(),
             $this->getPriceAdapter(),
@@ -55,6 +58,7 @@ trait AdapterHelper
             $this->getSummaryAdapter(),
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
+            $this->getVariantConfigurationAdapter($config),
         );
     }
 
@@ -118,9 +122,19 @@ trait AdapterHelper
         return new NameAdapter();
     }
 
+    public function getOptionsAdapter(?PluginConfig $config = null): OptionsAdapter
+    {
+        return new OptionsAdapter($config ?? $this->getPluginConfig());
+    }
+
     public function getOrderNumberAdapter(): OrderNumberAdapter
     {
         return new OrderNumberAdapter();
+    }
+
+    public function getVariantConfigurationAdapter(?PluginConfig $config = null): VariantConfigurationAdapter
+    {
+        return new VariantConfigurationAdapter($config ?? $this->getPluginConfig());
     }
 
     public function getOverriddenPriceAdapter(
