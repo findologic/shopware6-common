@@ -55,6 +55,8 @@ class ExportItemAdapterTest extends TestCase
             'categories' => [],
         ]);
 
+        // Test.
+
         $adapter = $this->getExportItemAdapter();
         $adapter->adaptProduct(new XMLItem($id), $product);
     }
