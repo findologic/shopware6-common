@@ -39,7 +39,7 @@ class Utils
             return '';
         }
 
-        return preg_replace('/[^äöüA-Za-z0-9:_-]/u', '', $string);
+        return preg_replace('/[^äöüßA-Za-z0-9:_-]/u', '', $string);
     }
 
     public static function multiByteRawUrlEncode(string $string): string

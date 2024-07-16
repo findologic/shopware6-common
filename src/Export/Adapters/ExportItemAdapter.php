@@ -226,6 +226,14 @@ class ExportItemAdapter
             foreach ($this->adapterFactory->getGroupsAdapter()->adapt($product) as $group) {
                 $variant->addGroup($group);
             }
+
+            if ($url = $this->adapterFactory->getUrlAdapter()->adapt($product)) {
+                $variant->setUrl($url);
+            }
+
+            foreach ($this->adapterFactory->getImagesAdapter()->adapt($product) as $image) {
+                $variant->addImage($image);
+            }
         } catch (Throwable $exception) {
             $exceptionLogger = new ExportExceptionLogger($this->logger);
             $exceptionLogger->log($product, $exception);
