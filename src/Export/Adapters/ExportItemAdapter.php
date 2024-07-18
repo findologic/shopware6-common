@@ -188,6 +188,7 @@ class ExportItemAdapter
                 $variant->addProperty($property);
             }
 
+            // Test comment.
             foreach ($this->adapterFactory->getGroupsAdapter()->adapt($product) as $group) {
                 $variant->addGroup($group);
             }
