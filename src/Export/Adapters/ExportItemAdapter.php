@@ -192,6 +192,7 @@ class ExportItemAdapter
                 $variant->addGroup($group);
             }
 
+            // Test comment.
             if ($url = $this->adapterFactory->getUrlAdapter()->adapt($product)) {
                 $variant->setUrl($url);
             }
