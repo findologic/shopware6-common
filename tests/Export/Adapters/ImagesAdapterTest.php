@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Image;
+use FINDOLOGIC\Export\Enums\ImageType;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ImageHelper;
@@ -142,11 +143,11 @@ class ImagesAdapterTest extends TestCase
                 'expectedImages' => [
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_DEFAULT,
+                        'type' => ImageType::DEFAULT,
                     ],
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_THUMBNAIL,
+                        'type' => ImageType::THUMBNAIL,
                     ],
                 ],
             ],
@@ -168,11 +169,11 @@ class ImagesAdapterTest extends TestCase
                 'expectedImages' => [
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_DEFAULT,
+                        'type' => ImageType::DEFAULT,
                     ],
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_THUMBNAIL,
+                        'type' => ImageType::THUMBNAIL,
                     ],
                 ],
             ],
@@ -200,7 +201,7 @@ class ImagesAdapterTest extends TestCase
                 'expectedImages' => [
                     [
                         'url' => 'findologic.png',
-                        'type' => Image::TYPE_DEFAULT,
+                        'type' => ImageType::DEFAULT,
                     ],
                 ],
             ],
@@ -209,11 +210,11 @@ class ImagesAdapterTest extends TestCase
                 'expectedImages' => [
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_DEFAULT,
+                        'type' => ImageType::DEFAULT,
                     ],
                     [
                         'url' => '600x600',
-                        'type' => Image::TYPE_THUMBNAIL,
+                        'type' => ImageType::THUMBNAIL,
                     ],
                 ],
             ],
@@ -259,11 +260,11 @@ class ImagesAdapterTest extends TestCase
                 'expectedImages' => [
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_DEFAULT,
+                        'type' => ImageType::DEFAULT,
                     ],
                     [
                         'url' => '800x800',
-                        'type' => Image::TYPE_THUMBNAIL,
+                        'type' => ImageType::THUMBNAIL,
                     ],
                 ],
             ],

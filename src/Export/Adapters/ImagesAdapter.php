@@ -9,11 +9,9 @@ use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 
 class ImagesAdapter
 {
-    protected ProductImageService $productImageService;
-
-    public function __construct(ProductImageService $productImageService)
-    {
-        $this->productImageService = $productImageService;
+    public function __construct(
+        protected readonly ProductImageService $productImageService,
+    ) {
     }
 
     /**

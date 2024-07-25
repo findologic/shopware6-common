@@ -14,9 +14,13 @@ class Constants
         'manufacturer',
         'manufacturer.translations',
         'cover',
+        'variantListingConfig',
+        'visibilities',
     ];
 
     public const VARIANT_ASSOCIATIONS = [
+        'seoUrls',
+        'media',
         'categories',
         'categories.seoUrls',
         'options',

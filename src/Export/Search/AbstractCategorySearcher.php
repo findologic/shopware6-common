@@ -9,12 +9,9 @@ use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 
 abstract class AbstractCategorySearcher
 {
-    protected ExportContext $exportContext;
-
     public function __construct(
-        ExportContext $exportContext
+        protected readonly ExportContext $exportContext,
     ) {
-        $this->exportContext = $exportContext;
     }
 
     abstract public function fetchParentsFromCategoryPath(string $categoryPath): CategoryCollection;

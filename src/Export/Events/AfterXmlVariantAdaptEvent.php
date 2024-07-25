@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export\Events;
 
-use FINDOLOGIC\Export\Data\Item;
+use FINDOLOGIC\Export\Data\Variant;
 use Symfony\Contracts\EventDispatcher\Event;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class AfterVariantAdaptEvent extends Event
+class AfterXmlVariantAdaptEvent extends Event
 {
-    public const NAME = 'fin_search.export.after_variant_adapt';
+    public const NAME = 'fin_search.export.after_xml_variant_adapt';
 
     public function __construct(
         private readonly ProductEntity $product,
-        private readonly Item $item,
+        private readonly Variant $variant,
     ) {
     }
 
@@ -23,8 +23,8 @@ class AfterVariantAdaptEvent extends Event
         return $this->product;
     }
 
-    public function getItem(): Item
+    public function getVariant(): Variant
     {
-        return $this->item;
+        return $this->variant;
     }
 }

@@ -12,14 +12,10 @@ class BeforeItemAdaptEvent extends Event
 {
     public const NAME = 'fin_search.export.before_item_adapt';
 
-    protected ProductEntity $product;
-
-    protected Item $item;
-
-    public function __construct(ProductEntity $product, Item $item)
-    {
-        $this->product = $product;
-        $this->item = $item;
+    public function __construct(
+        private readonly ProductEntity $product,
+        private readonly Item $item,
+    ) {
     }
 
     public function getProduct(): ProductEntity

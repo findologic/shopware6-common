@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
-use FINDOLOGIC\Shopware6Common\Export\Config\ImplementationType;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
+use FINDOLOGIC\Shopware6Common\Export\Enums\ImplementationType;
 use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractCategorySearcher;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductCriteriaBuilder;
 use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductSearcher;
-use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
+use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductStreamSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
+use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductImageService;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
@@ -52,15 +53,14 @@ trait ServicesHelper
         return new Logger($name);
     }
 
-    public function getEventDispatcherMock(): MockObject
+    public function getEventDispatcherMock(): EventDispatcher|MockObject
     {
         return $this->getMockBuilder(EventDispatcher::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    /** @return Translator|MockObject */
-    public function getTranslatorMock(string $locale = 'en'): MockObject
+    public function getTranslatorMock(string $locale = 'en'): Translator|MockObject
     {
         $translator = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
@@ -76,8 +76,7 @@ trait ServicesHelper
         return $translator;
     }
 
-    /** @return AbstractDynamicProductGroupService|MockObject */
-    public function getDynamicProductGroupServiceMock(): MockObject
+    public function getDynamicProductGroupServiceMock(): AbstractDynamicProductGroupService|MockObject
     {
         return $this->getMockBuilder(AbstractDynamicProductGroupService::class)
             ->onlyMethods(['getCategories'])
@@ -93,7 +92,7 @@ trait ServicesHelper
                 AbstractCategorySearcher $categorySearcher,
                 ?RouterInterface $router = null
             ) {
-                parent::__construct($exportContext, $categorySearcher, $router);
+                parent::__construct($categorySearcher, $exportContext, $router);
             }
 
             protected function buildCategoryUrls(CategoryEntity $category): array
@@ -145,6 +144,13 @@ trait ServicesHelper
     public function getProductSearcherMock(): AbstractProductSearcher
     {
         return $this->getMockBuilder(AbstractProductSearcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    public function getProductStreamSearcherMock(): AbstractProductStreamSearcher
+    {
+        return $this->getMockBuilder(AbstractProductStreamSearcher::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

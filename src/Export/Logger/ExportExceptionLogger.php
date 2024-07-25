@@ -17,11 +17,9 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class ExportExceptionLogger
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+    ) {
     }
 
     public function log(ProductEntity $product, Throwable $e): void
@@ -48,48 +46,37 @@ class ExportExceptionLogger
 
     private function logProductInvalidException(ProductEntity $product, ProductInvalidException $e): void
     {
-        switch (get_class($e)) {
-            case AccessEmptyPropertyException::class:
-                $message = sprintf(
-                    'Product "%s" with id %s was not exported because the property does not exist',
-                    $product->getTranslation('name'),
-                    $e->getProduct()->id,
-                );
-                break;
-            case ProductHasNoAttributesException::class:
-                $message = sprintf(
-                    'Product "%s" with id %s was not exported because it has no attributes',
-                    $product->getTranslation('name'),
-                    $e->getProduct()->id,
-                );
-                break;
-            case ProductHasNoNameException::class:
-                $message = sprintf(
-                    'Product with id %s was not exported because it has no name set',
-                    $e->getProduct()->id,
-                );
-                break;
-            case ProductHasNoPricesException::class:
-                $message = sprintf(
-                    'Product "%s" with id %s was not exported because it has no price associated to it',
-                    $product->getTranslation('name'),
-                    $e->getProduct()->id,
-                );
-                break;
-            case ProductHasNoCategoriesException::class:
-                $message = sprintf(
-                    'Product "%s" with id %s was not exported because it has no categories assigned',
-                    $product->getTranslation('name'),
-                    $e->getProduct()->id,
-                );
-                break;
-            default:
-                $message = sprintf(
-                    'Product "%s" with id %s could not be exported.',
-                    $product->getTranslation('name'),
-                    $e->getProduct()->id,
-                );
-        }
+        $message = match (get_class($e)) {
+            AccessEmptyPropertyException::class => sprintf(
+                'Product "%s" with id %s was not exported because the property does not exist',
+                $product->getTranslation('name'),
+                $e->getProduct()->id,
+            ),
+            ProductHasNoAttributesException::class => sprintf(
+                'Product "%s" with id %s was not exported because it has no attributes',
+                $product->getTranslation('name'),
+                $e->getProduct()->id,
+            ),
+            ProductHasNoNameException::class => sprintf(
+                'Product with id %s was not exported because it has no name set',
+                $e->getProduct()->id,
+            ),
+            ProductHasNoPricesException::class => sprintf(
+                'Product "%s" with id %s was not exported because it has no price associated to it',
+                $product->getTranslation('name'),
+                $e->getProduct()->id,
+            ),
+            ProductHasNoCategoriesException::class => sprintf(
+                'Product "%s" with id %s was not exported because it has no categories assigned',
+                $product->getTranslation('name'),
+                $e->getProduct()->id,
+            ),
+            default => sprintf(
+                'Product "%s" with id %s could not be exported.',
+                $product->getTranslation('name'),
+                $e->getProduct()->id,
+            ),
+        };
 
         $this->logger->warning($message, ['exception' => $e]);
     }

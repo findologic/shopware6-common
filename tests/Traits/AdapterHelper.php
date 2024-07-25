@@ -16,12 +16,13 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\KeywordsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\NameAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\OrderNumberAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\OverriddenPriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\PriceAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\ShopwarePropertiesAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SortAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\SummaryAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Adapters\UrlAdapter;
-use FINDOLOGIC\Shopware6Common\Export\Adapters\UserGroupsAdapter;
+use FINDOLOGIC\Shopware6Common\Export\Adapters\GroupsAdapter;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use Monolog\Logger;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -42,17 +43,18 @@ trait AdapterHelper
             $this->getDateAddedAdapter(),
             $this->getDescriptionAdapter(),
             $this->getDefaultPropertiesAdapter(),
+            $this->getGroupAdapter(),
             $this->getImagesAdapter(),
             $this->getKeywordsAdapter(),
             $this->getNameAdapter(),
             $this->getOrderNumberAdapter(),
+            $this->getOverriddenPriceAdapter(),
             $this->getPriceAdapter(),
             $this->getSalesFrequencyAdapter(),
             $this->getSortAdapter(),
             $this->getSummaryAdapter(),
             $this->getShopwarePropertiesAdapter(),
             $this->getUrlAdapter(),
-            $this->getUserGroupAdapter(),
         );
     }
 
@@ -60,7 +62,7 @@ trait AdapterHelper
         ?AdapterFactory $adapterFactory = null,
         ?PluginConfig $config = null,
         ?LoggerInterface $logger = null,
-        ?EventDispatcherInterface $eventDispatcher = null
+        ?EventDispatcherInterface $eventDispatcher = null,
     ): ExportItemAdapter {
         return new ExportItemAdapter(
             $adapterFactory ?? $this->getAdapterFactory($config),
@@ -74,6 +76,7 @@ trait AdapterHelper
         return new AttributeAdapter(
             $this->getDynamicProductGroupServiceMock(),
             $this->getCatUrlBuilderService(),
+            $this->getProductStreamSearcherMock(),
             $this->getExportContext(),
             $config ?? $this->getPluginConfig(),
             $this->getTranslatorMock(),
@@ -120,12 +123,23 @@ trait AdapterHelper
         return new OrderNumberAdapter();
     }
 
+    public function getOverriddenPriceAdapter(
+        ?CustomerGroupCollection $customerGroupCollection = null,
+        ?SalesChannelEntity $salesChannel = null,
+    ): OverriddenPriceAdapter {
+        return new OverriddenPriceAdapter(
+            $this->getExportContext($customerGroupCollection, $salesChannel),
+            $this->getPluginConfig(),
+        );
+    }
+
     public function getPriceAdapter(
         ?CustomerGroupCollection $customerGroupCollection = null,
-        ?SalesChannelEntity $salesChannel = null
+        ?SalesChannelEntity $salesChannel = null,
     ): PriceAdapter {
         return new PriceAdapter(
             $this->getExportContext($customerGroupCollection, $salesChannel),
+            $this->getPluginConfig(),
         );
     }
 
@@ -166,8 +180,8 @@ trait AdapterHelper
         return new UrlAdapter($this->getProductUrlService());
     }
 
-    public function getUserGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): UserGroupsAdapter
+    public function getGroupAdapter(?CustomerGroupCollection $customerGroupCollection = null): GroupsAdapter
     {
-        return new UserGroupsAdapter($this->getExportContext($customerGroupCollection));
+        return new GroupsAdapter($this->getExportContext($customerGroupCollection));
     }
 }

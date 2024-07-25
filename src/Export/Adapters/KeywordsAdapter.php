@@ -49,8 +49,7 @@ class KeywordsAdapter
                 continue;
             }
 
-            $isBlackListedKeyword = in_array($keywordValue, $blackListedKeywords);
-            if ($isBlackListedKeyword) {
+            if ($isBlackListedKeyword = in_array($keywordValue, $blackListedKeywords)) {
                 continue;
             }
 

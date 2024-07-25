@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Tests\Traits;
 
 use FINDOLOGIC\Export\Data\Attribute;
-use FINDOLOGIC\Shopware6Common\Export\Config\IntegrationType;
+use FINDOLOGIC\Shopware6Common\Export\Enums\IntegrationType;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
@@ -14,8 +14,10 @@ trait AttributeHelper
     /**
      * @return Attribute[]
      */
-    public function getAttributes(ProductEntity $productEntity, string $integrationType = IntegrationType::DI): array
-    {
+    public function getAttributes(
+        ProductEntity $productEntity,
+        IntegrationType $integrationType = IntegrationType::DI,
+    ): array {
         $defaultCatUrl = '';
 
         foreach ($productEntity->categories as $category) {
@@ -29,7 +31,7 @@ trait AttributeHelper
         $catAttribute = new Attribute('cat', ['FINDOLOGIC Category']);
         $vendorAttribute = new Attribute('vendor', ['FINDOLOGIC']);
 
-        if ($integrationType === 'Direct Integration') {
+        if ($integrationType === IntegrationType::DI) {
             $attributes[] = $catUrlAttribute;
         }
 

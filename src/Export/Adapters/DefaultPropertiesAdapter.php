@@ -12,16 +12,10 @@ use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
 class DefaultPropertiesAdapter
 {
-    protected ExportContext $exportContext;
-
-    protected TranslatorInterface $translator;
-
     public function __construct(
-        ExportContext $exportContext,
-        TranslatorInterface $translator
+        protected readonly ExportContext $exportContext,
+        protected readonly TranslatorInterface $translator,
     ) {
-        $this->exportContext = $exportContext;
-        $this->translator = $translator;
     }
 
     public function adapt(ProductEntity $product): array

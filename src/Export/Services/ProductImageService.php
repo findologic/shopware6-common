@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Services;
 
 use FINDOLOGIC\Export\Data\Image;
+use FINDOLOGIC\Export\Enums\ImageType;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
-use Vin\ShopwareSdk\Data\Entity\Entity;
 use Vin\ShopwareSdk\Data\Entity\Media\MediaEntity;
 use Vin\ShopwareSdk\Data\Entity\MediaThumbnail\MediaThumbnailCollection;
 use Vin\ShopwareSdk\Data\Entity\MediaThumbnail\MediaThumbnailEntity;
@@ -18,11 +18,9 @@ use Vin\ShopwareSdk\Data\Entity\ProductMedia\ProductMediaEntity;
 
 class ProductImageService
 {
-    private RouterInterface $router;
-
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
+    public function __construct(
+        private readonly RouterInterface $router,
+    ) {
     }
 
     /**
@@ -30,9 +28,7 @@ class ProductImageService
      */
     public function getProductImages(ProductEntity $product): array
     {
-        $productHasImages = $this->productHasImages($product);
-
-        if (!$productHasImages) {
+        if (!$this->productHasImages($product)) {
             return $this->getFallbackImages();
         }
 
@@ -43,7 +39,7 @@ class ProductImageService
 
     public function productHasImages(ProductEntity $product): bool
     {
-        return $product->media && $product->media->count() > 0;
+        return $product->media?->count() > 0;
     }
 
     protected function buildFallbackImage(RequestContext $requestContext): string
@@ -80,10 +76,7 @@ class ProductImageService
         return $images;
     }
 
-    /**
-     * @param MediaThumbnailEntity|MediaEntity $mediaEntity
-     */
-    protected function buildImage(Entity $mediaEntity, string $type = Image::TYPE_DEFAULT): Image
+    protected function buildImage(MediaThumbnailEntity|MediaEntity $mediaEntity, ImageType $type = ImageType::DEFAULT): Image
     {
         $encodedUrl = $this->getEncodedUrl($mediaEntity->url);
 
@@ -125,13 +118,13 @@ class ProductImageService
     protected function addThumbnailImages(array &$images, MediaThumbnailCollection $thumbnails): void
     {
         $imageIds = [];
-        /** @var MediaThumbnailEntity $thumbnailEntity */
+
         foreach ($thumbnails as $thumbnailEntity) {
             if (in_array($thumbnailEntity->mediaId, $imageIds)) {
                 continue;
             }
 
-            $images[] = $this->buildImage($thumbnailEntity, Image::TYPE_THUMBNAIL);
+            $images[] = $this->buildImage($thumbnailEntity, ImageType::THUMBNAIL);
             $imageIds[] = $thumbnailEntity->mediaId;
         }
     }
@@ -139,7 +132,7 @@ class ProductImageService
     protected function buildImageUrls(ProductMediaCollection $collection): array
     {
         $images = [];
-        /** @var ProductMediaEntity $productMedia */
+
         foreach ($collection as $productMedia) {
             $media = $productMedia->media;
 
@@ -175,17 +168,17 @@ class ProductImageService
 
         return [
             new Image($fallbackImage),
-            new Image($fallbackImage, Image::TYPE_THUMBNAIL),
+            new Image($fallbackImage, ImageType::THUMBNAIL),
         ];
     }
 
     protected function hasMediaUrl(MediaEntity $media): bool
     {
-        return $media && $media->url;
+        return (bool) $media->url;
     }
 
     protected function hasThumbnails(MediaEntity $media): bool
     {
-        return $media->thumbnails && $media->thumbnails->count() > 0;
+        return $media->thumbnails?->count() > 0;
     }
 }

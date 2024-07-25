@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Shopware6Common\Export;
 
-use FINDOLOGIC\Shopware6Common\Export\Config\ImplementationType;
+use FINDOLOGIC\Shopware6Common\Export\Enums\ImplementationType;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryEntity;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\SalesChannel\SalesChannelEntity;
@@ -13,32 +13,14 @@ class ExportContext
 {
     public const CONTAINER_ID = 'fin_search.export_context';
 
-    protected string $shopkey;
-
-    protected SalesChannelEntity $salesChannel;
-
-    protected CategoryEntity $navigationCategory;
-
-    protected CustomerGroupCollection $customerGroups;
-
-    protected bool $shouldHideProductsOutOfStock;
-
-    protected string $implementationType;
-
     public function __construct(
-        string $shopkey,
-        SalesChannelEntity $salesChannel,
-        CategoryEntity $navigationCategory,
-        CustomerGroupCollection $customerGroups,
-        bool $shouldHideProductsOutOfStock,
-        string $implementationType
+        protected readonly string $shopkey,
+        protected readonly SalesChannelEntity $salesChannel,
+        protected readonly CategoryEntity $navigationCategory,
+        protected readonly CustomerGroupCollection $customerGroups,
+        protected readonly bool $shouldHideProductsOutOfStock,
+        protected readonly ImplementationType $implementationType,
     ) {
-        $this->shopkey = $shopkey;
-        $this->salesChannel = $salesChannel;
-        $this->navigationCategory = $navigationCategory;
-        $this->customerGroups = $customerGroups;
-        $this->shouldHideProductsOutOfStock = $shouldHideProductsOutOfStock;
-        $this->implementationType = $implementationType;
     }
 
     public function getShopkey(): string
@@ -86,7 +68,7 @@ class ExportContext
         return $this->shouldHideProductsOutOfStock;
     }
 
-    public function getImplementationType(): string
+    public function getImplementationType(): ImplementationType
     {
         return $this->implementationType;
     }

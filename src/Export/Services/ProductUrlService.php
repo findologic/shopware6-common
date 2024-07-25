@@ -25,13 +25,11 @@ class ProductUrlService extends UrlBuilderService
      */
     public function buildProductUrl(ProductEntity $product): string
     {
-        $seoPath = $this->getProductSeoPath($product);
-        if (!$seoPath) {
+        if (!$seoPath = $this->getProductSeoPath($product)) {
             return $this->getFallbackUrl($product);
         }
 
-        $domain = $this->getSalesChannelDomain();
-        if (!$domain) {
+        if (!$domain = $this->getSalesChannelDomain()) {
             return $this->getFallbackUrl($product);
         }
 
@@ -59,7 +57,7 @@ class ProductUrlService extends UrlBuilderService
 
         /** @var SeoUrlCollection $seoUrls */
         $seoUrls = $this->getTranslatedEntities($applicableSeoUrls);
-        if (!$seoUrls || !$seoUrls->first()) {
+        if (!$seoUrls?->first()) {
             return null;
         }
 
@@ -138,7 +136,7 @@ class ProductUrlService extends UrlBuilderService
         /** @var SalesChannelDomainCollection $domains */
         $domains = $this->getTranslatedEntities($allDomains);
 
-        if (!$domains || !$domains->first()) {
+        if (!$domains?->first()) {
             return null;
         }
 

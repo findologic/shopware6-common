@@ -12,11 +12,9 @@ use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class ShopwarePropertiesAdapter
 {
-    protected PluginConfig $pluginConfig;
-
-    public function __construct(PluginConfig $pluginConfig)
-    {
-        $this->pluginConfig = $pluginConfig;
+    public function __construct(
+        protected readonly PluginConfig $pluginConfig,
+    ) {
     }
 
     public function adapt(ProductEntity $product): array
@@ -46,9 +44,10 @@ class ShopwarePropertiesAdapter
         $properties = [];
 
         $group = $propertyGroupOptionEntity->group;
-        if ($group && $propertyGroupOptionEntity->getTranslation('name') && $group->getTranslation('name')) {
+        if ($propertyGroupOptionEntity->getTranslation('name') && $group?->getTranslation('name')) {
             $groupName = $this->getAttributeKey($group->getTranslation('name'));
             $propertyGroupOptionName = $propertyGroupOptionEntity->getTranslation('name');
+
             if (!Utils::isEmpty($groupName) && !Utils::isEmpty($propertyGroupOptionName)) {
                 $propertyGroupProperty = new Property($groupName);
                 $propertyGroupProperty->addValue(Utils::removeControlCharacters($propertyGroupOptionName));

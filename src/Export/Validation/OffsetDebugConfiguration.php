@@ -8,10 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class OffsetDebugConfiguration extends OffsetExportConfiguration
 {
-    /**
-     * @Assert\NotBlank
-     * @var ?string
-     */
+    #[Assert\NotBlank]
     protected ?string $productId;
 
     public function __construct(string $shopkey, ?string $productId = null)
