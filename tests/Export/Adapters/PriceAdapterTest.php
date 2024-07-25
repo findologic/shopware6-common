@@ -9,6 +9,7 @@ use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoPricesExcep
 use FINDOLOGIC\Shopware6Common\Tests\CommonConstants;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupCollection;
 use Vin\ShopwareSdk\Data\Entity\CustomerGroup\CustomerGroupEntity;
@@ -56,7 +57,7 @@ class PriceAdapterTest extends TestCase
         $this->assertEquals($expectedPrice, $prices[0]->getValues()['']);
     }
 
-    public function customerGroupsProvider(): array
+    public static function customerGroupsProvider(): array
     {
         $grossCustomerGroup = new CustomerGroupEntity();
         $grossCustomerGroup->id = CommonConstants::GROSS_CUSTOMER_GROUP_ID;
@@ -104,11 +105,11 @@ class PriceAdapterTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @dataProvider customerGroupsProvider
      * @param CustomerGroupEntity[] $customerGroups
      * @param array<string, float> $expectedPrices
      * @throws ProductHasNoPricesException
      */
+    #[DataProvider('customerGroupsProvider')]
     public function testPriceIsExportedForCustomerGroups(
         float $grossPrice,
         float $netPrice,

@@ -13,6 +13,7 @@ use FINDOLOGIC\Shopware6Common\Export\Types\XmlExport;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ServicesHelper;
+use Mockery\MockInterface;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,7 @@ class XmlExportTest extends TestCase
     use ProductHelper;
     use ServicesHelper;
 
-    protected AbstractDynamicProductGroupService|MockObject $dynamicProductGroupService;
+    protected AbstractDynamicProductGroupService|MockInterface $dynamicProductGroupService;
 
     protected AbstractProductSearcher|MockObject $productSearcher;
 
@@ -68,9 +69,9 @@ class XmlExportTest extends TestCase
         $this->crossSellCategories = [$category->id];
 
         $this->dynamicProductGroupService
-            ->expects($this->once())
-            ->method('getCategories')
-            ->willReturn(new CategoryCollection());
+            ->shouldReceive('getCategories')
+            ->once()
+            ->andReturn(new CategoryCollection());
 
         $this->buildItemsAndAssertError($product, $category);
     }
@@ -83,9 +84,10 @@ class XmlExportTest extends TestCase
         $this->crossSellCategories = [$category->id];
 
         $categoryCollection = new CategoryCollection([$category]);
-        $this->dynamicProductGroupService->expects($this->any())
-            ->method('getCategories')
-            ->willReturn($categoryCollection);
+        $this->dynamicProductGroupService
+            ->shouldReceive('getCategories')
+            ->once()
+            ->andReturn($categoryCollection);
 
         $this->buildItemsAndAssertError($product, $category);
     }

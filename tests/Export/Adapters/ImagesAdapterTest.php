@@ -10,6 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\Adapters\ImagesAdapter;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\AdapterHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ImageHelper;
 use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Entity\Media\MediaCollection;
 use Vin\ShopwareSdk\Data\Entity\ProductMedia\ProductMediaEntity;
@@ -37,9 +38,7 @@ class ImagesAdapterTest extends TestCase
         $this->assertEquals($expectedImages, $images);
     }
 
-    /**
-     * @dataProvider thumbnailProvider
-     */
+    #[DataProvider('thumbnailProvider')]
     public function testCorrectThumbnailImageIsAdapted(array $thumbnails, array $expectedImages): void
     {
         $productData = [
@@ -59,9 +58,7 @@ class ImagesAdapterTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider widthSizesProvider
-     */
+    #[DataProvider('widthSizesProvider')]
     public function testImageThumbnailsAreFilteredAndSortedByWidth(array $widthSizes, array $expected): void
     {
         $thumbnails = $this->generateThumbnailData($widthSizes);
@@ -116,7 +113,7 @@ class ImagesAdapterTest extends TestCase
         return $thumbnails;
     }
 
-    public function thumbnailProvider(): array
+    public static function thumbnailProvider(): array
     {
         return [
             '3 thumbnails 400x400, 600x600 and 1000x100, the image of width 600 is taken' => [
@@ -271,7 +268,7 @@ class ImagesAdapterTest extends TestCase
         ];
     }
 
-    public function widthSizesProvider(): array
+    public static function widthSizesProvider(): array
     {
         return [
             'Max 600 width is provided' => [
