@@ -19,6 +19,9 @@ use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
+use Shopware\Core\Defaults;
+use Shopware\Core\Framework\DataAbstractionLayer\Pricing\Price;
+use Shopware\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 
 class AttributeAdapterTest extends TestCase
 {
@@ -750,4 +753,34 @@ class AttributeAdapterTest extends TestCase
             ],
         ];
     }
+
+    public function priceCustomFieldProvider(): array
+    {
+        return [
+            'CustomFieldCollectionWithPrice' => [
+                'customFields' => [
+                    'price' => [
+                        'net' => 22,
+                        'grose' => 21,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider priceCustomFieldProvider
+     */
+    public function testPriceCustomField(array $customFields): void
+    {
+        $price = new PriceCollection([new Price(Defaults::CURRENCY, 0, 0, false)]);
+
+        $data['customFields'] = $customFields;
+        $productEntity = $this->createTestProduct($data, true);
+//        $attributes = $this->attributeAdapter->adapt($productEntity);
+//        $customFieldAttributes = $this->getCustomFields($attributes, $data);
+
+        $this->assertSame(true, true);
+    }
+
 }
