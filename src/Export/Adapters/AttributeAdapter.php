@@ -316,5 +316,7 @@ class AttributeAdapter
         $translationKey = $value ? 'finSearch.general.yes' : 'finSearch.general.no';
 
         return $this->translator->trans($translationKey);
+
+        //test
     }
 }
