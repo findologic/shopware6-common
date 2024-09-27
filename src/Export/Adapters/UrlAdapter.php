@@ -8,7 +8,7 @@ use FINDOLOGIC\Export\Data\Url;
 use FINDOLOGIC\Shopware6Common\Export\Services\ProductUrlService;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class UrlAdapter
+class UrlAdapter implements AdapterInterface
 {
     public function __construct(
         protected readonly ProductUrlService $productUrlService,
