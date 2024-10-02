@@ -12,11 +12,10 @@ use FINDOLOGIC\Shopware6Common\Export\Search\AbstractProductStreamSearcher;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractDynamicProductGroupService;
 use FINDOLOGIC\Shopware6Common\Export\Services\AbstractCatUrlBuilderService;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
+use FINDOLOGIC\Shopware6Common\Traits\AdapterHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class AttributeAdapter implements AdapterInterface
 {
@@ -27,7 +26,6 @@ class AttributeAdapter implements AdapterInterface
         protected readonly AbstractCatUrlBuilderService $catUrlBuilderService,
         protected readonly AbstractProductStreamSearcher $productStreamSearcher,
         protected readonly ExportContext $exportContext,
-        protected readonly PluginConfig $pluginConfig,
         protected readonly TranslatorInterface $translator,
     ) {
     }
