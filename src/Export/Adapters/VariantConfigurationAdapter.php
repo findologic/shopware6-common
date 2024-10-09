@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Export\Adapters;
 
 use FINDOLOGIC\Export\Data\Attribute;
-use FINDOLOGIC\Shopware6Common\Export\Config\MainVariant;
+use FINDOLOGIC\Shopware6Common\Export\Enums\MainVariant;
 use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Traits\AdapterHelper;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
@@ -14,6 +14,8 @@ use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 class VariantConfigurationAdapter implements AdapterInterface
 {
     use AdapterHelper;
+
+    protected PluginConfig $pluginConfig;
 
     public function __construct(PluginConfig $pluginConfig)
     {
@@ -38,9 +40,8 @@ class VariantConfigurationAdapter implements AdapterInterface
             },
         );
         $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
-
         if (
-            $this->pluginConfig->getMainVariant() === MainVariant::SHOPWARE_DEFAULT &&
+            $this->pluginConfig->getMainVariant()->name === MainVariant::SHOPWARE_DEFAULT &&
             !$product->variantListingConfig['displayParent'] &&
             count($variantlisting)
         ) {
@@ -48,7 +49,6 @@ class VariantConfigurationAdapter implements AdapterInterface
                 return !in_array($option->groupId, $variantListingGroupId);
             });
         }
-
         return $this->getPropertyGroupOptionAttributes($options);
     }
 }

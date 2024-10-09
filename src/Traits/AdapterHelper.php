@@ -12,8 +12,6 @@ use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollectio
 
 trait AdapterHelper
 {
-    protected PluginConfig $pluginConfig;
-
     /**
      * @return Attribute[]
      */

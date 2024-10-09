@@ -26,6 +26,7 @@ class AttributeAdapter implements AdapterInterface
         protected readonly AbstractCatUrlBuilderService $catUrlBuilderService,
         protected readonly AbstractProductStreamSearcher $productStreamSearcher,
         protected readonly ExportContext $exportContext,
+        protected readonly PluginConfig $pluginConfig,
         protected readonly TranslatorInterface $translator,
     ) {
     }

@@ -13,6 +13,8 @@ class OptionsAdapter implements AdapterInterface
 {
     use AdapterHelper;
 
+    protected PluginConfig $pluginConfig;
+
     public function __construct(PluginConfig $pluginConfig)
     {
         $this->pluginConfig = $pluginConfig;
