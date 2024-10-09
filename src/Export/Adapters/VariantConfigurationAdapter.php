@@ -41,7 +41,7 @@ class VariantConfigurationAdapter implements AdapterInterface
         );
         $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
         if (
-            $this->pluginConfig->getMainVariant()->name === MainVariant::SHOPWARE_DEFAULT &&
+            $this->pluginConfig->getMainVariant()->name === MainVariant::SHOPWARE_DEFAULT->name &&
             !$product->variantListingConfig['displayParent'] &&
             count($variantlisting)
         ) {
