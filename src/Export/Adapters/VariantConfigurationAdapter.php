@@ -39,7 +39,9 @@ class VariantConfigurationAdapter implements AdapterInterface
                 return $listing['expressionForListings'];
             },
         );
+
         $variantListingGroupId = array_map(fn ($listing) => $listing['id'], $variantlisting);
+
         if (
             $this->pluginConfig->getMainVariant()->name === MainVariant::SHOPWARE_DEFAULT->name &&
             !$product->variantListingConfig['displayParent'] &&
@@ -49,6 +51,7 @@ class VariantConfigurationAdapter implements AdapterInterface
                 return !in_array($option->groupId, $variantListingGroupId);
             });
         }
+
         return $this->getPropertyGroupOptionAttributes($options);
     }
 }

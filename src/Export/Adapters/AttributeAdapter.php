@@ -30,7 +30,6 @@ class AttributeAdapter implements AdapterInterface
         protected readonly TranslatorInterface $translator,
     ) {
     }
-
     /**
      * @return Attribute[]
      */
@@ -144,7 +143,7 @@ class AttributeAdapter implements AdapterInterface
      */
     protected function getOptionAttributes(ProductEntity $product): array
     {
-            return [];
+        return [];
     }
 
     protected function getPropertyAttributes(ProductEntity $product): array

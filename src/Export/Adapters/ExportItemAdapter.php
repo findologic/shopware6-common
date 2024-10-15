@@ -137,7 +137,7 @@ class ExportItemAdapter
 
     public function adaptVariant(Item $item, ProductEntity $product): ?Item
     {
-        $this->eventDispatcher->dispatch(
+        $this->eventDispatcher?->dispatch(
             new BeforeVariantAdaptEvent($product, $item),
             BeforeVariantAdaptEvent::NAME,
         );
