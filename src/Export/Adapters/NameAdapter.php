@@ -9,7 +9,7 @@ use FINDOLOGIC\Shopware6Common\Export\Exceptions\Product\ProductHasNoNameExcepti
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class NameAdapter
+class NameAdapter implements AdapterInterface
 {
     /**
      * @throws ProductHasNoNameException

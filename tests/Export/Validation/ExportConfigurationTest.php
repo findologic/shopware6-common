@@ -179,8 +179,7 @@ class ExportConfigurationTest extends TestCase
         }
 
         $validator = Validation::createValidatorBuilder()
-            ->enableAnnotationMapping(true)
-            ->addDefaultDoctrineAnnotationReader()
+            ->enableAttributeMapping(true)
             ->getValidator();
 
         $validationsList = new ConstraintViolationList();
