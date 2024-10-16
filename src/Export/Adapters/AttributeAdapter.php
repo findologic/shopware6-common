@@ -16,8 +16,6 @@ use FINDOLOGIC\Shopware6Common\Traits\AdapterHelper;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vin\ShopwareSdk\Data\Entity\Category\CategoryCollection;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;
-use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 
 class AttributeAdapter implements AdapterInterface
 {
