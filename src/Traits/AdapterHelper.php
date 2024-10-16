@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace FINDOLOGIC\Shopware6Common\Traits;
 
 use FINDOLOGIC\Export\Data\Attribute;
-use FINDOLOGIC\Shopware6Common\Export\Config\PluginConfig;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionEntity;
 use Vin\ShopwareSdk\Data\Entity\PropertyGroupOption\PropertyGroupOptionCollection;

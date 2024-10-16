@@ -25,7 +25,6 @@ class OptionsAdapterTest extends TestCase
     }
 
     public function testGetOptionAttributes(): void
-
     {
         $id = Uuid::randomHex();
         $product = $this->createTestProduct([
