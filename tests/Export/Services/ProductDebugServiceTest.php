@@ -29,29 +29,22 @@ class ProductDebugServiceTest extends TestCase
 
         $productCriteriaBuilder = $this->getProductCriteriaBuilderMock();
 
-        $productDebugSearcher = $this->getMockBuilder(ProductDebugSearcherInterface::class)
-            ->getMock();
-        $productDebugSearcher->expects($this->once())
-            ->method('getProductById')
-            ->willReturnCallback(fn (string $productId) => $this->createTestProduct([
-                'id' => $productId,
-                'parentId' => Uuid::randomHex(),
-            ]));
-        $productDebugSearcher->expects($this->once())
-            ->method('buildCriteria')
-            ->willReturnCallback(static function () {
-                $criteria = new Criteria();
-                $criteria->addAssociations(Constants::PRODUCT_ASSOCIATIONS);
+        $productDebugSearcher = $this->createMock(ProductDebugSearcherInterface::class);
+        $productDebugSearcher->method('getProductById')->willReturnCallback(fn(string $productId) =>
+        $this->createTestProduct(['id' => $productId, 'parentId' => Uuid::randomHex()])
+        );
 
-                return $criteria;
-            });
-        $productDebugSearcher->expects($this->once())
-            ->method('getSiblings')
-            ->willReturnCallback(fn (string $parentId, int $count) => [
-                $this->createTestProduct(),
-                $this->createTestProduct(),
-                $this->createTestProduct(),
-            ]);
+        $productDebugSearcher->method('buildCriteria')->willReturnCallback(static function () {
+            $criteria = new Criteria();
+            $criteria->addAssociations(Constants::PRODUCT_ASSOCIATIONS);
+            return $criteria;
+        });
+
+        $productDebugSearcher->method('getSiblings')->willReturnCallback(fn(string $parentId, int $count) => [
+            $this->createTestProduct(),
+            $this->createTestProduct(),
+            $this->createTestProduct(),
+        ]);
 
         $this->productDebugService = new ProductDebugService(
             $this->getExportContext(),
@@ -67,10 +60,7 @@ class ProductDebugServiceTest extends TestCase
 
         $data = $this->getDebugInformation($productId);
 
-        $this->assertSame(
-            $data['export']['productId'],
-            $productId,
-        );
+        $this->assertSame($data['export']['productId'], $productId);
     }
 
     public function testExportedMainProductIdIsSet(): void
@@ -80,14 +70,8 @@ class ProductDebugServiceTest extends TestCase
 
         $data = $this->getDebugInformation($productId, $mainProductId);
 
-        $this->assertSame(
-            $data['export']['productId'],
-            $productId,
-        );
-        $this->assertSame(
-            $data['export']['exportedMainProductId'],
-            $mainProductId,
-        );
+        $this->assertSame($data['export']['productId'], $productId);
+        $this->assertSame($data['export']['exportedMainProductId'], $mainProductId);
     }
 
     public function testIsExportedFalseWithoutXmlItem(): void
@@ -98,10 +82,7 @@ class ProductDebugServiceTest extends TestCase
         $data = $this->getDebugInformation($productId, $mainProductId, null);
 
         $this->assertFalse($data['export']['isExported']);
-        $this->assertContains(
-            'Product is not visible for search',
-            $data['export']['reasons'],
-        );
+        $this->assertContains('Product is not visible for search', $data['export']['reasons']);
     }
 
     public function testWithDifferentProduct(): void
@@ -112,18 +93,10 @@ class ProductDebugServiceTest extends TestCase
         $data = $this->getDebugInformation($productId, $mainProductId);
 
         $this->assertFalse($data['export']['isExported']);
-        $this->assertContains(
-            'Product is not visible for search',
-            $data['export']['reasons'],
-        );
-        $this->assertContains(
-            'Product is not the exported variant.',
-            $data['export']['reasons'],
-        );
-
+        $this->assertContains('Product is not visible for search', $data['export']['reasons']);
+        $this->assertContains('Product is not the exported variant.', $data['export']['reasons']);
         $this->assertStringContainsString($mainProductId, $data['debugLinks']['exportUrl']);
         $this->assertStringContainsString($mainProductId, $data['debugLinks']['debugUrl']);
-
         $this->assertFalse($data['data']['isExportedMainVariant']);
         $this->assertSame($productId, $data['data']['product']['id']);
     }
@@ -136,10 +109,8 @@ class ProductDebugServiceTest extends TestCase
 
         $this->assertTrue($data['export']['isExported']);
         $this->assertEmpty($data['export']['reasons']);
-
         $this->assertStringContainsString($productId, $data['debugLinks']['exportUrl']);
         $this->assertStringContainsString($productId, $data['debugLinks']['debugUrl']);
-
         $this->assertTrue($data['data']['isExportedMainVariant']);
         $this->assertSame($productId, $data['data']['product']['id']);
     }
