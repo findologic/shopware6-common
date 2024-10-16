@@ -11,7 +11,7 @@ use FINDOLOGIC\Shopware6Common\Tests\Traits\ProductHelper;
 use PHPUnit\Framework\TestCase;
 use Vin\ShopwareSdk\Data\Uuid\Uuid;
 
-class OptionAdapterTest extends TestCase
+class OptionsAdapterTest extends TestCase
 {
     use ProductHelper;
     use AdapterHelper;

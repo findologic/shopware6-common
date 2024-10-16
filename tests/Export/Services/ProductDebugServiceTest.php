@@ -29,8 +29,8 @@ class ProductDebugServiceTest extends TestCase
 
         $productCriteriaBuilder = $this->getProductCriteriaBuilderMock();
 
-        $productDebugSearcher = $this->getMockBuilder(ProductDebugSearcherInterface::class)
-            ->getMock();
+        $productDebugSearcher = $this->createMock(ProductDebugSearcherInterface::class);
+
         $productDebugSearcher->expects($this->once())
             ->method('getProductById')
             ->willReturnCallback(fn (string $productId) => $this->createTestProduct([
