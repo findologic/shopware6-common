@@ -10,7 +10,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class OverriddenPriceAdapter
+class OverriddenPriceAdapter implements AdapterInterface
 {
     public function __construct(
         protected ExportContext $exportContext,

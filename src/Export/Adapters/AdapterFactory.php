@@ -16,6 +16,7 @@ class AdapterFactory
         private readonly ImagesAdapter $imagesAdapter,
         private readonly KeywordsAdapter $keywordsAdapter,
         private readonly NameAdapter $nameAdapter,
+        private readonly OptionsAdapter $optionsAdapter,
         private readonly OrderNumberAdapter $orderNumberAdapter,
         private readonly OverriddenPriceAdapter $overriddenPriceAdapter,
         private readonly PriceAdapter $priceAdapter,
@@ -24,6 +25,7 @@ class AdapterFactory
         private readonly SummaryAdapter $summaryAdapter,
         private readonly ShopwarePropertiesAdapter $shopwarePropertiesAdapter,
         private readonly UrlAdapter $urlAdapter,
+        private readonly VariantConfigurationAdapter $variantConfigurationAdapter,
     ) {
     }
 
@@ -72,6 +74,11 @@ class AdapterFactory
         return $this->nameAdapter;
     }
 
+    public function getOptionsAdapter(): OptionsAdapter
+    {
+        return $this->optionsAdapter;
+    }
+
     public function getOrderNumbersAdapter(): OrderNumberAdapter
     {
         return $this->orderNumberAdapter;
@@ -110,5 +117,10 @@ class AdapterFactory
     public function getUrlAdapter(): UrlAdapter
     {
         return $this->urlAdapter;
+    }
+
+    public function getVariantConfigurationAdapter(): VariantConfigurationAdapter
+    {
+        return $this->variantConfigurationAdapter;
     }
 }
