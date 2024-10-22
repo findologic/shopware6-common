@@ -148,6 +148,10 @@ class AttributeAdapter implements AdapterInterface
 
     protected function getPropertyAttributes(ProductEntity $product): array
     {
+        if (!$product->properties || !$product->properties->count()) {
+            return [];
+        }
+        
         return $this->getPropertyGroupOptionAttributes($product->properties);
     }
 
