@@ -44,7 +44,7 @@ class VariantConfigurationAdapter implements AdapterInterface
 
         if (
             $this->pluginConfig->getMainVariant()->name === MainVariant::SHOPWARE_DEFAULT->name &&
-            isset($product->variantListingConfig['displayParent']) &&
+            isset($product->variantListingConfig) &&
             !$product->variantListingConfig['displayParent'] &&
             count($variantlisting)
         ) {
