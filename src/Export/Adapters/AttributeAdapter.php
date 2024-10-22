@@ -151,7 +151,7 @@ class AttributeAdapter implements AdapterInterface
         if (!$product->properties || !$product->properties->count()) {
             return [];
         }
-        
+
         return $this->getPropertyGroupOptionAttributes($product->properties);
     }
 
