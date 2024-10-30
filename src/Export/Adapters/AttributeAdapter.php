@@ -42,6 +42,8 @@ class AttributeAdapter implements AdapterInterface
         $optionAttributes = $this->getOptionAttributes($product);
         $customFieldAttributes = $this->getCustomFieldAttributes($product);
         $additionalAttributes = $this->getAdditionalAttributes($product);
+        $seoUrlAttributes = $this->getSeoUrlAttributes($product);
+        $imageUrlAttributes = $this->getImageUrlAttributes($product);
 
         return array_merge(
             $categoryAttributes,
@@ -50,6 +52,8 @@ class AttributeAdapter implements AdapterInterface
             $optionAttributes,
             $customFieldAttributes,
             $additionalAttributes,
+            $seoUrlAttributes,
+            $imageUrlAttributes,
         );
     }
 
@@ -185,6 +189,53 @@ class AttributeAdapter implements AdapterInterface
                     $this->decodeHtmlEntities(array_filter((array) $cleanedValue, 'strlen')),
                 );
                 $attributes[] = $customFieldAttribute;
+            }
+        }
+
+        return $attributes;
+    }
+
+    protected function getSeoUrlAttributes(ProductEntity $product): array
+    {
+        $attributes = [];
+
+        // Extract SEO URLs from the product
+        if (!empty($product->seoUrls)) {
+            foreach ($product->seoUrls as $seoUrl) {
+                $url = $seoUrl->url;
+                if (!Utils::isEmpty($url)) {
+                    $cleanedUrl = Utils::cleanString($url);
+
+                    $seoUrlAttribute = new Attribute(
+                        'urls',
+                        $this->decodeHtmlEntities(array_filter((array) $cleanedUrl, 'strlen'))
+                    );
+
+                    $attributes[] = $seoUrlAttribute;
+                }
+            }
+        }
+
+        return $attributes;
+    }
+
+    protected function getImageUrlAttributes(ProductEntity $product): array
+    {
+        $attributes = [];
+
+        if (!empty($product->media)) {
+            foreach ($product->media as $mediaItem) {
+                $imageUrl = $mediaItem->media->url ?? null;
+                if (!Utils::isEmpty($imageUrl)) {
+                    $cleanedUrl = Utils::cleanString($imageUrl);
+
+                    $imageUrlAttribute = new Attribute(
+                        'images',
+                        $this->decodeHtmlEntities(array_filter((array) $cleanedUrl, 'strlen'))
+                    );
+
+                    $attributes[] = $imageUrlAttribute;
+                }
             }
         }
 
