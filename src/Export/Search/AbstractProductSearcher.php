@@ -129,10 +129,20 @@ abstract class AbstractProductSearcher
     {
         $realProductIds = [];
 
+        $mainVariantConfig = $this->pluginConfig->getMainVariant();
         foreach ($products as $product) {
             $mainVariantId = $product->variantListingConfig ? $product->variantListingConfig['mainVariantId'] : null;
             if ($mainVariantId) {
                 $realProductIds[] = $mainVariantId;
+
+                continue;
+            }
+
+            if ($product->variantListingConfig
+                && $product->variantListingConfig['displayParent']
+                && $mainVariantConfig == MainVariant::SHOPWARE_DEFAULT
+            ) {
+                $realProductIds[] = $product->parentId;
 
                 continue;
             }
