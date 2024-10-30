@@ -11,7 +11,7 @@ use FINDOLOGIC\Shopware6Common\Export\ExportContext;
 use FINDOLOGIC\Shopware6Common\Export\Utils\Utils;
 use Vin\ShopwareSdk\Data\Entity\Product\ProductEntity;
 
-class PriceAdapter
+class PriceAdapter implements AdapterInterface
 {
     public function __construct(
         protected ExportContext $exportContext,
